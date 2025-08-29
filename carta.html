@@ -15,7 +15,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
     position: relative;
   }
 
@@ -33,17 +33,15 @@
     margin: 0 auto 2rem;
     perspective: 1200px;
     cursor: pointer;
+    position: relative;
   }
   .envelope {
     width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute;
     transform-style: preserve-3d;
-    transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   }
-  .envelope.opened {
-    transform: rotateX(180deg);
-  }
+  
   .envelope-front, .envelope-back {
     position: absolute;
     width: 100%;
@@ -80,7 +78,14 @@
     border-radius: 12px 12px 0 0;
     border-bottom: 3px solid rgba(255,255,255,0.2);
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 25;
   }
+  .envelope-container.open .envelope-flap {
+    transform: rotateX(180deg);
+  }
+
   .envelope-body {
     position: absolute;
     bottom: 5%; left: 8%;
@@ -122,12 +127,15 @@
     justify-content: center;
     box-shadow: 0 6px 20px rgba(220,38,38,0.4), inset 0 2px 4px rgba(255,255,255,0.3);
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    z-index: 20;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+    z-index: 30;
   }
   .seal:hover {
     transform: translate(-50%, -50%) scale(1.1);
     box-shadow: 0 8px 25px rgba(220,38,38,0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+  }
+  .envelope-container.open .seal {
+    opacity: 0;
   }
   .seal-heart {
     width: 35px; height: 35px;
@@ -145,18 +153,22 @@
     border-radius: 16px;
     padding: 3rem;
     max-width: 560px;
-    margin: 0 auto 2rem;
+    margin: 0 auto;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     border: 2px solid rgba(220,38,38,0.1);
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
+    transform: translateY(100%);
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    position: relative;
     pointer-events: none;
   }
-  .paper.show {
+  .envelope-container.open .paper {
+    transform: translateY(-280px);
     opacity: 1;
-    transform: translateY(0);
     pointer-events: auto;
   }
 
@@ -271,18 +283,6 @@
     box-shadow: 0 8px 25px rgba(220,38,38,0.6);
   }
 
-  .special-message {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin-top: 2rem;
-    border-left: 4px solid #dc2626;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
-    color: #6b7280;
-  }
-
   .question-section {
     opacity: 0;
     transform: translateY(20px);
@@ -309,8 +309,8 @@
 
   <div class="main-container">
 
-    <div class="envelope-container" title="Clique para abrir a carta" id="envelopeContainer">
-      <div class="envelope" id="envelope">
+    <div class="envelope-container" id="envelopeContainer">
+      <div class="envelope">
         <div class="envelope-front">
           <div class="envelope-flap"></div>
           <div class="envelope-body"></div>
@@ -324,64 +324,59 @@
             </svg>
           </div>
         </div>
-        <div class="envelope-back"></div>
       </div>
-      <div class="instructions" id="instructions">Clique no envelope para entregar esta carta</div>
-    </div>
-
-    <div class="paper" id="letter" role="region" aria-label="Carta de amor">
-      <button class="close-btn" id="closeBtn" aria-label="Fechar carta">&times;</button>
-
-      <div class="header-icon" aria-hidden="true">
-        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-        </svg>
-      </div>
-      <h1 class="cursive" id="mainTitle">Minha Querida Dani</h1>
-      <p class="subtitle" id="subtitle">Para você, com todo o meu amor 💖</p>
-
-      <div class="romantic-divider" aria-hidden="true">✨ • 💕 • ✨</div>
-
-      <div class="love-letter" id="typewriterText" aria-live="polite" aria-atomic="true">
-        <p class="loading-text">📝 A carta está sendo escrita com carinho...</p>
-      </div>
-
-      <div class="romantic-divider" aria-hidden="true">💞 • 🌹 • 💞</div>
-
-      <div class="signature-section" id="signature" style="opacity: 0; transition: opacity 1s ease;">
-        <div class="cursive" style="font-size: 2rem; color: #b91c1c; margin-bottom: 0.5rem;">Com amor eterno,</div>
-        <div style="border-top: 2px solid #dc2626; padding-top: 0.5rem; font-weight: 600; font-family: 'Cinzel', serif; font-size: 1.3rem; color: #374151;">
-          Rubens
+      
+      <div class="paper" id="letter" role="region" aria-label="Carta de amor">
+        <button class="close-btn" id="closeBtn" aria-label="Fechar carta">&times;</button>
+  
+        <div class="header-icon" aria-hidden="true">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+          </svg>
         </div>
-      </div>
-
-      <div class="question-section" id="loveQuestionSection">
-        <h2>Você me ama?</h2>
-        <div class="buttons-container">
-          <button class="btn" id="yesLoveBtn">Sim</button>
-          <button class="btn" id="noLoveBtn">Não</button>
+        <h1 class="cursive" id="mainTitle">Minha Querida Dani</h1>
+        <p class="subtitle" id="subtitle">Para você, com todo o meu amor 💖</p>
+  
+        <div class="romantic-divider" aria-hidden="true">✨ • 💕 • ✨</div>
+  
+        <div class="love-letter" id="typewriterText" aria-live="polite" aria-atomic="true">
+          <p class="loading-text">📝 A carta está sendo escrita com carinho...</p>
         </div>
-      </div>
-
-      <div class="question-section" id="buttQuestionSection">
-        <h2>Você vai me dar a bunda sim ou não?</h2>
-        <div class="buttons-container">
-          <button class="btn" id="yesButtBtn">Sim</button>
-          <button class="btn" id="noButtBtn">Não</button>
+  
+        <div class="romantic-divider" aria-hidden="true">💞 • 🌹 • 💞</div>
+  
+        <div class="signature-section" id="signature" style="opacity: 0; transition: opacity 1s ease;">
+          <div class="cursive" style="font-size: 2rem; color: #b91c1c; margin-bottom: 0.5rem;">Com amor eterno,</div>
+          <div style="border-top: 2px solid #dc2626; padding-top: 0.5rem; font-weight: 600; font-family: 'Cinzel', serif; font-size: 1.3rem; color: #374151;">
+            Rubens
+          </div>
         </div>
+  
+        <div class="question-section" id="loveQuestionSection">
+          <h2>Você me ama?</h2>
+          <div class="buttons-container">
+            <button class="btn" id="yesLoveBtn">Sim</button>
+            <button class="btn" id="noLoveBtn">Não</button>
+          </div>
+        </div>
+  
+        <div class="question-section" id="buttQuestionSection">
+          <h2>Você vai me dar a bunda sim ou não?</h2>
+          <div class="buttons-container">
+            <button class="btn" id="yesButtBtn">Sim</button>
+            <button class="btn" id="noButtBtn">Não</button>
+          </div>
+        </div>
+  
       </div>
-
     </div>
 
   </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const envelope = document.getElementById('envelope');
     const envelopeContainer = document.getElementById('envelopeContainer');
-    const seal = document.getElementById('seal');
     const letter = document.getElementById('letter');
-    const instructions = document.getElementById('instructions');
     const closeBtn = document.getElementById('closeBtn');
     const typewriterText = document.getElementById('typewriterText');
     const signature = document.getElementById('signature');
@@ -411,6 +406,7 @@ Se for pra ser, será de verdade, dos dois lados.`;
 
     let typing = false;
     let index = 0;
+    let letterOpened = false;
 
     function typeWriter() {
       if (index < letterContent.length) {
@@ -427,27 +423,38 @@ Se for pra ser, será de verdade, dos dois lados.`;
     }
 
     function openEnvelope() {
-      if (typing) return;
-      envelope.classList.add('opened');
-      instructions.style.opacity = '0';
+      if (letterOpened) return;
+      letterOpened = true;
+      
+      envelopeContainer.classList.add('open');
+      
       setTimeout(() => {
-        letter.classList.add('show');
-        typewriterText.textContent = '';
+        if (typing) return;
+        typewriterText.innerHTML = '';
         index = 0;
         typing = true;
         typeWriter();
-      }, 800);
+      }, 1200); // Wait for slide out animation
     }
 
     function closeLetter() {
-      letter.classList.remove('show');
-      envelope.classList.remove('opened');
-      instructions.style.opacity = '1';
-      signature.style.opacity = '0';
-      loveQuestionSection.classList.remove('show');
-      buttQuestionSection.classList.remove('show');
+      envelopeContainer.classList.remove('open');
+      letterOpened = false;
       typing = false;
-      typewriterText.textContent = '';
+      
+      setTimeout(() => {
+        // Reset states after closing animation
+        typewriterText.innerHTML = '<p class="loading-text">📝 A carta está sendo escrita com carinho...</p>';
+        signature.style.opacity = '0';
+        loveQuestionSection.classList.remove('show');
+        buttQuestionSection.classList.remove('show');
+        // Reset prank state if needed
+        mainTitle.textContent = 'Minha Querida Dani';
+        subtitle.textContent = 'Para você, com todo o meu amor 💖';
+        signature.style.display = 'block';
+        buttQuestionSection.style.display = 'none';
+        loveQuestionSection.style.display = 'none';
+      }, 1000);
     }
 
     yesLoveBtn.addEventListener('click', () => {
@@ -470,14 +477,11 @@ Se for pra ser, será de verdade, dos dois lados.`;
       subtitle.textContent = '😂 sabia que você não ia resistir! 😂';
       typewriterText.innerHTML = '<p style="text-align: center; font-size: 1.5rem;">Te amo, sua boba!</p>';
       signature.style.display = 'none';
-      buttQuestionSection.style.display = 'none';
+      loveQuestionSection.style.display = 'none';
+      buttQuestionSection.classList.remove('show');
     });
 
     envelopeContainer.addEventListener('click', openEnvelope);
-    seal.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openEnvelope();
-    });
     closeBtn.addEventListener('click', closeLetter);
   });
 </script>
