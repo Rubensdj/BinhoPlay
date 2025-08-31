@@ -28,8 +28,10 @@
   }
 
   .envelope-container {
-    width: 420px;
-    height: 320px;
+    width: 90vw;
+    max-width: 420px;
+    height: 65vw;
+    max-height: 320px;
     margin: 0 auto 2rem;
     perspective: 1200px;
     cursor: pointer;
@@ -103,13 +105,13 @@
     font-family: 'Cinzel', serif;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   }
-  .recipient-name {
+  .recipient-de {
     font-size: 1.4rem;
     font-weight: 600;
     letter-spacing: 1px;
     margin-bottom: 0.3rem;
   }
-  .recipient-address {
+  .recipient-para {
     font-size: 0.9rem;
     font-style: italic;
     opacity: 0.9;
@@ -151,23 +153,26 @@
   .paper {
     background: rgba(255,255,255,0.98);
     border-radius: 16px;
-    padding: 3rem;
-    max-width: 560px;
+    padding: 2rem;
+    width: 80vw;
+    height: 50vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    max-width: 800px;
     margin: 0 auto;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     border: 2px solid rgba(220,38,38,0.1);
     position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    z-index: 5;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 35;
     transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
-    transform: translateY(100%);
     opacity: 0;
     pointer-events: none;
   }
   .envelope-container.open .paper {
-    transform: translateY(-280px);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
     pointer-events: auto;
   }
@@ -303,10 +308,28 @@
     position: relative;
     transition: top 0.3s ease, left 0.3s ease;
   }
+
+  @media (max-width: 600px) {
+    .paper {
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    .love-letter {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .btn {
+      padding: 10px 24px;
+      font-size: 1rem;
+    }
+  }
 </style>
 </head>
 <body>
 
+  <audio id="envelopeSound" src="https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-four/household_envelope_letter_open_close_001.mp3" preload="auto"></audio>
   <div class="main-container">
 
     <div class="envelope-container" id="envelopeContainer">
@@ -315,8 +338,8 @@
           <div class="envelope-flap"></div>
           <div class="envelope-body"></div>
           <div class="recipient-info">
-            <div class="recipient-name">Dani</div>
-            <div class="recipient-address">Para a pessoa mais especial</div>
+            <div class="recipient-de">de: Rubens</div>
+            <div class="recipient-para">para: uma pessoa especial</div>
           </div>
           <div class="seal" id="seal" title="Abrir carta">
             <svg class="seal-heart" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -334,7 +357,7 @@
             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
           </svg>
         </div>
-        <h1 class="cursive" id="mainTitle">Minha Querida Dani</h1>
+        <h1 class="cursive" id="mainTitle">Minha Querida Aline</h1>
         <p class="subtitle" id="subtitle">Para você, com todo o meu amor 💖</p>
   
         <div class="romantic-divider" aria-hidden="true">✨ • 💕 • ✨</div>
@@ -374,116 +397,120 @@
   </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const envelopeContainer = document.getElementById('envelopeContainer');
-    const letter = document.getElementById('letter');
-    const closeBtn = document.getElementById('closeBtn');
-    const typewriterText = document.getElementById('typewriterText');
-    const signature = document.getElementById('signature');
-    const mainTitle = document.getElementById('mainTitle');
-    const subtitle = document.getElementById('subtitle');
+document.addEventListener('DOMContentLoaded', () => {
+  // --- DOM Elements ---
+  const envelopeContainer = document.getElementById('envelopeContainer');
+  const letter = document.getElementById('letter');
+  const closeBtn = document.getElementById('closeBtn');
+  const typewriterText = document.getElementById('typewriterText');
+  const signature = document.getElementById('signature');
+  const mainTitle = document.getElementById('mainTitle');
+  const subtitle = document.getElementById('subtitle');
+  const loveQuestionSection = document.getElementById('loveQuestionSection');
+  const yesLoveBtn = document.getElementById('yesLoveBtn');
+  const noLoveBtn = document.getElementById('noLoveBtn');
+  const buttQuestionSection = document.getElementById('buttQuestionSection');
+  const yesButtBtn = document.getElementById('yesButtBtn');
+  const noButtBtn = document.getElementById('noButtBtn');
+  const envelopeSound = document.getElementById('envelopeSound');
 
-    const loveQuestionSection = document.getElementById('loveQuestionSection');
-    const yesLoveBtn = document.getElementById('yesLoveBtn');
-    const noLoveBtn = document.getElementById('noLoveBtn');
+  // --- Letter Content ---
+  const letterContent = `A gente se conheceu dia 20/08/2025, e desde então tua presença tem feito diferença.  Mesmo em pouco tempo, já mostrou que amizade não precisa de anos, só de conexão real.  Você tem uma energia única, leve, verdadeira…  Obrigad@ por estar presente, por somar e por ser você.  Tô feliz por ter cruzado teu caminho — e espero que essa amizade só cresça daqui pra frente.`;
 
-    const buttQuestionSection = document.getElementById('buttQuestionSection');
-    const yesButtBtn = document.getElementById('yesButtBtn');
-    const noButtBtn = document.getElementById('noButtBtn');
+  // --- State ---
+  let isTyping = false;
+  let letterOpened = false;
+  let typeIndex = 0;
 
-    const letterContent = `Eu só quero que saiba que eu não tava atrás de ninguém, tenho minhas regras por proteção.  
-Mas desde que a gente se conheceu, algo mudou.  
-Ainda é pouco tempo pra dizer "eu te amo", mas sinto algo real.  
-Nunca namorei, sou confuso e chato às vezes, mas se estiver com você, é só com você.  
-Quero construir meu caminho, com ou sem você, mas se for junto, quero andar lado a lado, no mesmo ritmo.  
-Sobre o que rola nas salas: jogo é só jogo.  
-Se algo te incomodar, não feche a cara nem fique brava na frente dos outros.  
-Espera o momento certo pra gente conversar e resolver.  
-Se você aceitou estar comigo, não somos só amigos.  
-Se alguém ultrapassar um limite comigo, só fala: "eu sou a mulher dele."  
-Quero respeito, maturidade e equilíbrio.  
-Se for pra ser, será de verdade, dos dois lados.`;
-
-    let typing = false;
-    let index = 0;
-    let letterOpened = false;
-
-    function typeWriter() {
-      if (index < letterContent.length) {
-        typewriterText.textContent += letterContent.charAt(index);
-        index++;
-        setTimeout(typeWriter, 40 + Math.random() * 30);
-      } else {
-        signature.style.opacity = '1';
-        setTimeout(() => {
-          loveQuestionSection.classList.add('show');
-        }, 800);
-        typing = false;
-      }
-    }
-
-    function openEnvelope() {
-      if (letterOpened) return;
-      letterOpened = true;
-      
-      envelopeContainer.classList.add('open');
-      
+  // --- Functions ---
+  function typeWriter() {
+    if (typeIndex < letterContent.length) {
+      typewriterText.textContent += letterContent.charAt(typeIndex);
+      typeIndex++;
+      setTimeout(typeWriter, 40 + Math.random() * 30);
+    } else {
+      signature.style.opacity = '1';
       setTimeout(() => {
-        if (typing) return;
-        typewriterText.innerHTML = '';
-        index = 0;
-        typing = true;
-        typeWriter();
-      }, 1200); // Wait for slide out animation
+        loveQuestionSection.classList.add('show');
+      }, 800);
+      isTyping = false;
     }
+  }
 
-    function closeLetter() {
-      envelopeContainer.classList.remove('open');
-      letterOpened = false;
-      typing = false;
-      
-      setTimeout(() => {
-        // Reset states after closing animation
-        typewriterText.innerHTML = '<p class="loading-text">📝 A carta está sendo escrita com carinho...</p>';
-        signature.style.opacity = '0';
-        loveQuestionSection.classList.remove('show');
-        buttQuestionSection.classList.remove('show');
-        // Reset prank state if needed
-        mainTitle.textContent = 'Minha Querida Dani';
-        subtitle.textContent = 'Para você, com todo o meu amor 💖';
-        signature.style.display = 'block';
-        buttQuestionSection.style.display = 'none';
-        loveQuestionSection.style.display = 'none';
-      }, 1000);
-    }
+  function openEnvelope() {
+    if (letterOpened) return;
+    letterOpened = true;
+    envelopeContainer.classList.add('open');
+    envelopeSound.play();
+    
+    setTimeout(() => {
+      if (isTyping) return;
+      typewriterText.innerHTML = '';
+      typeIndex = 0;
+      isTyping = true;
+      typeWriter();
+    }, 1200);
+  }
 
-    yesLoveBtn.addEventListener('click', () => {
+  function closeLetter() {
+    envelopeContainer.classList.remove('open');
+    letterOpened = false;
+    isTyping = false;
+    
+    setTimeout(() => {
+      typewriterText.innerHTML = '<p class="loading-text">📝 A carta está sendo escrita com carinho...</p>';
+      signature.style.opacity = '0';
       loveQuestionSection.classList.remove('show');
-      setTimeout(() => {
-        buttQuestionSection.classList.add('show');
-      }, 400);
-    });
-
-    noButtBtn.addEventListener('mouseover', () => {
-      const top = Math.random() * (window.innerHeight - 150);
-      const left = Math.random() * (window.innerWidth - 150);
-      noButtBtn.style.position = 'absolute';
-      noButtBtn.style.top = top + 'px';
-      noButtBtn.style.left = left + 'px';
-    });
-
-    yesButtBtn.addEventListener('click', () => {
-      mainTitle.textContent = 'PEGADINHA!';
-      subtitle.textContent = '😂 sabia que você não ia resistir! 😂';
-      typewriterText.innerHTML = '<p style="text-align: center; font-size: 1.5rem;">Te amo, sua boba!</p>';
-      signature.style.display = 'none';
-      loveQuestionSection.style.display = 'none';
       buttQuestionSection.classList.remove('show');
-    });
+      mainTitle.textContent = 'Minha Querida Aline';
+      subtitle.textContent = 'Para você, com todo o meu amor 💖';
+      signature.style.display = 'block';
+      buttQuestionSection.style.display = 'none';
+      loveQuestionSection.style.display = 'none';
+    }, 1000);
+  }
 
+  function handleYesLoveClick() {
+    loveQuestionSection.classList.remove('show');
+    setTimeout(() => {
+      buttQuestionSection.classList.add('show');
+    }, 400);
+  }
+
+  function handleNoButtMouseover() {
+    const top = Math.random() * (window.innerHeight - 150);
+    const left = Math.random() * (window.innerWidth - 150);
+    noButtBtn.style.position = 'absolute';
+    noButtBtn.style.top = `${top}px`;
+    noButtBtn.style.left = `${left}px`;
+  }
+
+  function handleYesButtClick() {
+    mainTitle.textContent = 'PEGADINHA!';
+    subtitle.textContent = '😂 sabia que você não ia resistir! 😂';
+    typewriterText.innerHTML = '<p style="text-align: center; font-size: 1.5rem;">Te amo, sua boba!</p>';
+    signature.style.display = 'none';
+    loveQuestionSection.style.display = 'none';
+    buttQuestionSection.classList.remove('show');
+  }
+
+  // --- Event Listeners ---
+  if (envelopeContainer) {
     envelopeContainer.addEventListener('click', openEnvelope);
+  }
+  if (closeBtn) {
     closeBtn.addEventListener('click', closeLetter);
-  });
+  }
+  if (yesLoveBtn) {
+    yesLoveBtn.addEventListener('click', handleYesLoveClick);
+  }
+  if (noButtBtn) {
+    noButtBtn.addEventListener('mouseover', handleNoButtMouseover);
+  }
+  if (yesButtBtn) {
+    yesButtBtn.addEventListener('click', handleYesButtClick);
+  }
+});
 </script>
 
 </body>
