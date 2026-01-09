@@ -1,153 +1,320 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Carta de Natal para Minha Irmã</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LoveGram • Ana & Rubens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary: #ff4757;
+            --bg-login: #f8f9fa;
+            --app-bg: linear-gradient(135deg, #fff5f7 0%, #ffe3e6 100%);
+            --nav-height: 70px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #001122, #004466);
-            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            background: var(--bg-login);
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-        .envelope {
-            width: 400px;
-            height: 300px;
-            background: #f4e4bc;
-            border: 2px solid #8b4513;
-            position: relative;
-            cursor: pointer; /* Garante que seja clicável */
-            transition: transform 0.5s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Sombra para 3D */
-            border-radius: 5px; /* Bordas suaves */
+
+        /* === LOGIN === */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 5000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; transition: transform 0.8s ease;
         }
-        .envelope.open {
-            transform: rotateY(180deg) scale(0.9); /* Abre e encolhe ligeiramente */
+        .login-card { width: 100%; max-width: 350px; text-align: center; }
+        .app-logo {
+            font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff0066, #ff4757, #ff9f43);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .envelope-front {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, #f4e4bc 80%, #d2b48c 100%); /* Textura leve */
-            clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%); /* Forma de envelope com aba maior */
-            z-index: 2;
-            border-top: 3px solid #8b4513; /* Aba superior mais visível */
+        .login-input {
+            width: 100%; padding: 12px; background: #fafafa; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 14px; margin-bottom: 10px; outline: none;
         }
-        .envelope-back {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #f4e4bc;
-            transform: rotateY(180deg);
-            z-index: 1;
+        .login-btn {
+            width: 100%; padding: 12px; background: var(--primary); color: white; border: none;
+            border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 5px; font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
         }
-        .letter {
-            position: absolute;
-            top: 50px; /* Posição inicial dentro do envelope */
-            left: 20px;
-            width: 360px;
-            height: 200px;
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            box-sizing: border-box;
-            display: none;
-            z-index: 3;
-            animation: slideOut 1s ease-out; /* Animação de sair */
-            transform-origin: top center;
+
+        /* === APP === */
+        #app-container { display: none; width: 100%; height: 100%; background: var(--app-bg); padding-bottom: 90px; overflow-y: auto; }
+        
+        .content-section { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
+        .content-section.active-section { display: block; }
+        
+        .card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .title { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--primary); text-align: center; margin-bottom: 15px; }
+
+        /* INTERATIVOS */
+        .love-check { border: 2px dashed #ffb8b8; background: #fff0f3; text-align: center; padding: 20px; border-radius: 15px; margin-top: 15px; }
+        .btn-sim { background: #2ecc71; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        .btn-nao { background: #e74c3c; color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; position: relative; transition: 0.2s; }
+
+        /* CARTAS ABRA QUANDO */
+        .letter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .letter-btn {
+            background: white; border: 1px solid #ffdfe6; padding: 15px; border-radius: 12px;
+            text-align: center; font-size: 0.9rem; color: #555; cursor: pointer; transition: 0.2s;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 5px; align-items: center;
         }
-        .envelope.open .letter {
-            display: block;
+        .letter-btn:active { transform: scale(0.98); background: #fff0f3; }
+        .letter-icon { font-size: 1.5rem; color: var(--primary); }
+
+        /* CUPONS */
+        .coupon-container { text-align: center; margin-top: 20px; }
+        .coupon-card {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4); color: white;
+            padding: 20px; border-radius: 15px; margin-top: 15px; font-weight: bold;
+            font-size: 1.2rem; border: 2px dashed white; display: none; animation: popIn 0.5s;
         }
-        @keyframes slideOut {
-            from { transform: translateY(0) rotateX(0deg); opacity: 0; }
-            to { transform: translateY(-50px) rotateX(-10deg); opacity: 1; } /* Sai e inclina */
+
+        /* MODAL (JANELINHA) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 6000; display: none;
+            justify-content: center; align-items: center; padding: 20px;
         }
-        .snow {
-            position: absolute;
-            top: -10px;
-            animation: fall 5s linear infinite;
-            color: white;
-            font-size: 20px;
+        .modal-box {
+            background: white; width: 100%; max-width: 320px; padding: 25px;
+            border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: popIn 0.3s;
         }
-        @keyframes fall {
-            to { transform: translateY(100vh); }
+        .close-modal {
+            margin-top: 15px; background: var(--primary); color: white; border: none;
+            padding: 10px 20px; border-radius: 20px; cursor: pointer; width: 100%;
         }
-        .message {
-            font-size: 18px;
-            color: #8b0000;
-            text-align: center;
-            animation: glow 2s infinite alternate;
+
+        /* NAV */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: var(--nav-height);
+            background: white; border-top: 1px solid #eee; display: flex; justify-content: space-around;
+            align-items: center; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.03);
         }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #ff0000; }
-            to { text-shadow: 0 0 20px #ff0000; }
-        }
-        .photo {
-            width: 200px;
-            height: 150px;
-            margin: 10px auto;
-            border: 2px solid #8b4513;
-            display: block;
-        }
-        .santa {
-            font-size: 50px;
-            text-align: center;
-            animation: wave 2s infinite;
-            margin: 10px 0;
-        }
-        @keyframes wave {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            75% { transform: rotate(-5deg); }
-        }
-        audio {
-            display: none; /* Música toca automaticamente */
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #b0b0b0; text-decoration: none; font-size: 0.7rem; transition: 0.3s; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
+
+        /* PLAYER */
+        .music-float { position: fixed; top: 15px; right: 15px; width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 200; animation: spin 4s linear infinite paused; }
+        .music-float.playing { animation-play-state: running; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div class="envelope" onclick="openEnvelope()">
-        <div class="envelope-front"></div>
-        <div class="envelope-back"></div>
-        <div class="letter">
-            <h1 style="text-align: center; color: #32cd32;">🎄 Feliz Natal, Mana! 🎄</h1>
-            <img src="[SUA FOTO]" alt="Foto da família" class="photo"> <!-- Substitua por URL da sua foto -->
-            <div class="santa">🎅</div> <!-- Papai Noel animado -->
-            <p class="message">Querida [Nome dela], este Natal me lembra de todas as aventuras que vivemos juntos – das brigas bobas às risadas infinitas. Você é minha melhor amiga e parceira de crimes. Te amo demais e mal posso esperar pelo próximo ano cheio de memórias! Que o Papai Noel traga tudo o que você sonhou. Ho ho ho!</p>
+    
+    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+    <div class="music-float" id="musicBtn" onclick="toggleMusic()" style="display:none;"><i class="fas fa-music"></i></div>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <h1 class="app-logo">LoveGram</h1>
+            <p style="color:#888; margin-bottom: 20px; font-size: 0.9rem;">O app oficial do nosso amor</p>
+            <input type="text" class="login-input" placeholder="Seu nome">
+            <input type="password" id="passwordInput" class="login-input" placeholder="Senha">
+            <button class="login-btn" onclick="checkLogin()">Entrar ❤️</button>
+            <p style="margin-top:20px; font-size: 12px; color: #aaa;" onclick="alert('Dica: 19122025')">Esqueceu a senha?</p>
         </div>
     </div>
-    
-    <!-- Música de fundo -->
-    <audio autoplay loop>
-        <source src="musica.mp3" type="audio/mpeg"> <!-- Substitua por seu arquivo MP3 festivo -->
-        Seu navegador não suporta áudio.
-    </audio>
-    
-    <script>
-        // Animação de neve caindo
-        setInterval(() => {
-            const snow = document.createElement('div');
-            snow.className = 'snow';
-            snow.textContent = '❄️';
-            snow.style.left = Math.random() * 100 + '%';
-            document.body.appendChild(snow);
-            setTimeout(() => snow.remove(), 5000);
-        }, 300);
+
+    <div id="app-container">
         
-        // Função para abrir/fechar envelope
-        function openEnvelope() {
-            const envelope = document.querySelector('.envelope');
-            envelope.classList.toggle('open');
+        <section id="home" class="content-section active-section">
+            <div class="card">
+                <h2 class="title">Bem-vinda, Vida!</h2>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <span style="background: #ffe0e6; color: #ff4757; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;" id="timerDisplay">...</span>
+                </div>
+
+                <div class="love-check">
+                    <p style="font-weight: bold; color: #333; margin-bottom: 15px;">Você me ama muito? 🥺</p>
+                    <button class="btn-sim" onclick="sendWhatsapp('SIM, EU TE AMO MUITO! ❤️')">SIM ❤️</button>
+                    <button class="btn-nao" id="btnNao" onclick="alert('Ei! Não vale! 😂')">NÃO</button>
+                </div>
+
+                <div style="margin-top: 20px; text-align: justify; color: #555; line-height: 1.6; font-size: 0.95rem;">
+                    <p>Ô meu amor, se tem uma pessoa q tem q agradecer todos os dias sou eu, por ter vc. Vc entrou na minha vida pra fazer a diferença.</p>
+                    <p style="margin-top: 10px;">Eu te escolhi e te escolheria mais 10 vezes. Vc é a melhor parte do meu dia.</p>
+                    <p style="text-align: center; font-weight: bold; color: var(--primary); margin-top: 15px;">Te amo. 💙💑💖✨</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="letters" class="content-section">
+            <div class="card">
+                <h2 class="title">Abra Quando... 💌</h2>
+                <p style="text-align: center; margin-bottom: 20px; color: #666; font-size: 0.9rem;">Escolha como você está se sentindo:</p>
+                
+                <div class="letter-grid">
+                    <div class="letter-btn" onclick="openModal('Triste 😢', 'Amor, não fica assim! Lembra que eu to aqui com você pra tudo. Você é forte e incrível. Respira fundo, eu te amo!')">
+                        <i class="fas fa-sad-tear letter-icon"></i> Estiver Triste
+                    </div>
+                    <div class="letter-btn" onclick="openModal('Feliz 😄', 'Ver você feliz é o que me faz feliz! Sorria muito, você ilumina meu mundo com esse sorriso!')">
+                        <i class="fas fa-smile-beam letter-icon"></i> Estiver Feliz
+                    </div>
+                    <div class="letter-btn" onclick="openModal('Com Saudade 🥺', 'Eu também to morrendo de saudade! Fecha os olhos e imagina meu abraço bem forte agora. Logo a gente se vê!')">
+                        <i class="fas fa-heart-broken letter-icon"></i> Com Saudade
+                    </div>
+                    <div class="letter-btn" onclick="openModal('Brava 😤', 'Eita, calma ai leoa! Respira... Eu te amo mesmo quando você tá brava. Desculpa qualquer coisa, tá?')">
+                        <i class="fas fa-angry letter-icon"></i> Estiver Brava
+                    </div>
+                    <div class="letter-btn" onclick="openModal('Insegura 🙈', 'Ei? Para com isso. Você é a mulher da minha vida, a mais linda e a única que eu quero. Nunca duvide disso!')">
+                        <i class="fas fa-user-shield letter-icon"></i> Insegura
+                    </div>
+                    <div class="letter-btn" onclick="openModal('Carente 🤗', 'Own meu dengo... Queria ta ai pra te encher de beijo e carinho. Sinta-se beijada agora!')">
+                        <i class="fas fa-kiss-wink-heart letter-icon"></i> Carente
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fun" class="content-section">
+            
+            <div class="card">
+                <h2 class="title">Cupons do Amor 🎟️</h2>
+                <p style="text-align: center; font-size: 0.9rem; color: #666;">Clique para ganhar um vale-presente:</p>
+                
+                <div class="coupon-container">
+                    <button onclick="getCoupon()" style="background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer;">Resgatar Cupom</button>
+                    <div id="couponResult" class="coupon-card"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="title">Dado do Amor 🎲</h2>
+                <div id="diceResult" style="text-align: center; font-weight: bold; color: var(--primary); min-height: 30px; margin-bottom: 10px;">...</div>
+                <button onclick="rollDice()" style="width:100%; padding: 10px; background: #333; color: white; border: none; border-radius: 8px;">Girar Dado</button>
+            </div>
+
+             <div class="card">
+                <h2 class="title">Quiz Rápido ⚡</h2>
+                <p style="text-align: center;">Onde nos conhecemos?</p>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button onclick="alert('Acertou! 😍')" style="flex:1; padding: 10px; border:1px solid #ddd; background:white; border-radius:8px;">WePlay</button>
+                    <button onclick="alert('Errou 😅')" style="flex:1; padding: 10px; border:1px solid #ddd; background:white; border-radius:8px;">Shopping</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="chat" class="content-section">
+            <div class="card">
+                <h2 class="title">Direct 💌</h2>
+                <textarea id="msgInput" style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 10px; resize: none;" placeholder="Escreva algo pra mim..."></textarea>
+                <button onclick="sendCustomMsg()" style="width: 100%; padding: 12px; background: #25D366; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                    <i class="fab fa-whatsapp"></i> Enviar
+                </button>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="#" class="nav-item" onclick="nav('letters', this)"><i class="fas fa-envelope-open-text"></i><span>Cartas</span></a>
+            <a href="#" class="nav-item" onclick="nav('fun', this)"><i class="fas fa-gamepad"></i><span>Diversão</span></a>
+            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-paper-plane"></i><span>Chat</span></a>
+        </nav>
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="modalTitle" style="color: var(--primary); margin-bottom: 10px;">Titulo</h3>
+            <p id="modalText" style="color: #555; line-height: 1.5;">Texto...</p>
+            <button class="close-modal" onclick="closeModal()">Fechar ❤️</button>
+        </div>
+    </div>
+
+    <script>
+        // --- SEU NÚMERO (PERNAMBUCO) ---
+        const MEU_NUMERO = "5581989501999"; 
+        
+        const SENHA = "19122025";
+        const DATA_INICIO = new Date("2025-12-19T00:00:00");
+
+        // LOGIN
+        function checkLogin() {
+            const pass = document.getElementById('passwordInput');
+            if(pass.value === SENHA) {
+                document.getElementById('login-screen').style.transform = "translateY(-100%)";
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = "none";
+                    document.getElementById('app-container').style.display = "block";
+                    document.getElementById('musicBtn').style.display = "flex";
+                    playMusic(); setInterval(timer, 1000);
+                }, 500);
+            } else { alert("Senha incorreta! Dica: Data do WePlay"); }
+        }
+
+        // NAV
+        function nav(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
+        }
+
+        // WHATSAPP
+        function sendWhatsapp(msg) {
+            window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+        function sendCustomMsg() {
+            const txt = document.getElementById('msgInput').value;
+            if(txt) sendWhatsapp("Amor, mensagem do site: " + txt);
+        }
+
+        // MODAL (CARTAS)
+        function openModal(title, text) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalText').innerText = text;
+            document.getElementById('modal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        // CUPOM
+        function getCoupon() {
+            const cupons = ["Vale 1 Massagem", "Vale 1 Beijo", "Vale 1 Jantar", "Vale Cinema", "Vale um Pedido Livre"];
+            const result = document.getElementById('couponResult');
+            result.style.display = 'block';
+            result.innerText = cupons[Math.floor(Math.random() * cupons.length)];
+        }
+
+        // DADO
+        function rollDice() {
+            const desafios = ["Beijo demorado", "Abraço", "Massagem", "Dizer 'Te Amo'", "Sussurrar no ouvido"];
+            document.getElementById('diceResult').innerText = "Girando...";
+            setTimeout(() => document.getElementById('diceResult').innerText = desafios[Math.floor(Math.random()*desafios.length)], 1000);
+        }
+
+        // FUGIR BOTÃO NÃO
+        const btnNao = document.getElementById('btnNao');
+        btnNao.addEventListener('mouseover', () => {
+            btnNao.style.position = 'fixed';
+            btnNao.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btnNao.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+        });
+
+        // TIMER & MUSIC
+        function timer() {
+            const diff = new Date() - DATA_INICIO;
+            const d = Math.floor(diff/(1000*60*60*24));
+            document.getElementById('timerDisplay').innerText = `${d} Dias Juntos`;
+        }
+        function playMusic() { document.getElementById('bgMusic').play().catch(()=>{}); document.getElementById('musicBtn').classList.add('playing'); }
+        function toggleMusic() { 
+            const a = document.getElementById('bgMusic'); 
+            if(a.paused){a.play(); document.getElementById('musicBtn').classList.add('playing');}
+            else{a.pause(); document.getElementById('musicBtn').classList.remove('playing');} 
         }
     </script>
 </body>
