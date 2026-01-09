@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MÁFIA WEPLAY - CENTRAL DE COMANDO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #d4af37; --dark: #0a0a0a; --card: #1a1a1a; --text: #e0e0e0; --red: #ff4444; --green: #00ff00; --blue: #00d4ff; }
+        body { background: var(--dark); color: var(--text); font-family: 'Roboto', sans-serif; margin: 0; padding: 0; }
+        
+        /* Navegação */
+        nav { background: #000; padding: 15px; border-bottom: 2px solid var(--gold); display: flex; justify-content: center; gap: 20px; position: sticky; top: 0; z-index: 100; }
+        nav a { color: var(--gold); text-decoration: none; font-family: 'Cinzel', serif; font-size: 0.9em; cursor: pointer; }
+        nav a:hover { color: white; }
+
+        header { text-align: center; padding: 30px 10px; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 2em; letter-spacing: 4px; }
+
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .section { display: none; animation: fadeIn 0.5s; }
+        .active { display: block; }
+
+        /* Dashboard Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 8px; text-align: center; border-bottom: 3px solid var(--gold); }
+        .stat-val { display: block; font-size: 1.8em; font-weight: bold; color: var(--gold); margin-top: 5px; }
+
+        /* Painéis */
+        .grid-main { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
+        .panel { background: var(--card); padding: 20px; border-radius: 8px; border: 1px solid #333; }
+
+        textarea { width: 100%; height: 150px; background: #000; color: var(--green); border: 1px solid #444; padding: 10px; border-radius: 5px; font-family: monospace; resize: none; margin: 10px 0; }
+        
+        .btn { background: var(--gold); color: black; border: none; padding: 12px; font-weight: bold; cursor: pointer; border-radius: 4px; width: 100%; text-transform: uppercase; margin: 5px 0; }
+        .btn:hover { background: white; }
+        .btn-red { background: var(--red); color: white; }
+
+        /* Tabelas */
+        table { width: 100%; border-collapse: collapse; background: #151515; font-size: 0.85em; }
+        th { background: #222; color: var(--gold); padding: 12px; text-align: left; border-bottom: 2px solid var(--gold); }
+        td { padding: 12px; border-bottom: 1px solid #333; }
+        
+        .tag { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75em; }
+        .tag-120 { background: var(--blue); color: black; }
+        .tag-60 { background: var(--gold); color: black; }
+        .tag-24 { background: #c0c0c0; color: black; }
+        .tag-8 { background: #cd7f32; color: black; }
+
+        /* Roleta */
+        .wheel-box { text-align: center; padding: 20px; }
+        canvas { max-width: 100%; height: auto; border: 5px solid var(--gold); border-radius: 50%; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a onclick="showSection('dash')">INÍCIO</a>
+    <a onclick="showSection('gestao')">GESTÃO</a>
+    <a onclick="showSection('roleta')">ROLETA</a>
+    <a onclick="showSection('blacklist')">BLACKLIST</a>
+</nav>
+
+<header>
+    <h1>🏛️ MÁFIA WEPLAY 🏛️</h1>
+    <p style="color: #888;">ORDEM • PODER • LEALDADE</p>
+</header>
+
+<div class="container">
+    
+    <div id="dash" class="section active">
+        <div class="stats-grid">
+            <div class="stat-card">MEMBROS<span class="stat-val" id="statMembros">0 / 120</span></div>
+            <div class="stat-card">BANCO SEMANAL<span class="stat-val" id="statBanco">0 🪙</span></div>
+            <div class="stat-card">TOP ATIVIDADE<span class="stat-val" id="statTop">---</span></div>
+        </div>
+        <div class="panel">
+            <h3>🏆 Elite da Semana (Ranking)</h3>
+            <table id="tableRanking">
+                <thead>
+                    <tr>
+                        <th>Membro</th>
+                        <th>Atividade (C)</th>
+                        <th>Doação (🪙)</th>
+                        <th>Status Baú</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyRanking"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="gestao" class="section">
+        <div class="grid-main">
+            <div class="panel">
+                <h3>📥 Processar Dados</h3>
+                <select id="tipoInput" class="btn" style="background:#222; color:white; border:1px solid #444;">
+                    <option value="missao">TAREFAS DIÁRIAS (C)</option>
+                    <option value="doacao">DOAÇÃO BANCO (🪙)</option>
+                </select>
+                <input type="number" id="valorInput" value="500" class="btn" style="background:#222; color:white; border:1px solid #444; text-align:center;">
+                <textarea id="textoLista" placeholder="Cole a lista do WePlay aqui..."></textarea>
+                <button class="btn" onclick="processarLista()">✅ Somar Pontos</button>
+                <hr style="border:0; border-top:1px solid #333; margin:20px 0;">
+                <button class="btn" style="background:#444; color:white;" onclick="exportarWhatsApp()">📋 Copiar Resumo WhatsApp</button>
+                <button class="btn btn-red" onclick="resetSemana()">🔄 Reiniciar Semana</button>
+                <button class="btn" style="background:#222; color:var(--gold); font-size:0.7em;" onclick="downloadData()">💾 Backup Dados (JSON)</button>
+            </div>
+            <div class="panel">
+                <h3>👥 Gerenciar Membros</h3>
+                <table id="tableGestao">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyGestao"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="roleta" class="section">
+        <div class="grid-main">
+            <div class="panel">
+                <h3>🎰 Sorteio de Envelopes</h3>
+                <textarea id="listaRoleta" placeholder="Um prêmio ou nome por linha...">Envelope 500&#10;Presente 1k&#10;Vaga VIP&#10;Nada</textarea>
+                <button class="btn" id="btnGirar" onclick="girarRoleta()">GIRAR ROLETA</button>
+                <h2 id="resRoleta" style="color:var(--gold); text-align:center;">---</h2>
+            </div>
+            <div class="panel wheel-box">
+                <canvas id="canvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="blacklist" class="section">
+        <div class="panel">
+            <h3>🚫 Lista Negra (Traidores)</h3>
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <input type="text" id="nomeBlack" placeholder="Nome do Traidor" class="btn" style="background:#222; color:white; text-align:left; padding-left:15px;">
+                <input type="text" id="motivoBlack" placeholder="Motivo" class="btn" style="background:#222; color:white; text-align:left; padding-left:15px;">
+                <button class="btn" style="width:200px;" onclick="addBlacklist()">BANIR</button>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Nome</th><th>Motivo</th><th>Data</th><th></th></tr>
+                </thead>
+                <tbody id="bodyBlack"></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- DATABASE ---
+    let db = JSON.parse(localStorage.getItem('mafia_ultra_db')) || { familia: [], blacklist: [] };
+
+    function save() { 
+        localStorage.setItem('mafia_ultra_db', JSON.stringify(db)); 
+        renderAll();
+    }
+
+    // --- NAVEGAÇÃO ---
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'roleta') drawWheel();
+    }
+
+    // --- LÓGICA DE MEMBROS ---
+    function processarLista() {
+        const txt = document.getElementById('textoLista').value;
+        const valor = parseInt(document.getElementById('valorInput').value) || 0;
+        const tipo = document.getElementById('tipoInput').value;
+        
+        if(!txt) return alert("Lista vazia!");
+        const linhas = txt.split('\n');
+        let cont = 0;
+
+        linhas.forEach(l => {
+            const match = l.match(/\d+[-]\s*(.+)/);
+            if(match) {
+                const nome = match[1].trim();
+                if(nome) {
+                    let m = db.familia.find(f => f.nome === nome);
+                    if(!m) { m = { nome, c: 0, d: 0 }; db.familia.push(m); }
+                    if(tipo === 'missao') m.c += valor; else m.d += valor;
+                    cont++;
+                }
+            }
+        });
+        document.getElementById('textoLista').value = "";
+        alert(cont + " Membros Processados!");
+        save();
+    }
+
+    function calcBau(c, d) {
+        if(c >= 2400 && d >= 6000) return { t: "120K 💎", c: "tag-120" };
+        if(c >= 1200 && d >= 3000) return { t: "60K 💰", c: "tag-60" };
+        if(c >= 500 && d >= 700) return { t: "24K 🪙", c: "tag-24" };
+        if(c >= 500) return { t: "8K 📦", c: "tag-8" };
+        return { t: "INATIVO", c: "" };
+    }
+
+    function renderAll() {
+        // Stats
+        document.getElementById('statMembros').innerText = `${db.familia.length} / 120`;
+        const totalD = db.familia.reduce((s, m) => s + m.d, 0);
+        document.getElementById('statBanco').innerText = totalD + " 🪙";
+        
+        // Ranking Dash
+        const bodyR = document.getElementById('bodyRanking');
+        bodyR.innerHTML = "";
+        db
