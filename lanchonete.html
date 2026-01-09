@@ -1,0 +1,184 @@
+// --- DADOS DOS PRODUTOS (Edite aqui se precisar mudar preços) ---
+const products = [
+    { id: 1, name: "X-Tudo Delícia", price: 28.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd" },
+    { id: 2, name: "Barca de Batata", price: 35.00, img: "https://images.unsplash.com/photo-1541592106381-b31e96716230" },
+    { id: 3, name: "Coca-Cola 2L", price: 12.00, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97" },
+    { id: 4, name: "Combo Casal", price: 55.90, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5" }
+];
+
+let cart = [];
+let orderData = { id: null, type: null, detail: null, payment: null };
+let checkoutStep = 0; 
+let isChatOpen = false;
+
+document.addEventListener('DOMContentLoaded', () => { renderMenu(); });
+
+function renderMenu() {
+    const container = document.getElementById('products-container');
+    products.forEach(p => {
+        container.innerHTML += `
+            <div class="card">
+                <img src="${p.img}" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <span class="price">R$ ${p.price.toFixed(2)}</span>
+                <button class="add-btn" onclick="addToCart(${p.id})">Pedir Agora</button>
+            </div>
+        `;
+    });
+}
+
+function addToCart(id) {
+    const item = products.find(p => p.id === id);
+    cart.push(item);
+    document.getElementById('cart-count').innerText = cart.length;
+    
+    if(!isChatOpen) toggleChat();
+    
+    if(checkoutStep === 0) {
+        botReply(`Hummm! 😋 Adicionei <b>${item.name}</b>. Total parcial: R$ ${calculateTotal()}`);
+    } else {
+        botReply(`(Adicionado) Continue com seus dados...`);
+    }
+}
+
+function calculateTotal() { return cart.reduce((acc, item) => acc + item.price, 0).toFixed(2); }
+
+function toggleChat() {
+    isChatOpen = !isChatOpen;
+    document.getElementById('chat-window').style.display = isChatOpen ? 'flex' : 'none';
+}
+
+function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+
+function sendMessage() {
+    const input = document.getElementById('user-input');
+    const txt = input.value.trim();
+    if (!txt) return;
+
+    addMessage(txt, 'user');
+    input.value = '';
+
+    setTimeout(() => { processAiResponse(txt); }, 800);
+}
+
+function addMessage(text, sender) {
+    const chatBody = document.getElementById('chat-body');
+    const div = document.createElement('div');
+    div.className = `message ${sender}`;
+    div.innerHTML = `<p>${text}</p>`;
+    chatBody.appendChild(div);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function botReply(text) { addMessage(text, 'bot'); }
+
+// CÉREBRO DA IA (Fluxo Delícias da Casa)
+function processAiResponse(text) {
+    const lower = text.toLowerCase();
+
+    if (checkoutStep === 0) {
+        if (lower.includes('fechar') || lower.includes('finalizar') || lower.includes('conta') || lower.includes('pedir')) {
+            if (cart.length === 0) return botReply("Seu carrinho está vazio! Clique em 'Pedir Agora' nos lanches primeiro.");
+            
+            checkoutStep = 1;
+            botReply("Ótima escolha! 🛵 Vai ser <b>ENTREGA</b> ou vai <b>RETIRAR</b> aqui?");
+        } 
+        else if (lower.includes('oi') || lower.includes('ola')) {
+            botReply("Olá! Bem-vindo ao Delícias da Casa. Posso anotar seu pedido?");
+        }
+        else {
+            botReply("Entendi. Quando quiser fechar, é só digitar 'fechar conta'.");
+        }
+    }
+    
+    else if (checkoutStep === 1) {
+        if (lower.includes('entrega')) {
+            orderData.type = 'Delivery';
+            checkoutStep = 2;
+            botReply("Ok, Delivery! Por favor, digite seu <b>Endereço Completo</b> (Rua, Número e Bairro).");
+        } 
+        else if (lower.includes('retirar') || lower.includes('buscar') || lower.includes('aqui')) {
+            orderData.type = 'Retirada';
+            checkoutStep = 2;
+            botReply("Combinado! Qual é o <b>seu nome</b> para colocarmos na sacola?");
+        } 
+        else {
+            botReply("Não entendi bem. Digite <b>Entrega</b> ou <b>Retirar</b>.");
+        }
+    }
+
+    else if (checkoutStep === 2) {
+        orderData.detail = text;
+        checkoutStep = 3;
+        botReply("Anotado! 📝 Como prefere pagar? (Pix, Dinheiro ou Cartão)");
+    }
+
+    else if (checkoutStep === 3) {
+        orderData.payment = text;
+        orderData.id = generateOrderId();
+        
+        botReply("Perfeito! Gerando sua Nota do Pedido...");
+        setTimeout(() => { generateInvoice(); checkoutStep = 0; }, 1000);
+    }
+}
+
+function generateOrderId() {
+    const random = Math.floor(1000 + Math.random() * 9000);
+    return `#JR-${random}`;
+}
+
+function generateInvoice() {
+    const modal = document.getElementById('invoice-modal');
+    const content = document.getElementById('invoice-content');
+    const date = new Date().toLocaleString('pt-BR');
+    
+    let itemsHtml = '';
+    cart.forEach(item => {
+        itemsHtml += `<div style="display:flex; justify-content:space-between;"><span>1x ${item.name}</span><span>R$ ${item.price.toFixed(2)}</span></div>`;
+    });
+
+    content.innerHTML = `
+        <center><strong>DELÍCIAS DA CASA</strong></center>
+        <center>O Sabor que Vicia</center>
+        <div class="dashed-line"></div>
+        <div>DATA: ${date}</div>
+        <div>PEDIDO: <strong>${orderData.id}</strong></div>
+        <div>MODO: ${orderData.type}</div>
+        <div class="dashed-line"></div>
+        ${itemsHtml}
+        <div class="dashed-line"></div>
+        <div class="total-row">
+            <span>TOTAL:</span>
+            <span>R$ ${calculateTotal()}</span>
+        </div>
+        <div class="dashed-line"></div>
+        <div>CLIENTE/ENDEREÇO: ${orderData.detail}</div>
+        <div>PAGAMENTO: ${orderData.payment}</div>
+        <br>
+        <center>*** Obrigado pela preferência! ***</center>
+    `;
+
+    modal.style.display = 'flex';
+}
+
+function closeInvoice() {
+    document.getElementById('invoice-modal').style.display = 'none';
+    cart = []; 
+    document.getElementById('cart-count').innerText = '0';
+    botReply("Pedido enviado! Se quiser mais alguma coisa, estou por aqui.");
+}
+
+function sendToWhatsAppFinal() {
+    let msg = `🧾 *NOVO PEDIDO - DELÍCIAS DA CASA*\n`;
+    msg += `--------------------------------\n`;
+    cart.forEach(item => { msg += `🍔 1x ${item.name} - R$ ${item.price.toFixed(2)}\n`; });
+    msg += `--------------------------------\n`;
+    msg += `💰 *TOTAL: R$ ${calculateTotal()}*\n`;
+    msg += `💳 Pagamento: ${orderData.payment}\n`;
+    msg += `📍 Info: ${orderData.detail}\n`;
+    msg += `📦 Tipo: ${orderData.type}`;
+
+    // SEU NÚMERO CONFIGURADO AQUI:
+    const phone = "5581989131430"; 
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
