@@ -82,4 +82,298 @@
 
         /* DOCUMENTOS */
         .contract-paper {
-            background: #fffdf0; border: 1px solid #d4af37
+            background: #fffdf0; border: 1px solid #d4af37; padding: 20px;
+            font-family: 'Courier Prime', monospace; font-size: 0.85rem; line-height: 1.6;
+            color: #000; position: relative; margin-bottom: 15px;
+        }
+        
+        .certificate {
+            background: #fff; border: 8px double #d4af37; padding: 20px; text-align: center; display: none; margin-top: 20px;
+        }
+        
+        .id-card {
+            background: linear-gradient(135deg, #ff4757, #ff6b81); color: white;
+            border-radius: 15px; padding: 20px; display: none; margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        /* CALENDÁRIO */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
+        .cal-day { padding: 10px; background: white; border-radius: 5px; font-size: 0.9rem; cursor: pointer; border: 1px solid #eee; }
+        .cal-day.today { background: #eee; font-weight: bold; }
+        .cal-day.special { background: #ff4757; color: white; font-weight: bold; }
+
+        /* MENU INFERIOR */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 350px; height: 65px; background: white; border-radius: 50px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .nav-item { color: #ccc; font-size: 1.4rem; transition: 0.3s; cursor: pointer; }
+        .nav-item.active { color: #ff4757; transform: translateY(-3px); }
+
+        /* MODAL */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+            z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content { background: white; padding: 25px; border-radius: 10px; width: 100%; max-width: 350px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+
+    <div id="login-screen">
+        <div class="gov-card">
+            <div class="gov-logo">República do Amor</div>
+            <p style="margin-bottom: 20px; color: #666;">Sistema Único de Namoro</p>
+            
+            <input type="text" id="nameInput" class="login-input" placeholder="Seu Nome (Ex: Ana)">
+            <input type="password" id="passInput" class="login-input" placeholder="Senha">
+            
+            <button type="button" class="login-btn" onclick="tryLogin()">Entrar no Sistema</button>
+            <p style="margin-top: 15px; font-size: 12px; color: #999;">Dica: 19122025</p>
+        </div>
+    </div>
+
+    <div id="app-container">
+        <div class="app-header">
+            <span style="font-weight: bold; color: #002d62;">PORTAL OFICIAL</span>
+            <i class="fas fa-heart" style="color: #ff4757;"></i>
+        </div>
+
+        <div id="tab-home" class="section active">
+            <div class="card">
+                <h2 class="title">Olá, <span class="dynamic-name" id="displayHomeName">Cidadã</span>!</h2>
+                
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; border-left: 5px solid #2196f3; margin-bottom: 20px;">
+                    <strong>Status:</strong> <span style="color: green; font-weight: bold;">CONECTADOS</span><br>
+                    <small id="timerDisplay">Calculando tempo...</small>
+                </div>
+
+                <p style="line-height: 1.6; text-align: justify;">
+                    Prezada <span class="dynamic-name" id="letterName">___</span>,<br><br>
+                    Este portal foi desenvolvido para oficializar o que o meu coração já sabe: você é a pessoa mais importante da minha vida. Navegue pelas abas abaixo para acessar seus documentos e agendamentos oficiais.
+                </p>
+            </div>
+
+            <div class="card" style="text-align: center;">
+                <h3 style="color: #555; margin-bottom: 10px;">Ursinho Assistente 🧸</h3>
+                <div id="bearBubble" style="background: #f9f9f9; padding: 10px; border-radius: 10px; margin-bottom: 10px; display: none;">...</div>
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712593.png" style="width: 150px; cursor: pointer;" onclick="bearTalk()">
+                <p style="font-size: 0.8rem; color: #999; margin-top: 5px;">Toque nele!</p>
+            </div>
+        </div>
+
+        <div id="tab-docs" class="section">
+            <div class="card" id="contractCard">
+                <h2 class="title">Contrato de Namoro</h2>
+                <div class="contract-paper">
+                    <p align="center"><strong>CONTRATO DE AFETO</strong></p><br>
+                    <p>Eu, RUBENS, comprometo-me a fazer a Srta. <span class="dynamic-name" id="contractName">___</span> feliz todos os dias.</p><br>
+                    <p>A Srta. <span class="dynamic-name" id="contractName2">___</span> aceita ser a dona exclusiva do meu coração?</p>
+                    <br>
+                    <p align="center">_______________________<br>Assinatura Digital</p>
+                </div>
+                <button class="login-btn" style="background: #2ecc71;" onclick="sign()">✍️ ASSINAR AGORA</button>
+            </div>
+
+            <div id="certCard" class="certificate">
+                <i class="fas fa-certificate" style="font-size: 3rem; color: #d4af37;"></i>
+                <h2 style="font-family: 'Playfair Display'; margin: 10px 0;">Certidão de União</h2>
+                <p>CERTIFICO QUE</p>
+                <h3 style="margin: 15px 0;">RUBENS & <span class="dynamic-name" id="certName">ANA</span></h3>
+                <p>ESTÃO OFICIALMENTE UNIDOS PELO DESTINO.</p>
+                <p style="margin-top: 15px; font-size: 0.8rem;">Data de Vigência: 19/12/2025</p>
+            </div>
+
+            <div id="idCard" class="id-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <strong>NAMORADA VIP</strong> <i class="fas fa-heart"></i>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="width: 70px; height: 90px; background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #ccc;"><i class="fas fa-user"></i></div>
+                    <div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">NOME</div>
+                        <div style="font-weight: bold; margin-bottom: 5px;" class="dynamic-name" id="idName">___</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">CARGO</div>
+                        <div style="font-weight: bold;">Amor da Minha Vida</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-calendar" class="section">
+            <div class="card">
+                <h2 class="title">Agenda Oficial</h2>
+                <p style="text-align: center; color: #777; font-size: 0.9rem; margin-bottom: 10px;">Toque em um dia para agendar</p>
+                <div class="calendar-grid" id="calGrid"></div>
+            </div>
+        </div>
+
+        <div id="tab-chat" class="section">
+            <div class="card">
+                <h2 class="title">Ouvidoria</h2>
+                <textarea id="msgInput" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 10px;" rows="4" placeholder="Escreva aqui..."></textarea>
+                <button class="login-btn" style="background: #25D366;" onclick="sendZap()">Enviar no WhatsApp</button>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <a onclick="openTab('tab-home', this)" class="nav-item active"><i class="fas fa-home"></i></a>
+            <a onclick="openTab('tab-docs', this)" class="nav-item"><i class="fas fa-file-signature"></i></a>
+            <a onclick="openTab('tab-calendar', this)" class="nav-item"><i class="fas fa-calendar-alt"></i></a>
+            <a onclick="openTab('tab-chat', this)" class="nav-item"><i class="fas fa-comments"></i></a>
+        </div>
+    </div>
+
+    <div id="modalEvent" class="modal">
+        <div class="modal-content">
+            <h3>Novo Agendamento</h3>
+            <p id="modalDate" style="color: #666; margin-bottom: 10px;">Data: --/--</p>
+            <input type="text" id="evtTitle" class="login-input" placeholder="O que vamos fazer?">
+            <input type="time" id="evtTime" class="login-input">
+            <button class="login-btn" onclick="sendEvent()">Confirmar</button>
+            <button class="login-btn" style="background: #ccc; margin-top: 10px;" onclick="document.getElementById('modalEvent').style.display='none'">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÕES
+        const ZAP = "5581989501999"; 
+        const PASS = "19122025";
+        let userName = "Amor"; // Nome padrão
+        let selectedDateStr = "";
+
+        // --- SISTEMA DE LOGIN SEGURO ---
+        function tryLogin() {
+            // Pega os valores e remove espaços em branco extras
+            const p = document.getElementById('passInput').value.trim();
+            const n = document.getElementById('nameInput').value.trim();
+
+            if(p === PASS) {
+                // Se digitou nome, atualiza a variável
+                if(n.length > 0) userName = n;
+                
+                // Atualiza todos os textos com o nome dela
+                updateNames();
+                
+                // Esconde login e mostra app
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                
+                // Inicia funções
+                startApp();
+                
+                // Tenta tocar música
+                const audio = document.getElementById('bgMusic');
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log("Áudio precisa de clique"));
+
+            } else {
+                alert("Senha incorreta! Tente a data de conexão.");
+            }
+        }
+
+        // ATUALIZA NOMES NA TELA
+        function updateNames() {
+            const els = document.getElementsByClassName('dynamic-name');
+            for(let i = 0; i < els.length; i++) {
+                els[i].innerText = userName;
+            }
+        }
+
+        // NAVEGAÇÃO ENTRE ABAS
+        function openTab(tabId, btnElement) {
+            // Esconde todas as seções
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            // Remove ativo dos botões
+            const navs = document.querySelectorAll('.nav-item');
+            navs.forEach(nav => nav.classList.remove('active'));
+
+            // Mostra a selecionada
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+            
+            // Rola para o topo
+            window.scrollTo(0,0);
+        }
+
+        // LÓGICA DO CARTÓRIO
+        function sign() {
+            if(confirm(`Eu, ${userName}, aceito namorar o Rubens? ❤️`)) {
+                document.getElementById('contractCard').style.display = 'none';
+                document.getElementById('certCard').style.display = 'block';
+                document.getElementById('idCard').style.display = 'block';
+                
+                const msg = `ASSINADO! ✍️\nEu, ${userName}, assinei o contrato no site!`;
+                window.open(`https://wa.me/${ZAP}?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+        }
+
+        // LÓGICA GERAL DO APP
+        function startApp() {
+            // Renderiza Calendário
+            const grid = document.getElementById('calGrid');
+            const now = new Date();
+            const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            
+            grid.innerHTML = ""; // Limpa
+            
+            for(let i=1; i<=days; i++) {
+                let d = document.createElement('div');
+                d.className = 'cal-day'; d.innerText = i;
+                
+                if(i === now.getDate()) d.classList.add('today');
+                if(i === 19) d.classList.add('special');
+                
+                d.onclick = () => {
+                    selectedDateStr = `${i}/${now.getMonth()+1}`;
+                    document.getElementById('modalDate').innerText = "Data: " + selectedDateStr;
+                    document.getElementById('modalEvent').style.display = 'flex';
+                };
+                grid.appendChild(d);
+            }
+
+            // Inicia Timer
+            setInterval(() => {
+                const diff = new Date() - new Date("2025-12-19T00:00:00");
+                const dias = Math.floor(diff/(1000*60*60*24));
+                document.getElementById('timerDisplay').innerText = dias + " Dias Juntos";
+            }, 1000);
+        }
+
+        // ENVIAR EVENTO
+        function sendEvent() {
+            const t = document.getElementById('evtTitle').value;
+            const h = document.getElementById('evtTime').value;
+            
+            if(!t) { alert("Escreva o que vamos fazer!"); return; }
+            
+            const msg = `📅 *Agendamento de ${userName}*\nData: ${selectedDateStr}\nHora: ${h}\nEvento: ${t}`;
+            window.open(`https://wa.me/${ZAP}?text=${encodeURIComponent(msg)}`, '_blank');
+            document.getElementById('modalEvent').style.display = 'none';
+        }
+
+        // URSINHO
+        function bearTalk() {
+            const txts = [`${userName}, você é linda!`, "O Rubens te ama!", "Sinta meu abraço!", "Hoje o dia está lindo!"];
+            const b = document.getElementById('bearBubble');
+            b.innerText = txts[Math.floor(Math.random()*txts.length)];
+            b.style.display = 'block';
+        }
+
+        // WHATSAPP GERAL
+        function sendZap() {
+            const t = document.getElementById('msgInput').value;
+            if(t) window.open(`https://wa.me/${ZAP}?text=${encodeURIComponent("💌 Ouvidoria: " + t)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
