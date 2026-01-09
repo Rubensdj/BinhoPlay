@@ -1,184 +1,175 @@
-// --- DADOS DOS PRODUTOS (Edite aqui se precisar mudar preços) ---
-const products = [
-    { id: 1, name: "X-Tudo Delícia", price: 28.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd" },
-    { id: 2, name: "Barca de Batata", price: 35.00, img: "https://images.unsplash.com/photo-1541592106381-b31e96716230" },
-    { id: 3, name: "Coca-Cola 2L", price: 12.00, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97" },
-    { id: 4, name: "Combo Casal", price: 55.90, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5" }
-];
-
-let cart = [];
-let orderData = { id: null, type: null, detail: null, payment: null };
-let checkoutStep = 0; 
-let isChatOpen = false;
-
-document.addEventListener('DOMContentLoaded', () => { renderMenu(); });
-
-function renderMenu() {
-    const container = document.getElementById('products-container');
-    products.forEach(p => {
-        container.innerHTML += `
-            <div class="card">
-                <img src="${p.img}" alt="${p.name}">
-                <h3>${p.name}</h3>
-                <span class="price">R$ ${p.price.toFixed(2)}</span>
-                <button class="add-btn" onclick="addToCart(${p.id})">Pedir Agora</button>
-            </div>
-        `;
-    });
-}
-
-function addToCart(id) {
-    const item = products.find(p => p.id === id);
-    cart.push(item);
-    document.getElementById('cart-count').innerText = cart.length;
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delícias da Casa | Pedido Inteligente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    if(!isChatOpen) toggleChat();
-    
-    if(checkoutStep === 0) {
-        botReply(`Hummm! 😋 Adicionei <b>${item.name}</b>. Total parcial: R$ ${calculateTotal()}`);
-    } else {
-        botReply(`(Adicionado) Continue com seus dados...`);
-    }
-}
-
-function calculateTotal() { return cart.reduce((acc, item) => acc + item.price, 0).toFixed(2); }
-
-function toggleChat() {
-    isChatOpen = !isChatOpen;
-    document.getElementById('chat-window').style.display = isChatOpen ? 'flex' : 'none';
-}
-
-function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-
-function sendMessage() {
-    const input = document.getElementById('user-input');
-    const txt = input.value.trim();
-    if (!txt) return;
-
-    addMessage(txt, 'user');
-    input.value = '';
-
-    setTimeout(() => { processAiResponse(txt); }, 800);
-}
-
-function addMessage(text, sender) {
-    const chatBody = document.getElementById('chat-body');
-    const div = document.createElement('div');
-    div.className = `message ${sender}`;
-    div.innerHTML = `<p>${text}</p>`;
-    chatBody.appendChild(div);
-    chatBody.scrollTop = chatBody.scrollHeight;
-}
-
-function botReply(text) { addMessage(text, 'bot'); }
-
-// CÉREBRO DA IA (Fluxo Delícias da Casa)
-function processAiResponse(text) {
-    const lower = text.toLowerCase();
-
-    if (checkoutStep === 0) {
-        if (lower.includes('fechar') || lower.includes('finalizar') || lower.includes('conta') || lower.includes('pedir')) {
-            if (cart.length === 0) return botReply("Seu carrinho está vazio! Clique em 'Pedir Agora' nos lanches primeiro.");
-            
-            checkoutStep = 1;
-            botReply("Ótima escolha! 🛵 Vai ser <b>ENTREGA</b> ou vai <b>RETIRAR</b> aqui?");
-        } 
-        else if (lower.includes('oi') || lower.includes('ola')) {
-            botReply("Olá! Bem-vindo ao Delícias da Casa. Posso anotar seu pedido?");
+    <style>
+        /* --- CSS (ESTILO VISUAL) --- */
+        :root {
+            --primary: #ffa502; /* Laranja Ouro */
+            --secondary: #ff4757; /* Vermelho */
+            --dark-bg: #1e1e1e;
+            --glass: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
         }
-        else {
-            botReply("Entendi. Quando quiser fechar, é só digitar 'fechar conta'.");
-        }
-    }
-    
-    else if (checkoutStep === 1) {
-        if (lower.includes('entrega')) {
-            orderData.type = 'Delivery';
-            checkoutStep = 2;
-            botReply("Ok, Delivery! Por favor, digite seu <b>Endereço Completo</b> (Rua, Número e Bairro).");
-        } 
-        else if (lower.includes('retirar') || lower.includes('buscar') || lower.includes('aqui')) {
-            orderData.type = 'Retirada';
-            checkoutStep = 2;
-            botReply("Combinado! Qual é o <b>seu nome</b> para colocarmos na sacola?");
-        } 
-        else {
-            botReply("Não entendi bem. Digite <b>Entrega</b> ou <b>Retirar</b>.");
-        }
-    }
 
-    else if (checkoutStep === 2) {
-        orderData.detail = text;
-        checkoutStep = 3;
-        botReply("Anotado! 📝 Como prefere pagar? (Pix, Dinheiro ou Cartão)");
-    }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
-    else if (checkoutStep === 3) {
-        orderData.payment = text;
-        orderData.id = generateOrderId();
+        body {
+            background: linear-gradient(to right, #1e1e1e, #2d3436);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .glass-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 5%;
+            background: rgba(30, 30, 30, 0.95);
+            position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo { font-size: 1.4rem; font-weight: bold; color: var(--primary); text-transform: uppercase; }
+        .menu-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
+        .menu-links a:hover { color: var(--primary); }
+
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; margin-left: 20px;}
+        #cart-count {
+            position: absolute; top: -8px; right: -8px;
+            background: var(--secondary); color: white;
+            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
+        }
+
+        /* Hero */
+        .hero {
+            height: 70vh; display: flex; align-items: center; justify-content: center;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(255, 165, 2, 0.15) 0%, transparent 70%);
+            padding: 20px;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; line-height: 1.2;}
+        .highlight { color: var(--primary); }
         
-        botReply("Perfeito! Gerando sua Nota do Pedido...");
-        setTimeout(() => { generateInvoice(); checkoutStep = 0; }, 1000);
-    }
-}
+        .cta-btn {
+            padding: 12px 30px; background: var(--primary); border: none;
+            color: #000; font-weight: bold; font-size: 1rem; border-radius: 50px;
+            cursor: pointer; margin-top: 20px; transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 165, 2, 0.4);
+        }
+        .cta-btn:hover { transform: scale(1.05); }
 
-function generateOrderId() {
-    const random = Math.floor(1000 + Math.random() * 9000);
-    return `#JR-${random}`;
-}
+        /* Produtos */
+        .container { padding: 4rem 5%; }
+        .section-title { text-align: center; margin-bottom: 3rem; font-size: 2rem; color: var(--primary); }
 
-function generateInvoice() {
-    const modal = document.getElementById('invoice-modal');
-    const content = document.getElementById('invoice-content');
-    const date = new Date().toLocaleString('pt-BR');
-    
-    let itemsHtml = '';
-    cart.forEach(item => {
-        itemsHtml += `<div style="display:flex; justify-content:space-between;"><span>1x ${item.name}</span><span>R$ ${item.price.toFixed(2)}</span></div>`;
-    });
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;
+        }
 
-    content.innerHTML = `
-        <center><strong>DELÍCIAS DA CASA</strong></center>
-        <center>O Sabor que Vicia</center>
-        <div class="dashed-line"></div>
-        <div>DATA: ${date}</div>
-        <div>PEDIDO: <strong>${orderData.id}</strong></div>
-        <div>MODO: ${orderData.type}</div>
-        <div class="dashed-line"></div>
-        ${itemsHtml}
-        <div class="dashed-line"></div>
-        <div class="total-row">
-            <span>TOTAL:</span>
-            <span>R$ ${calculateTotal()}</span>
+        .card {
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px; padding: 15px; text-align: center;
+            transition: 0.3s; backdrop-filter: blur(5px);
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card img { width: 100%; border-radius: 10px; margin-bottom: 15px; height: 180px; object-fit: cover; }
+        .price { color: var(--primary); font-size: 1.3rem; font-weight: bold; display: block; margin: 10px 0; }
+
+        .add-btn {
+            width: 100%; padding: 10px; border: 2px solid var(--primary);
+            background: transparent; color: var(--primary); border-radius: 25px; cursor: pointer;
+            font-weight: bold; transition: 0.3s;
+        }
+        .add-btn:hover { background: var(--primary); color: #000; }
+
+        /* Chatbot */
+        .ai-assistant { position: fixed; bottom: 30px; right: 30px; z-index: 200; }
+        .ai-trigger {
+            width: 60px; height: 60px; background: var(--secondary);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+            transition: 0.3s; font-size: 1.5rem; position: relative;
+        }
+        .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; position: absolute; top: 2px; right: 2px; }
+
+        .chat-window {
+            position: absolute; bottom: 80px; right: 0; width: 320px; height: 450px;
+            background: #2d3436; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px; display: none; flex-direction: column; overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+
+        .chat-header { background: #1e1e1e; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 15px; border-radius: 10px; max-width: 85%; font-size: 0.9rem; }
+        .message.bot { background: #3d3d3d; align-self: flex-start; border-bottom-left-radius: 0; }
+        .message.user { background: var(--secondary); align-self: flex-end; border-bottom-right-radius: 0; }
+        .chat-input { display: flex; padding: 10px; background: #1e1e1e; }
+        .chat-input input { flex: 1; background: transparent; border: none; color: white; outline: none; padding: 5px; }
+        .chat-input button { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
+
+        /* Nota Fiscal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .invoice-box { width: 90%; max-width: 400px; padding: 20px; border-radius: 10px; text-align: center; }
+        .invoice-paper {
+            background: #fff8e1; color: #000; padding: 20px; font-family: 'Courier New', monospace;
+            text-align: left; font-size: 0.85rem; margin-bottom: 20px;
+        }
+        .dashed-line { border-bottom: 1px dashed #000; margin: 10px 0; }
+        .total-row { font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; margin-top: 10px; }
+        .send-wa-btn {
+            width: 100%; background: #25D366; color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; gap: 10px; font-size: 1.1rem;
+        }
+        .close-btn { margin-top: 15px; background: transparent; border: none; color: #888; cursor: pointer; text-decoration: underline; }
+
+        @media (max-width: 600px) {
+            .chat-window { width: 300px; right: -10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="glass-nav">
+        <div class="logo"><i class="fas fa-utensils"></i> Delícias da Casa</div>
+        <div class="menu-links">
+            <a href="https://www.instagram.com/jr_delicias_da_casa?igsh=NHBrMTIxaDhla2Vn" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
         </div>
-        <div class="dashed-line"></div>
-        <div>CLIENTE/ENDEREÇO: ${orderData.detail}</div>
-        <div>PAGAMENTO: ${orderData.payment}</div>
-        <br>
-        <center>*** Obrigado pela preferência! ***</center>
-    `;
+        <div class="cart-icon" onclick="toggleChat()">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </nav>
 
-    modal.style.display = 'flex';
-}
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Sabor Caseiro, <br><span class="highlight">Tecnologia de Ponta</span></h1>
+            <p>Peça com nossa Inteligência Artificial.</p>
+            <button class="cta-btn" onclick="document.getElementById('menu').scrollIntoView()">Fazer Pedido</button>
+        </div>
+    </header>
 
-function closeInvoice() {
-    document.getElementById('invoice-modal').style.display = 'none';
-    cart = []; 
-    document.getElementById('cart-count').innerText = '0';
-    botReply("Pedido enviado! Se quiser mais alguma coisa, estou por aqui.");
-}
+    <section id="menu" class="container">
+        <h2 class="section-title">Nossas Delícias</h2>
+        <div class="products-grid" id="products-container">
+            </div>
+    </section>
 
-function sendToWhatsAppFinal() {
-    let msg = `🧾 *NOVO PEDIDO - DELÍCIAS DA CASA*\n`;
-    msg += `--------------------------------\n`;
-    cart.forEach(item => { msg += `🍔 1x ${item.name} - R$ ${item.price.toFixed(2)}\n`; });
-    msg += `--------------------------------\n`;
-    msg += `💰 *TOTAL: R$ ${calculateTotal()}*\n`;
-    msg += `💳 Pagamento: ${orderData.payment}\n`;
-    msg += `📍 Info: ${orderData.detail}\n`;
-    msg += `📦 Tipo: ${orderData.type}`;
-
-    // SEU NÚMERO CONFIGURADO AQUI:
-    const phone = "5581989131430"; 
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-}
+    <div class="ai-assistant">
+        <div class="ai-trigger" onclick="toggleChat()">
+            <i class="fas fa-robot"></i>
+            <span class="status-dot"></span>
+        </div>
+        
+        <div class="chat-window" id="chat-
