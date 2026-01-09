@@ -3,138 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LoveGram • Ana & Rubens</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>LoveGov • Portal do Amor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary: #ff4757;
             --secondary: #2ed573;
-            --bg-body: #f0f2f5;
+            --bg-body: #f4f7f6;
             --card-bg: #ffffff;
             --text-color: #333;
+            --gold: #d4af37;
             --nav-bg: #ffffff;
-            --app-bg: linear-gradient(135deg, #fff5f7 0%, #ffe3e6 100%);
-            --ai-color: #70a1ff;
+            --nav-height: 70px;
         }
 
         [data-theme="dark"] {
-            --bg-body: #000000;
-            --card-bg: #1c1c1e;
-            --text-color: #e5e5e5;
+            --bg-body: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
             --nav-bg: #1c1c1e;
-            --app-bg: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        html, body {
-            height: 100%; /* Garante altura total */
-            width: 100%;
-            overflow: hidden; /* Impede rolagem dupla */
-            background: var(--bg-body);
-            color: var(--text-color);
-            font-family: 'Poppins', sans-serif;
-            transition: 0.3s;
+        body {
+            min-height: 100vh; background: var(--bg-body); color: var(--text-color);
+            font-family: 'Poppins', sans-serif; overflow: hidden; transition: 0.3s;
         }
 
-        /* === LOGIN === */
+        /* === LOGIN (Estilo Gov.br / Oficial) === */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-body); z-index: 5000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            overflow-y: auto; /* Permite rolar se a tela for pequena */
+            padding: 20px; transition: transform 0.8s ease;
         }
-        .app-logo {
-            font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin-bottom: 10px;
-            background: linear-gradient(45deg, #ff0066, #ff4757, #ff9f43);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        .gov-logo {
+            font-family: 'Playfair Display', serif; font-size: 2.5rem; color: #002d62; 
+            border-bottom: 3px solid #d4af37; padding-bottom: 5px; margin-bottom: 20px;
         }
         .login-input {
-            width: 100%; max-width: 300px; padding: 15px; background: var(--card-bg); border: 1px solid #ddd;
-            border-radius: 12px; font-size: 1rem; margin-bottom: 10px; outline: none; color: var(--text-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            width: 100%; max-width: 300px; padding: 15px; background: var(--card-bg); border: 1px solid #ccc;
+            border-radius: 5px; font-size: 1rem; margin-bottom: 10px; outline: none; color: var(--text-color);
         }
         .login-btn {
-            width: 100%; max-width: 300px; padding: 15px; background: var(--primary); color: white; border: none;
-            border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); transition: 0.2s;
+            width: 100%; max-width: 300px; padding: 15px; background: #0056b3; color: white; border: none;
+            border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .login-btn:active { transform: scale(0.95); }
 
-        /* === APP CONTAINER (CORREÇÃO DO SCROLL) === */
-        #app-container {
-            display: none;
-            position: fixed; /* Fixa o container */
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            background: var(--app-bg);
-            overflow-y: scroll; /* Força barra de rolagem */
-            -webkit-overflow-scrolling: touch; /* Rolagem suave no iPhone */
-            padding-bottom: 120px; /* Espaço extra para não cortar conteúdo no fim */
-            z-index: 1;
-        }
+        /* === APP === */
+        #app-container { display: none; width: 100%; height: 100%; padding-bottom: 90px; overflow-y: auto; }
         
         .app-header {
             display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
-            /* background: rgba(255,255,255,0.3); Opcional se quiser fundo */
+            background: var(--card-bg); box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
         }
-        .theme-btn { font-size: 1.4rem; cursor: pointer; color: var(--primary); background: none; border: none; }
         
         .content-section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .content-section.active-section { display: block; }
         
-        .card { background: var(--card-bg); border-radius: 24px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.3s; }
-        .title { font-family: 'Dancing Script', cursive; font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+        .card { background: var(--card-bg); border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-        /* TOAST NOTIFICATION */
-        #toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: rgba(0,0,0,0.8); color: white; padding: 12px 25px; border-radius: 50px;
-            z-index: 7000; transition: 0.5s; font-size: 0.9rem; display: flex; align-items: center; gap: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 90%; max-width: 350px; justify-content: center;
+        /* === DOCUMENTOS (ESTILO CARTÓRIO) === */
+        .contract-paper {
+            background: #fffdf0; border: 1px solid #d4af37; padding: 20px; 
+            font-family: 'Courier Prime', monospace; font-size: 0.85rem; line-height: 1.6;
+            color: #000; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); position: relative;
         }
-        #toast.show { transform: translateX(-50%) translateY(0); }
+        .contract-header { text-align: center; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .stamp {
+            position: absolute; top: 10px; right: 10px; width: 80px; height: 80px; 
+            border: 3px solid #c0392b; border-radius: 50%; color: #c0392b; display: flex; 
+            justify-content: center; align-items: center; font-weight: bold; transform: rotate(-15deg);
+            opacity: 0.8; font-family: sans-serif; text-transform: uppercase; font-size: 0.8rem; text-align: center;
+        }
 
-        /* METAS (CHECKLIST) */
-        .goal-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; transition: 0.2s; }
-        .goal-text { font-size: 0.95rem; }
-        .goal-btn { background: #f1f2f6; color: #333; border: none; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
-        .goal-btn:hover { background: var(--secondary); color: white; }
+        /* CERTIDÃO */
+        .certificate {
+            background: #fff; border: 10px double #d4af37; padding: 20px; text-align: center; display: none;
+        }
+        .cert-title { font-family: 'Playfair Display', serif; font-size: 2rem; color: #000; margin-bottom: 10px; }
+        .cert-body { font-family: 'Times New Roman', serif; font-size: 1.1rem; color: #333; margin: 20px 0; }
+        .seal { font-size: 3rem; color: #d4af37; margin-top: 10px; }
 
-        /* SPOTIFY */
-        .spotify-container { border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 15px; }
+        /* CARTEIRINHA */
+        .id-card {
+            background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; border-radius: 15px;
+            padding: 20px; position: relative; overflow: hidden; display: none; box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+        .id-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .id-chip { width: 40px; height: 30px; background: #d4af37; border-radius: 5px; opacity: 0.8; }
+        .id-photo { width: 80px; height: 100px; background: #fff; border-radius: 5px; display: flex; justify-content: center; align-items: center; color: #ccc; font-size: 2rem; }
+        .id-details { text-align: left; margin-left: 15px; flex: 1; }
+        .id-label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; }
+        .id-value { font-size: 0.9rem; font-weight: bold; margin-bottom: 5px; }
 
         /* CALENDÁRIO */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; margin-top: 15px; }
-        .cal-day { padding: 10px 5px; border-radius: 10px; font-size: 0.9rem; color: var(--text-color); }
-        .cal-day.today { background: #eee; font-weight: bold; color: #333; }
-        .cal-day.special { background: var(--primary); color: white; font-weight: bold; animation: pulse 2s infinite; }
-
-        /* IA CHAT */
-        .ai-bubble { background: #f0f8ff; border: 1px solid #dbeafe; padding: 15px; border-radius: 15px; margin-bottom: 15px; color: #333; font-size: 0.9rem; }
-        [data-theme="dark"] .ai-bubble { background: #1a202c; border-color: #2d3748; color: #e2e8f0; }
+        .cal-day { padding: 15px 5px; border-radius: 8px; font-size: 0.9rem; background: #fff; border: 1px solid #eee; cursor: pointer; }
+        .cal-day:hover { background: #ffe0e6; }
+        .cal-day.special { background: var(--primary); color: white; font-weight: bold; }
         
         /* URSINHO */
-        .bear-container { text-align: center; position: relative; margin-top: 20px; }
-        .big-bear-img { width: 80%; max-width: 250px; height: auto; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2)); cursor: pointer; transition: 0.3s; }
-        .big-bear-img:active { transform: scale(0.95) rotate(-5deg); }
-        .speech-bubble {
-            position: relative; background: #fff; border-radius: 30px; padding: 20px; margin: 20px auto;
-            max-width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 2px solid var(--primary);
-            display: none; font-size: 1rem; color: #555; font-weight: 500;
-        }
-        .speech-bubble::after { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); border-width: 15px; border-style: solid; border-color: transparent transparent #fff transparent; }
-        .speech-bubble::before { content: ''; position: absolute; top: -18px; left: 50%; transform: translateX(-50%); border-width: 18px; border-style: solid; border-color: transparent transparent var(--primary) transparent; z-index: -1; }
+        .bear-container { text-align: center; margin-top: 20px; }
+        .big-bear-img { width: 180px; cursor: pointer; transition: 0.3s; }
+        .big-bear-img:active { transform: scale(0.9); }
+        .bubble { background: #fff; padding: 15px; border-radius: 20px; border: 1px solid #ddd; margin-bottom: 10px; display: none; }
 
-        .bear-controls { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .bear-btn { background: white; border: 2px solid var(--primary); color: var(--primary); padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.2s; font-size: 0.9rem; }
-        .bear-btn:hover { background: var(--primary); color: white; }
-
-        /* NAV FLUTUANTE */
+        /* NAV */
         .bottom-nav {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 350px; height: 65px;
@@ -142,210 +121,11 @@
             display: flex; justify-content: space-around; align-items: center;
             z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #aaa; text-decoration: none; font-size: 1.2rem; transition: 0.3s; position: relative; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #aaa; text-decoration: none; font-size: 1.2rem; transition: 0.3s; }
         .nav-item.active { color: var(--primary); transform: translateY(-5px); }
-        .nav-item.active::after { content:''; width: 5px; height: 5px; background: var(--primary); border-radius: 50%; position: absolute; bottom: -8px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    </style>
-</head>
-<body>
-    
-    <div id="toast"><i class="fas fa-heart" style="color: #ff4757;"></i> <span id="toastMsg">Mensagem</span></div>
-
-    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
-
-    <div id="login-screen">
-        <h1 class="app-logo">LoveOS 9.1</h1>
-        <p style="color:#888; margin-bottom: 20px; font-size: 0.9rem;">Teddy Bear Edition 🧸</p>
-        <input type="password" id="passwordInput" class="login-input" placeholder="Digite a Senha">
-        <button class="login-btn" onclick="checkLogin()">Desbloquear ❤️</button>
-        <p style="margin-top:20px; font-size: 12px; color: #aaa;">Dica: 19122025</p>
-    </div>
-
-    <div id="app-container">
-        
-        <div class="app-header">
-            <span style="font-weight: 700; color: var(--primary); letter-spacing: 1px;">ANA & RUBENS</span>
-            <div style="display: flex; gap: 15px;">
-                <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
-                <button class="theme-btn" onclick="toggleMusic()"><i class="fas fa-music"></i></button>
-            </div>
-        </div>
-
-        <section id="home" class="content-section active-section">
-            <div class="card">
-                <h2 class="title" style="text-align: center;">Bem-vinda, Amor!</h2>
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;" id="timerDisplay">Calculando...</span>
-                </div>
-                <div style="text-align: justify; line-height: 1.7; font-size: 0.95rem;">
-                    Ô meu amor, se tem uma pessoa q tem q agradecer todos os dias sou eu, por ter uma pessoa tão incrível do meu lado, vc n sabe o quanto eu sou feliz só de ter vc comigo.<br><br>
-                    Vc realmente conseguiu me mostrar q nem tudo era do jeito q sempre foi, vc realmente entrou na minha vida para fazer a diferença e eu te agradeço muito por isso.<br><br>
-                    Eu te escolhi e pode ter certeza q eu te escolheria mais 10 vezes se fosse possível, vc é muito mais do q só uma amiga, acabou se tornando uma parte de mim.<br><br>
-                    Te peço desculpas pelas minhas falhas, q sei q n são poucas, mas prometo consertar elas e ser cada dia mais uma pessoa melhor para poder te fazer muito feliz.<br><br>
-                    <strong style="color: var(--primary); display: block; text-align: center;">Te amo. 💙💑💖✨</strong>
-                </div>
-            </div>
-        </section>
-
-        <section id="chat" class="content-section">
-            <div class="card">
-                <h2 class="title">Direct AI 🤖</h2>
-                <div class="ai-bubble">
-                    <strong><i class="fas fa-robot"></i> Assistente E.D.I.T.H:</strong><br>
-                    "Olá Ana! O Rubens pediu para eu te perguntar: O que vamos fazer hoje? Estou aguardando sua resposta para notificar ele."
-                </div>
-                <textarea id="aiInput" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 12px; background: var(--bg-body); color: var(--text-color); margin-bottom: 10px;" rows="4" placeholder="Responda para o Rubens..."></textarea>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="generateAIMsg()" style="flex: 1; padding: 12px; background: var(--ai-color); border: none; border-radius: 12px; color: white; font-weight: bold;"><i class="fas fa-magic"></i> IA Mágica</button>
-                    <button onclick="sendWhatsapp()" style="flex: 1; padding: 12px; background: #25D366; border: none; border-radius: 12px; color: white; font-weight: bold;"><i class="fab fa-whatsapp"></i> Enviar</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="explore" class="content-section">
-            <div class="card">
-                <h2 class="title"><i class="fab fa-spotify"></i> Nossa Vibe</h2>
-                <p style="font-size: 0.9rem; margin-bottom: 10px;">Dê o play na nossa trilha sonora:</p>
-                <div class="spotify-container">
-                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-                </div>
-            </div>
-            <div class="card">
-                <h2 class="title">Nossas Metas 🎯</h2>
-                <div class="goal-item"><span class="goal-text">💍 Casar com você</span><button class="goal-btn" onclick="notifyGoal('Casar')">Sonhar</button></div>
-                <div class="goal-item"><span class="goal-text">✈️ Viajar juntos</span><button class="goal-btn" onclick="notifyGoal('Viajar')">Planejar</button></div>
-                <div class="goal-item"><span class="goal-text">🏠 Ter nossa casa</span><button class="goal-btn" onclick="notifyGoal('Casa')">Realizar</button></div>
-            </div>
-            <div class="card">
-                <h2 class="title">Agenda 📅</h2>
-                <div class="calendar-grid" id="calendarGrid"></div>
-                <button onclick="scheduleEvent()" class="login-btn" style="margin-top: 20px; width: 100%;">Marcar Encontro</button>
-            </div>
-        </section>
-
-        <section id="bear" class="content-section">
-            <div class="card" style="background: linear-gradient(to bottom, #fff, #fff0f3);">
-                <h2 class="title">Seu Guardião 🧸</h2>
-                <p style="text-align: center; color: #666; font-size: 0.9rem;">Eu fico aqui cuidando de você quando o Rubens não está. Clique em mim!</p>
-                
-                <div class="bear-container">
-                    <div id="bearBubble" class="speech-bubble">
-                        <span id="bearText">...</span>
-                    </div>
-                    
-                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712593.png" alt="Ursinho Fofo" class="big-bear-img" onclick="bearAction('love')">
-                </div>
-
-                <div class="bear-controls">
-                    <button class="bear-btn" onclick="bearAction('hug')"><i class="fas fa-hands-holding-heart"></i> Abraço</button>
-                    <button class="bear-btn" onclick="bearAction('kiss')"><i class="fas fa-kiss-wink-heart"></i> Beijinho</button>
-                    <button class="bear-btn" onclick="bearAction('love')"><i class="fas fa-heart"></i> Lembrete</button>
-                </div>
-            </div>
-        </section>
-
-        <nav class="bottom-nav">
-            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
-            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-robot"></i></a>
-            <a href="#" class="nav-item" onclick="nav('explore', this)"><i class="fas fa-compass"></i></a>
-            <a href="#" class="nav-item" onclick="nav('bear', this)"><i class="fas fa-teddy-bear"></i></a>
-        </nav>
-
-    </div>
-
-    <script>
-        const MEU_NUMERO = "5581989501999"; 
-        const SENHA = "19122025";
-        const DATA_INICIO = new Date("2025-12-19T00:00:00");
-
-        // LOGIN ANIMADO
-        function checkLogin() {
-            if(document.getElementById('passwordInput').value === SENHA) {
-                document.getElementById('login-screen').style.transform = "translateY(-100%) scale(0.8)";
-                document.getElementById('login-screen').style.opacity = "0";
-                setTimeout(() => {
-                    document.getElementById('login-screen').style.display = "none";
-                    document.getElementById('app-container').style.display = "block";
-                    showToast(`Bem-vinda, Ana! ❤️`);
-                    renderCalendar();
-                    setInterval(timer, 1000);
-                    document.getElementById('bgMusic').play().catch(()=>{});
-                }, 600);
-            } else { showToast("Senha incorreta! 🚫"); }
-        }
-
-        // NAV
-        function nav(id, el) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active-section');
-            el.classList.add('active');
-            // Scroll para o topo ao trocar de aba
-            document.getElementById('app-container').scrollTo(0, 0);
-        }
-
-        // --- LÓGICA DO URSINHO ---
-        const bearMessages = {
-            hug: ["(O Ursinho te dá um abraço apertado!) O Rubens mandou dizer que o abraço dele é melhor, mas o meu quebra um galho! ❤️", "Sinta meu pêlo fofinho... É todo o carinho do Rubens por você.", "Um abraço quentinho pra espantar qualquer tristeza!"],
-            kiss: ["Muah! 💋 Um beijinho virtual do seu amor.", "(O Ursinho encosta o nariz no seu) O Rubens te ama mais que tudo!", "Beijo na testa pra dar sorte e proteção! ✨"],
-            love: ["Ei, psiu... Você é a mulher mais incrível do mundo, sabia?", "O Rubens pediu pra te lembrar: Você é o sonho dele realizado.", "Levanta essa cabeça, princesa! Meu dono é louco por você."]
-        };
-
-        function bearAction(type) {
-            const bubble = document.getElementById('bearBubble');
-            const textSpan = document.getElementById('bearText');
-            const bearImg = document.querySelector('.big-bear-img');
-            
-            bearImg.style.transform = "scale(0.95) rotate(-5deg)";
-            setTimeout(() => bearImg.style.transform = "scale(1) rotate(0deg)", 200);
-
-            const msgs = bearMessages[type];
-            const selectedMsg = msgs[Math.floor(Math.random() * msgs.length)];
-
-            bubble.style.display = 'block';
-            bubble.style.animation = 'popIn 0.5s ease';
-            
-            textSpan.innerText = "Digitando...";
-            setTimeout(() => {
-                textSpan.innerText = selectedMsg;
-                showToast("O Ursinho falou! 🧸🔊");
-            }, 500);
-        }
-
-        // FUNÇÕES ESPECIAIS
-        function showToast(msg) {
-            const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg;
-            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
-        }
-        function notifyGoal(meta) { window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("Amor! Vamos realizar nossa meta de: " + meta + "? 😍")}`, '_blank'); }
-        function scheduleEvent() { window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("Amor, bora marcar um encontro? Abre a agenda ai! 📅")}`, '_blank'); }
-        function sendWhatsapp() { const txt = document.getElementById('aiInput').value; if(!txt) return showToast("Escreva algo! 😅"); window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("💌 Msg do App: " + txt)}`, '_blank'); }
-        function generateAIMsg() {
-            const msgs = ["Amor, você é a razão do meu sorriso hoje! ❤️", "Tô com saudade do seu cheiro...", "Obrigada por ser esse namorado incrível!", "Você + Eu = Combinação Perfeita."];
-            document.getElementById('aiInput').value = msgs[Math.floor(Math.random()*msgs.length)]; showToast("IA Gerou uma mensagem! ✨");
-        }
-
-        // CALENDÁRIO & TIMER
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid'); const now = new Date();
-            const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-            for(let i=1; i<=days; i++) {
-                const d = document.createElement('div'); d.className = 'cal-day'; d.innerText = i;
-                if(i===now.getDate()) d.classList.add('today');
-                if(i===19) { d.classList.add('special'); d.innerText="19❤️"; }
-                grid.appendChild(d);
-            }
-        }
-        function timer() {
-            const diff = new Date() - DATA_INICIO;
-            document.getElementById('timerDisplay').innerText = `${Math.floor(diff/(1000*60*60*24))} Dias Conectados`;
-        }
-        function toggleTheme() { const b = document.body; b.getAttribute('data-theme')==='dark' ? b.removeAttribute('data-theme') : b.setAttribute('data-theme', 'dark'); }
-        function toggleMusic() { const a = document.getElementById('bgMusic'); if(a.paused) { a.play(); showToast("Música: On 🎵"); } else { a.pause(); showToast("Música: Off 🔇"); } }
-    </script>
-</body>
-</html>
+        /* MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 6000; display: none;
+            justify-content: center; align-items: center; padding
