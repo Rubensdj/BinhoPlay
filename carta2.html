@@ -132,4 +132,208 @@
             display: flex; justify-content: space-around; align-items: center;
             z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
         }
-        .nav-item { display: flex; flex-direction: column; align-
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #aaa; text-decoration: none; font-size: 1.2rem; transition: 0.3s; position: relative; }
+        .nav-item.active { color: var(--primary); transform: translateY(-5px); }
+        .nav-item.active::after { content:''; width: 5px; height: 5px; background: var(--primary); border-radius: 50%; position: absolute; bottom: -8px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+    
+    <div id="toast"><i class="fas fa-heart" style="color: #ff4757;"></i> <span id="toastMsg">Mensagem</span></div>
+
+    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+
+    <div id="login-screen">
+        <h1 class="app-logo">LoveOS 9.0</h1>
+        <p style="color:#888; margin-bottom: 20px; font-size: 0.9rem;">Teddy Bear Edition 🧸</p>
+        <input type="password" id="passwordInput" class="login-input" placeholder="Digite a Senha">
+        <button class="login-btn" onclick="checkLogin()">Desbloquear ❤️</button>
+        <p style="margin-top:20px; font-size: 12px; color: #aaa;">Dica: 19122025</p>
+    </div>
+
+    <div id="app-container">
+        
+        <div class="app-header">
+            <span style="font-weight: 700; color: var(--primary); letter-spacing: 1px;">ANA & RUBENS</span>
+            <div style="display: flex; gap: 15px;">
+                <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
+                <button class="theme-btn" onclick="toggleMusic()"><i class="fas fa-music"></i></button>
+            </div>
+        </div>
+
+        <section id="home" class="content-section active-section">
+            <div class="card">
+                <h2 class="title" style="text-align: center;">Bem-vinda, Amor!</h2>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <span style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;" id="timerDisplay">Calculando...</span>
+                </div>
+                <div style="text-align: justify; line-height: 1.7; font-size: 0.95rem;">
+                    Ô meu amor, se tem uma pessoa q tem q agradecer todos os dias sou eu, por ter uma pessoa tão incrível do meu lado, vc n sabe o quanto eu sou feliz só de ter vc comigo.<br><br>
+                    Vc realmente conseguiu me mostrar q nem tudo era do jeito q sempre foi, vc realmente entrou na minha vida para fazer a diferença e eu te agradeço muito por isso.<br><br>
+                    Eu te escolhi e pode ter certeza q eu te escolheria mais 10 vezes se fosse possível, vc é muito mais do q só uma amiga, acabou se tornando uma parte de mim.<br><br>
+                    Te peço desculpas pelas minhas falhas, q sei q n são poucas, mas prometo consertar elas e ser cada dia mais uma pessoa melhor para poder te fazer muito feliz.<br><br>
+                    <strong style="color: var(--primary); display: block; text-align: center;">Te amo. 💙💑💖✨</strong>
+                </div>
+            </div>
+        </section>
+
+        <section id="chat" class="content-section">
+            <div class="card">
+                <h2 class="title">Direct AI 🤖</h2>
+                <div class="ai-bubble">
+                    <strong><i class="fas fa-robot"></i> Assistente E.D.I.T.H:</strong><br>
+                    "Olá Ana! O Rubens pediu para eu te perguntar: O que vamos fazer hoje? Estou aguardando sua resposta para notificar ele."
+                </div>
+                <textarea id="aiInput" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 12px; background: var(--bg-body); color: var(--text-color); margin-bottom: 10px;" rows="4" placeholder="Responda para o Rubens..."></textarea>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="generateAIMsg()" style="flex: 1; padding: 12px; background: var(--ai-color); border: none; border-radius: 12px; color: white; font-weight: bold;"><i class="fas fa-magic"></i> IA Mágica</button>
+                    <button onclick="sendWhatsapp()" style="flex: 1; padding: 12px; background: #25D366; border: none; border-radius: 12px; color: white; font-weight: bold;"><i class="fab fa-whatsapp"></i> Enviar</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="content-section">
+            <div class="card">
+                <h2 class="title"><i class="fab fa-spotify"></i> Nossa Vibe</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 10px;">Dê o play na nossa trilha sonora:</p>
+                <div class="spotify-container">
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+            </div>
+            <div class="card">
+                <h2 class="title">Nossas Metas 🎯</h2>
+                <div class="goal-item"><span class="goal-text">💍 Casar com você</span><button class="goal-btn" onclick="notifyGoal('Casar')">Sonhar</button></div>
+                <div class="goal-item"><span class="goal-text">✈️ Viajar juntos</span><button class="goal-btn" onclick="notifyGoal('Viajar')">Planejar</button></div>
+                <div class="goal-item"><span class="goal-text">🏠 Ter nossa casa</span><button class="goal-btn" onclick="notifyGoal('Casa')">Realizar</button></div>
+            </div>
+            <div class="card">
+                <h2 class="title">Agenda 📅</h2>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <button onclick="scheduleEvent()" class="login-btn" style="margin-top: 20px; width: 100%;">Marcar Encontro</button>
+            </div>
+        </section>
+
+        <section id="bear" class="content-section">
+            <div class="card" style="background: linear-gradient(to bottom, #fff, #fff0f3);">
+                <h2 class="title">Seu Guardião 🧸</h2>
+                <p style="text-align: center; color: #666; font-size: 0.9rem;">Eu fico aqui cuidando de você quando o Rubens não está. Clique em mim!</p>
+                
+                <div class="bear-container">
+                    <div id="bearBubble" class="speech-bubble">
+                        <span id="bearText">...</span>
+                    </div>
+                    
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712593.png" alt="Ursinho Fofo" class="big-bear-img" onclick="bearAction('love')">
+                </div>
+
+                <div class="bear-controls">
+                    <button class="bear-btn" onclick="bearAction('hug')"><i class="fas fa-hands-holding-heart"></i> Pedir Abraço</button>
+                    <button class="bear-btn" onclick="bearAction('kiss')"><i class="fas fa-kiss-wink-heart"></i> Receber Beijinho</button>
+                    <button class="bear-btn" onclick="bearAction('love')"><i class="fas fa-heart"></i> Lembrete de Amor</button>
+                </div>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
+            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-robot"></i></a>
+            <a href="#" class="nav-item" onclick="nav('explore', this)"><i class="fas fa-compass"></i></a>
+            <a href="#" class="nav-item" onclick="nav('bear', this)"><i class="fas fa-teddy-bear"></i></a> </nav>
+
+    </div>
+
+    <script>
+        const MEU_NUMERO = "5581989501999"; 
+        const SENHA = "19122025";
+        const DATA_INICIO = new Date("2025-12-19T00:00:00");
+
+        // LOGIN ANIMADO
+        function checkLogin() {
+            if(document.getElementById('passwordInput').value === SENHA) {
+                document.getElementById('login-screen').style.transform = "translateY(-100%) scale(0.8)";
+                document.getElementById('login-screen').style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = "none";
+                    document.getElementById('app-container').style.display = "block";
+                    showToast(`Bem-vinda, Ana! ❤️`);
+                    renderCalendar();
+                    setInterval(timer, 1000);
+                    document.getElementById('bgMusic').play().catch(()=>{});
+                }, 600);
+            } else { showToast("Senha incorreta! 🚫"); }
+        }
+
+        // NAV
+        function nav(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
+        }
+
+        // --- LÓGICA DO URSINHO ---
+        const bearMessages = {
+            hug: ["(O Ursinho te dá um abraço apertado!) O Rubens mandou dizer que o abraço dele é melhor, mas o meu quebra um galho! ❤️", "Sinta meu pêlo fofinho... É todo o carinho do Rubens por você.", "Um abraço quentinho pra espantar qualquer tristeza!"],
+            kiss: ["Muah! 💋 Um beijinho virtual do seu amor.", "(O Ursinho encosta o nariz no seu) O Rubens te ama mais que tudo!", "Beijo na testa pra dar sorte e proteção! ✨"],
+            love: ["Ei, psiu... Você é a mulher mais incrível do mundo, sabia?", "O Rubens pediu pra te lembrar: Você é o sonho dele realizado.", "Levanta essa cabeça, princesa! Meu dono é louco por você."]
+        };
+
+        function bearAction(type) {
+            const bubble = document.getElementById('bearBubble');
+            const textSpan = document.getElementById('bearText');
+            const bearImg = document.querySelector('.big-bear-img');
+            
+            // Animação de clique no urso
+            bearImg.style.transform = "scale(0.95) rotate(-5deg)";
+            setTimeout(() => bearImg.style.transform = "scale(1) rotate(0deg)", 200);
+
+            const msgs = bearMessages[type];
+            const selectedMsg = msgs[Math.floor(Math.random() * msgs.length)];
+
+            bubble.style.display = 'block';
+            bubble.style.animation = 'popIn 0.5s ease';
+            
+            textSpan.innerText = "Digitando...";
+            setTimeout(() => {
+                textSpan.innerText = selectedMsg;
+                showToast("O Ursinho falou! 🧸🔊");
+            }, 500);
+        }
+
+        // FUNÇÕES ESPECIAIS
+        function showToast(msg) {
+            const t = document.getElementById('toast'); document.getElementById('toastMsg').innerText = msg;
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+        }
+        function notifyGoal(meta) { window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("Amor! Vamos realizar nossa meta de: " + meta + "? 😍")}`, '_blank'); }
+        function scheduleEvent() { window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("Amor, bora marcar um encontro? Abre a agenda ai! 📅")}`, '_blank'); }
+        function sendWhatsapp() { const txt = document.getElementById('aiInput').value; if(!txt) return showToast("Escreva algo! 😅"); window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("💌 Msg do App: " + txt)}`, '_blank'); }
+        function generateAIMsg() {
+            const msgs = ["Amor, você é a razão do meu sorriso hoje! ❤️", "Tô com saudade do seu cheiro...", "Obrigada por ser esse namorado incrível!", "Você + Eu = Combinação Perfeita."];
+            document.getElementById('aiInput').value = msgs[Math.floor(Math.random()*msgs.length)]; showToast("IA Gerou uma mensagem! ✨");
+        }
+
+        // CALENDÁRIO & TIMER
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid'); const now = new Date();
+            const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            for(let i=1; i<=days; i++) {
+                const d = document.createElement('div'); d.className = 'cal-day'; d.innerText = i;
+                if(i===now.getDate()) d.classList.add('today');
+                if(i===19) { d.classList.add('special'); d.innerText="19❤️"; }
+                grid.appendChild(d);
+            }
+        }
+        function timer() {
+            const diff = new Date() - DATA_INICIO;
+            document.getElementById('timerDisplay').innerText = `${Math.floor(diff/(1000*60*60*24))} Dias Conectados`;
+        }
+        function toggleTheme() { const b = document.body; b.getAttribute('data-theme')==='dark' ? b.removeAttribute('data-theme') : b.setAttribute('data-theme', 'dark'); }
+        function toggleMusic() { const a = document.getElementById('bgMusic'); if(a.paused) { a.play(); showToast("Música: On 🎵"); } else { a.pause(); showToast("Música: Off 🔇"); } }
+    </script>
+</body>
+</html>
