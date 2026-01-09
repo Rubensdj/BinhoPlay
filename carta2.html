@@ -9,16 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
-        /* --- ESTILO GERAL --- */
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background-color: #f2f4f8; font-family: 'Poppins', sans-serif; color: #333; height: 100vh; overflow: hidden; }
 
-        /* --- CORES --- */
         :root {
-            --primary: #003366; /* Azul Oficial */
-            --accent: #c0392b;  /* Vermelho Selo */
+            --primary: #003366; 
+            --accent: #c0392b;  
             --gold: #d4af37;
-            --bg-app: #ffffff;
         }
 
         /* --- TELA DE LOGIN (CONFIGURAÇÃO) --- */
@@ -33,7 +30,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid var(--primary);
         }
         .login-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
-        .login-subtitle { font-size: 0.8rem; color: #666; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         
         .input-group { text-align: left; margin-bottom: 15px; }
         .input-label { font-size: 0.8rem; font-weight: bold; color: #555; margin-left: 5px; }
@@ -44,11 +40,10 @@
         .login-btn {
             width: 100%; padding: 15px; background: var(--primary); color: white; border: none;
             border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0,51,102,0.3); transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,51,102,0.3);
         }
-        .login-btn:active { transform: scale(0.98); }
 
-        /* --- SISTEMA INTERNO --- */
+        /* --- SISTEMA --- */
         #app-container {
             display: none; width: 100%; height: 100%; overflow-y: auto;
             background: #f8f9fa; padding-bottom: 90px;
@@ -68,261 +63,253 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;
         }
 
-        /* SUBMENUS (GRID) */
+        /* SUBMENUS */
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .menu-item {
             background: white; padding: 20px; border-radius: 12px; text-align: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee;
         }
         .menu-icon { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
-        .menu-label { font-size: 0.9rem; font-weight: 600; color: #555; }
 
-        /* DOCUMENTOS & CONTRATO */
+        /* DOCUMENTOS */
         .doc-paper {
-            background: #fff; border: 1px solid #ccc; padding: 30px; margin-bottom: 20px;
-            font-family: 'Times New Roman', serif; color: #000; position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background: #fffdf0; border: 1px solid #d4af37; padding: 30px; margin-bottom: 20px;
+            font-family: 'Courier Prime', monospace; font-size: 0.85rem; line-height: 1.6;
+            color: #000; position: relative;
         }
-        .doc-title { text-align: center; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-        .clause { margin-bottom: 15px; text-align: justify; line-height: 1.4; font-size: 0.9rem; }
-        .input-line { border: none; border-bottom: 1px solid #000; background: transparent; width: 100px; text-align: center; font-family: inherit; }
-        
         .stamp {
             position: absolute; bottom: 50px; right: 30px; width: 100px; height: 100px;
             border: 4px double var(--accent); border-radius: 50%; color: var(--accent);
             display: flex; justify-content: center; align-items: center; font-weight: bold;
             transform: rotate(-20deg); opacity: 0.8; font-size: 0.8rem; text-align: center;
-            pointer-events: none;
         }
 
-        /* PDF BUTTON */
-        .pdf-btn {
-            background: #e74c3c; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px;
-            font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-
-        /* BOTTOM NAV */
+        /* NAV */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: white;
             display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000;
         }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 0.75rem; text-decoration: none; }
+        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 0.75rem; }
         .nav-btn i { font-size: 1.4rem; margin-bottom: 3px; }
         .nav-btn.active { color: var(--primary); }
 
+        /* ELEMENTOS DINÂMICOS */
+        .dynamic-name { text-transform: capitalize; font-weight: bold; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
+
     <div id="login-screen">
         <div class="login-card">
             <div class="login-title">S.N.A.</div>
-            <div class="login-subtitle">Sistema Nacional de Amor</div>
+            <p style="margin-bottom: 20px; color:#666; font-size:0.8rem;">Sistema Nacional de Amor</p>
             
             <div class="input-group">
-                <label class="input-label">Seu Nome (Quem vai usar):</label>
-                <input type="text" id="userName" class="login-input" placeholder="Ex: Ana Gabriele">
+                <label class="input-label">Nome da Namorada(o):</label>
+                <input type="text" id="targetName" class="login-input" placeholder="Ex: Maria">
             </div>
 
             <div class="input-group">
-                <label class="input-label">Nome do Parceiro(a):</label>
-                <input type="text" id="partnerName" class="login-input" value="Rubens Pereira Fernandes">
+                <label class="input-label">Data do Início (Namoro/Conheceram):</label>
+                <input type="date" id="targetDate" class="login-input">
             </div>
 
             <div class="input-group">
-                <label class="input-label">Data do Início:</label>
-                <input type="date" id="startDate" class="login-input" value="2025-12-19">
+                <label class="input-label">Senha de Acesso:</label>
+                <input type="password" id="passwordInput" class="login-input" placeholder="Senha">
             </div>
             
             <button class="login-btn" onclick="enterSystem()">Acessar Sistema</button>
+            <p style="margin-top:15px; font-size: 0.7rem; color:#999;">Rubens Pereira Fernandes</p>
         </div>
     </div>
 
     <div id="app-container">
         
         <div class="header">
-            <span>Olá, <span class="d-user-name">Usuário</span></span>
+            <span>Olá, <span class="d-name">Amor</span></span>
             <i class="fas fa-heart"></i>
         </div>
 
         <div id="tab-home" class="section active">
             <div class="card" style="background: linear-gradient(135deg, #003366, #0056b3); color: white;">
-                <h3>Resumo da União</h3>
+                <h3>Nosso Tempo Juntos</h3>
                 <div style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;" id="daysCount">0</div>
-                <small>Dias de Felicidade</small>
+                <small id="fullDateDisplay">Dias de Felicidade</small>
             </div>
 
             <div class="card">
-                <h3>Notificações</h3>
-                <div style="padding: 10px; border-left: 4px solid #2ecc71; background: #f0fff4; margin-top: 10px;">
-                    <strong>Status:</strong> Relacionamento Oficializado e Estável.
+                <h2 class="title" style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 10px;">Carta para <span class="d-name">Você</span></h2>
+                <div style="text-align: justify; line-height: 1.7; font-size: 0.9rem;">
+                    <p>Ô meu amor, se tem uma pessoa q tem q agradecer todos os dias sou eu, por ter uma pessoa tão incrível do meu lado, vc n sabe o quanto eu sou feliz só de ter vc comigo.</p><br>
+                    <p>Vc realmente conseguiu me mostrar q nem tudo era do jeito q sempre foi, vc realmente entrou na minha vida para fazer a diferença e eu te agradeço muito por isso.</p><br>
+                    <p>Eu te escolhi e pode ter certeza q eu te escolheria mais 10 vezes se fosse possível, vc é muito mais do q só uma amiga, acabou se tornando uma parte de mim.</p><br>
+                    <p><strong>Te amo, <span class="d-name">___</span>. 💙💑💖✨</strong></p>
                 </div>
             </div>
         </div>
 
         <div id="tab-docs" class="section">
-            
             <div class="card">
                 <h3>Contrato de Namoro</h3>
-                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">Preencha os dados e baixe o PDF.</p>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">Preencha os dados faltantes para gerar o PDF.</p>
                 
                 <div id="contract-content" class="doc-paper">
-                    <div class="contract-header">CONTRATO DE NAMORO E COMPROMISSO</div>
-                    <p style="text-align: center; font-size: 0.8rem; margin-bottom: 20px;">REGISTRO Nº 2026/001 - REPÚBLICA DO AMOR</p>
+                    <div style="text-align: center; font-weight: bold; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">CONTRATO DE NAMORO E AFETO</div>
                     
-                    <p class="clause">
-                        <strong>IDENTIFICAÇÃO DAS PARTES:</strong><br>
-                        De um lado, <strong class="d-partner-name">RUBENS</strong>, e de outro, <strong class="d-user-name">ANA</strong>.
+                    <p style="margin-bottom: 15px;">
+                        <strong>I. PARTES:</strong><br>
+                        De um lado, <strong>RUBENS PEREIRA FERNANDES</strong>, e de outro, <strong class="d-name-upper">___</strong>.
                     </p>
 
-                    <p class="clause">
-                        <strong>CLÁUSULA 1ª - DO OBJETO:</strong><br>
-                        O presente contrato tem como objetivo firmar o compromisso de NAMORO, baseado em amor, respeito, lealdade e divisão de lanches.
+                    <p style="margin-bottom: 15px;">
+                        <strong>II. OBJETO:</strong><br>
+                        O presente contrato firma o compromisso de união, carinho e parceria iniciado em <strong class="d-date">___</strong>.
                     </p>
 
-                    <p class="clause">
-                        <strong>CLÁUSULA 2ª - DOS DADOS PESSOAIS:</strong><br>
-                        A contratante, nascida em <input type="date" class="input-line">, declara estar ciente de que o Sr. Rubens é o amor da sua vida.
+                    <p style="margin-bottom: 15px;">
+                        <strong>III. DADOS DA CONTRATANTE:</strong><br>
+                        Nascida em: <input type="date" style="border:none; border-bottom:1px solid #000; background:transparent; font-family:inherit;">,<br>
+                        Portadora do CPF (Fictício): <input type="text" placeholder="000.000.000-00" style="border:none; border-bottom:1px solid #000; width:120px;">.
                     </p>
 
-                    <p class="clause">
-                        <strong>CLÁUSULA 3ª - DA VIGÊNCIA:</strong><br>
-                        Este contrato entra em vigor na data de <span class="d-start-date"></span> e tem prazo de validade INDETERMINADO (Eterno).
+                    <p style="margin-bottom: 15px;">
+                        <strong>IV. CLÁUSULAS:</strong><br>
+                        1. É proibido dormir brigado.<br>
+                        2. Beijos de bom dia são obrigatórios.<br>
+                        3. A fidelidade e o respeito são a base deste acordo.
                     </p>
                     
-                    <div style="margin-top: 40px; text-align: center;">
+                    <div style="margin-top: 50px; text-align: center;">
                         ________________________________<br>
-                        <span class="d-user-name">Assinatura</span>
+                        <span class="d-name">Assinatura</span>
                     </div>
 
                     <div class="stamp">REGISTRADO<br>EM CARTÓRIO</div>
                 </div>
                 
-                <button class="pdf-btn" onclick="downloadPDF('contract-content', 'Contrato_Namoro.pdf')">
-                    <i class="fas fa-file-pdf"></i> Baixar Contrato (PDF)
-                </button>
-            </div>
-
-            <div class="card">
-                <h3>Certidão Oficial</h3>
-                <div id="cert-content" class="doc-paper" style="border: 5px double #003366; text-align: center;">
-                    <i class="fas fa-certificate" style="font-size: 3rem; color: #d4af37;"></i>
-                    <h2 style="font-family: 'Playfair Display'; margin: 10px 0;">CERTIDÃO DE UNIÃO</h2>
-                    <p>CERTIFICO E DOU FÉ QUE</p>
-                    <h3 style="margin: 15px 0; color: #003366;"><span class="d-partner-name">RUBENS</span> & <span class="d-user-name">ANA</span></h3>
-                    <p>Estão unidos pelos laços do amor e da cumplicidade.</p>
-                    <p style="margin-top: 20px; font-size: 0.8rem;">Brasília/DF, <span id="todayDate"></span></p>
-                </div>
-                <button class="pdf-btn" style="background: #003366;" onclick="downloadPDF('cert-content', 'Certidao_Amor.pdf')">
-                    <i class="fas fa-file-pdf"></i> Baixar Certidão (PDF)
+                <button style="background: #e74c3c; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="downloadPDF()">
+                    <i class="fas fa-file-pdf"></i> Baixar e Imprimir (PDF)
                 </button>
             </div>
         </div>
 
         <div id="tab-menu" class="section">
-            <h2 class="title" style="font-family: 'Playfair Display'; color: var(--primary);">Serviços</h2>
+            <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 15px;">Serviços</h2>
             <div class="menu-grid">
-                <div class="menu-item" onclick="openService('bank')">
+                <div class="menu-item" onclick="serviceAction('bank')">
                     <div class="menu-icon"><i class="fas fa-piggy-bank"></i></div>
                     <div class="menu-label">Banco do Amor</div>
                 </div>
-                <div class="menu-item" onclick="openService('goals')">
-                    <div class="menu-icon"><i class="fas fa-plane"></i></div>
-                    <div class="menu-label">Nossas Metas</div>
+                <div class="menu-item" onclick="serviceAction('date')">
+                    <div class="menu-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="menu-label">Agendar Date</div>
                 </div>
-                <div class="menu-item" onclick="openService('chat')">
+                <div class="menu-item" onclick="serviceAction('chat')">
                     <div class="menu-icon"><i class="fas fa-comments"></i></div>
                     <div class="menu-label">Ouvidoria</div>
                 </div>
-                <div class="menu-item" onclick="openService('date')">
-                    <div class="menu-icon"><i class="fas fa-calendar-alt"></i></div>
-                    <div class="menu-label">Agendar Date</div>
+                <div class="menu-item" onclick="serviceAction('music')">
+                    <div class="menu-icon"><i class="fas fa-music"></i></div>
+                    <div class="menu-label">Playlist</div>
                 </div>
-            </div>
-            
-            <div id="service-area" class="card" style="margin-top: 20px; display: none;">
-                <h3 id="service-title">Título</h3>
-                <p id="service-desc">Descrição</p>
-                <button id="service-btn" class="login-btn">Ação</button>
             </div>
         </div>
 
         <div class="bottom-nav">
             <a onclick="nav('tab-home', this)" class="nav-btn active"><i class="fas fa-home"></i>Início</a>
-            <a onclick="nav('tab-docs', this)" class="nav-btn"><i class="fas fa-file-signature"></i>Documentos</a>
+            <a onclick="nav('tab-docs', this)" class="nav-btn"><i class="fas fa-file-signature"></i>Contrato</a>
             <a onclick="nav('tab-menu', this)" class="nav-btn"><i class="fas fa-th-large"></i>Serviços</a>
         </div>
     </div>
 
     <script>
-        // VARIÁVEIS GLOBAIS
-        let userData = {
-            user: "",
-            partner: "",
-            start: ""
-        };
-        const MY_PHONE = "5581989501999"; // Seu número
+        // --- DADOS GLOBAIS ---
+        const MY_PHONE = "5581989501999"; 
+        const PASS = "19122025";
+        
+        let globalName = "Amor";
+        let globalDate = new Date(); // Será substituída pelo input
 
-        // --- 1. ENTRAR NO SISTEMA (LÓGICA DINÂMICA) ---
+        // 1. ENTRAR NO SISTEMA (Lógica Inteligente)
         function enterSystem() {
-            const uName = document.getElementById('userName').value;
-            const pName = document.getElementById('partnerName').value;
-            const sDate = document.getElementById('startDate').value;
+            const nameInput = document.getElementById('targetName').value;
+            const dateInput = document.getElementById('targetDate').value; // Pega a data do calendário
+            const passInput = document.getElementById('passwordInput').value;
 
-            if(!uName || !pName || !sDate) {
-                alert("Por favor, preencha todos os campos para gerar o sistema!");
+            if(passInput !== PASS) {
+                alert("Senha incorreta!");
                 return;
             }
 
-            // Salva dados
-            userData.user = uName;
-            userData.partner = pName;
-            userData.start = new Date(sDate);
+            if(!nameInput || !dateInput) {
+                alert("Por favor, preencha o nome dela e a data!");
+                return;
+            }
 
-            // Preenche o site
-            populateData();
-            
+            // Salva os dados
+            globalName = nameInput;
+            globalDate = new Date(dateInput);
+
+            // Substitui textos no site
+            updateInterface();
+
             // Troca de tela
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-container').style.display = 'block';
-            
-            // Inicia timer
+
+            // Inicia contador com a data escolhida
             startTimer();
-        }
-
-        // --- 2. PREENCHER DADOS EM TODO O SITE ---
-        function populateData() {
-            // Preenche todos os spans com classe d-user-name
-            document.querySelectorAll('.d-user-name').forEach(el => el.innerText = userData.user);
-            document.querySelectorAll('.d-partner-name').forEach(el => el.innerText = userData.partner.toUpperCase());
             
-            // Formata data
-            const dateStr = userData.start.toLocaleDateString('pt-BR');
-            document.querySelectorAll('.d-start-date').forEach(el => el.innerText = dateStr);
-
-            // Data de hoje na certidão
-            const today = new Date();
-            document.getElementById('todayDate').innerText = today.toLocaleDateString('pt-BR');
+            // Tenta tocar música
+            document.getElementById('bgMusic').play().catch(()=>{});
         }
 
-        // --- 3. GERAR PDF (HTML2PDF) ---
-        function downloadPDF(elementId, filename) {
-            const element = document.getElementById(elementId);
+        // 2. ATUALIZA NOME E DATA EM TUDO
+        function updateInterface() {
+            // Nomes
+            document.querySelectorAll('.d-name').forEach(el => el.innerText = globalName);
+            document.querySelectorAll('.d-name-upper').forEach(el => el.innerText = globalName.toUpperCase());
+            
+            // Data Formatada (Ex: 15/05/2024)
+            const dateStr = globalDate.toLocaleDateString('pt-BR');
+            document.querySelectorAll('.d-date').forEach(el => el.innerText = dateStr);
+        }
+
+        // 3. CONTADOR DE DIAS (DINÂMICO)
+        function startTimer() {
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - globalDate; // Diferença entre hoje e a data escolhida
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                
+                if(days < 0) {
+                    document.getElementById('daysCount').innerText = "0"; // Data futura
+                } else {
+                    document.getElementById('daysCount').innerText = days;
+                }
+            }, 1000);
+        }
+
+        // 4. DOWNLOAD PDF
+        function downloadPDF() {
+            const element = document.getElementById('contract-content');
             const opt = {
-                margin:       10,
-                filename:     filename,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin: 10,
+                filename: `Contrato_${globalName}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
-            
-            // Gambiarra visual: remove bordas temporariamente para imprimir bonito
-            alert("Gerando PDF... Aguarde um instante.");
+            alert("Gerando PDF... Aguarde!");
             html2pdf().set(opt).from(element).save();
         }
 
-        // --- 4. FUNÇÕES DE NAVEGAÇÃO ---
+        // 5. NAVEGAÇÃO
         function nav(tabId, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -330,45 +317,15 @@
             btn.classList.add('active');
         }
 
-        function startTimer() {
-            setInterval(() => {
-                const now = new Date();
-                const diff = now - userData.start;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('daysCount').innerText = days;
-            }, 1000);
-        }
-
-        // --- 5. LÓGICA DO SUBMENU (SERVIÇOS) ---
-        function openService(type) {
-            const area = document.getElementById('service-area');
-            const title = document.getElementById('service-title');
-            const desc = document.getElementById('service-desc');
-            const btn = document.getElementById('service-btn');
+        // 6. AÇÕES DOS SERVIÇOS
+        function serviceAction(type) {
+            let msg = "";
+            if(type === 'bank') msg = "Amor, quero fazer um saque no Banco do Amor! 🏦❤️";
+            if(type === 'date') msg = "Solicito agendamento de um Date Oficial! 📅";
+            if(type === 'chat') msg = "Tenho um comunicado para a Ouvidoria do Amor. 🗣️";
+            if(type === 'music') return alert("A música já está tocando no fundo! 🎵");
             
-            area.style.display = 'block';
-
-            if(type === 'bank') {
-                title.innerText = "Banco do Amor";
-                desc.innerText = "Saldo atual: Infinito. Você pode realizar saques de beijos a qualquer momento.";
-                btn.innerText = "Realizar Saque (WhatsApp)";
-                btn.onclick = () => window.open(`https://wa.me/${MY_PHONE}?text=Amor, quero fazer um saque de beijos!`, '_blank');
-            } else if(type === 'goals') {
-                title.innerText = "Metas de Vida";
-                desc.innerText = "Nossa lista de sonhos: Casamento, Viagens, Casa Própria.";
-                btn.innerText = "Sugerir Nova Meta";
-                btn.onclick = () => window.open(`https://wa.me/${MY_PHONE}?text=Amor, tive uma ideia de meta pro futuro...`, '_blank');
-            } else if(type === 'chat') {
-                title.innerText = "Ouvidoria Oficial";
-                desc.innerText = "Reclamações, Elogios ou Declarações. Atendimento 24h.";
-                btn.innerText = "Falar com Atendente";
-                btn.onclick = () => window.open(`https://wa.me/${MY_PHONE}?text=Tenho um comunicado oficial para o Sr. Rubens.`, '_blank');
-            } else if(type === 'date') {
-                title.innerText = "Agendar Encontro";
-                desc.innerText = "Solicite uma data na agenda oficial do casal.";
-                btn.innerText = "Solicitar Data";
-                btn.onclick = () => window.open(`https://wa.me/${MY_PHONE}?text=Solicito agendamento de encontro urgente!`, '_blank');
-            }
+            window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 </body>
