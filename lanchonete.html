@@ -2,174 +2,466 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delícias da Casa | Pedido Inteligente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JR Delícias | O Shopping do Sabor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS (ESTILO VISUAL) --- */
+        /* --- ESTILO MARKETPLACE DARK (JR DELÍCIAS) --- */
         :root {
-            --primary: #ffa502; /* Laranja Ouro */
-            --secondary: #ff4757; /* Vermelho */
-            --dark-bg: #1e1e1e;
-            --glass: rgba(255, 255, 255, 0.08);
-            --text: #ffffff;
+            --primary: #ffbf00; /* Amarelo Ouro */
+            --primary-dark: #d4a000;
+            --accent: #e64c3c; /* Vermelho Oferta */
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --border: #333333;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-        body {
-            background: linear-gradient(to right, #1e1e1e, #2d3436);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        /* Navbar */
-        .glass-nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 5%;
-            background: rgba(30, 30, 30, 0.95);
-            position: sticky; top: 0; z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .logo { font-size: 1.4rem; font-weight: bold; color: var(--primary); text-transform: uppercase; }
-        .menu-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
-        .menu-links a:hover { color: var(--primary); }
-
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; margin-left: 20px;}
-        #cart-count {
-            position: absolute; top: -8px; right: -8px;
-            background: var(--secondary); color: white;
-            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;
-        }
-
-        /* Hero */
-        .hero {
-            height: 70vh; display: flex; align-items: center; justify-content: center;
-            text-align: center;
-            background: radial-gradient(circle at center, rgba(255, 165, 2, 0.15) 0%, transparent 70%);
-            padding: 20px;
-        }
-
-        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; line-height: 1.2;}
-        .highlight { color: var(--primary); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        .cta-btn {
-            padding: 12px 30px; background: var(--primary); border: none;
-            color: #000; font-weight: bold; font-size: 1rem; border-radius: 50px;
-            cursor: pointer; margin-top: 20px; transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 165, 2, 0.4);
+        body { background-color: var(--bg-body); color: var(--text-main); padding-bottom: 70px; }
+
+        /* TOPO FIXO (APP STYLE) */
+        header {
+            background: #000000; border-bottom: 1px solid var(--border);
+            padding: 10px 15px; position: sticky; top: 0; z-index: 100;
         }
-        .cta-btn:hover { transform: scale(1.05); }
+        
+        .top-bar { display: flex; align-items: center; gap: 12px; }
+        
+        /* Barra de Busca estilo Shopee */
+        .search-box {
+            flex: 1; background: #333; border-radius: 5px; padding: 8px 12px;
+            display: flex; align-items: center; gap: 8px; border: 1px solid #444;
+        }
+        .search-box input { 
+            background: transparent; border: none; outline: none; width: 100%; 
+            color: white; font-size: 0.9rem; 
+        }
+        .search-box i { color: var(--primary); }
+        
+        .header-icons { display: flex; gap: 18px; align-items: center; }
+        .cart-icon-head { position: relative; cursor: pointer; }
+        .badge {
+            position: absolute; top: -8px; right: -8px; 
+            background: var(--accent); color: white;
+            font-size: 0.65rem; padding: 2px 5px; border-radius: 10px; font-weight: bold;
+        }
 
-        /* Produtos */
-        .container { padding: 4rem 5%; }
-        .section-title { text-align: center; margin-bottom: 3rem; font-size: 2rem; color: var(--primary); }
+        /* BANNER CAROUSEL */
+        .banner-container { width: 100%; overflow: hidden; margin-bottom: 5px; }
+        .banner-img { width: 100%; display: block; aspect-ratio: 2/1; object-fit: cover; }
 
+        /* ÍCONES DE CATEGORIA (BOLINHAS) */
+        .categories-scroll {
+            display: flex; gap: 15px; padding: 15px; overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        .categories-scroll::-webkit-scrollbar { display: none; } /* Chrome */
+        
+        .cat-item { display: flex; flex-direction: column; align-items: center; min-width: 65px; cursor: pointer; }
+        .cat-icon {
+            width: 55px; height: 55px; border-radius: 18px; 
+            background: linear-gradient(135deg, #333, #222); border: 1px solid var(--primary);
+            display: flex; justify-content: center; align-items: center; font-size: 1.4rem;
+            margin-bottom: 8px; color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .cat-name { font-size: 0.75rem; color: var(--text-muted); text-align: center; }
+
+        /* SEÇÃO DE CUPONS (ESTILO SHOPEE) */
+        .coupon-section {
+            padding: 10px 15px; display: flex; gap: 10px; overflow-x: auto;
+        }
+        .coupon-card {
+            background: #2a2a2a; border-left: 4px solid var(--primary); border-radius: 4px;
+            padding: 8px 12px; min-width: 160px; display: flex; flex-direction: column;
+            justify-content: center; position: relative;
+        }
+        .coupon-title { font-size: 0.8rem; font-weight: bold; color: var(--primary); }
+        .coupon-desc { font-size: 0.7rem; color: #fff; }
+        .btn-resgatar {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: var(--primary); color: #000; border: none; padding: 4px 8px;
+            border-radius: 3px; font-size: 0.7rem; font-weight: bold; cursor: pointer;
+        }
+
+        /* OFERTAS RELÂMPAGO */
+        .flash-sale { margin-top: 10px; padding: 10px 15px; background: #1a1a1a; border-top: 1px solid #333; border-bottom: 1px solid #333; }
+        .fs-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .fs-title { 
+            color: var(--accent); font-weight: 900; font-style: italic; font-size: 1.1rem; 
+            display: flex; align-items: center; gap: 8px; text-transform: uppercase;
+        }
+        .countdown { 
+            background: #000; color: white; padding: 3px 6px; border-radius: 4px; 
+            font-size: 0.8rem; font-weight: bold; border: 1px solid #444;
+        }
+        
+        .fs-grid { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; }
+        .fs-card { min-width: 120px; max-width: 120px; cursor: pointer; }
+        .fs-img-box { position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+        .fs-img { width: 100%; height: 100%; object-fit: cover; }
+        .fs-tag {
+            position: absolute; top: 0; right: 0; background: var(--accent); color: white;
+            font-size: 0.7rem; padding: 2px 6px; font-weight: bold; border-bottom-left-radius: 8px;
+        }
+        .fs-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
+        .fs-bar { width: 100%; height: 6px; background: #333; border-radius: 3px; margin-top: 5px; position: relative; overflow: hidden; }
+        .fs-fill { height: 100%; background: var(--accent); width: 85%; }
+
+        /* GRID DE PRODUTOS (ALIEEXPRESS STYLE) */
+        .section-header { 
+            padding: 20px 15px 10px; font-size: 1.2rem; font-weight: bold; color: var(--primary);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .section-header::before { content: ''; width: 4px; height: 20px; background: var(--primary); display: block; border-radius: 2px; }
+        
         .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 8px 20px;
         }
-
-        .card {
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 15px; padding: 15px; text-align: center;
-            transition: 0.3s; backdrop-filter: blur(5px);
+        
+        .product-card {
+            background: var(--bg-card); border-radius: 6px; overflow: hidden; 
+            position: relative; transition: transform 0.1s; border: 1px solid #333;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card img { width: 100%; border-radius: 10px; margin-bottom: 15px; height: 180px; object-fit: cover; }
-        .price { color: var(--primary); font-size: 1.3rem; font-weight: bold; display: block; margin: 10px 0; }
-
-        .add-btn {
-            width: 100%; padding: 10px; border: 2px solid var(--primary);
-            background: transparent; color: var(--primary); border-radius: 25px; cursor: pointer;
-            font-weight: bold; transition: 0.3s;
+        .product-card:active { transform: scale(0.98); border-color: var(--primary); }
+        
+        .p-img-box { position: relative; width: 100%; aspect-ratio: 1/1; }
+        .p-img { width: 100%; height: 100%; object-fit: cover; }
+        .p-info { padding: 10px; }
+        .p-name {
+            font-size: 0.9rem; color: #fff; line-height: 1.3; margin-bottom: 6px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 38px;
         }
-        .add-btn:hover { background: var(--primary); color: #000; }
-
-        /* Chatbot */
-        .ai-assistant { position: fixed; bottom: 30px; right: 30px; z-index: 200; }
-        .ai-trigger {
-            width: 60px; height: 60px; background: var(--secondary);
+        .tag-row { display: flex; gap: 5px; margin-bottom: 8px; }
+        .tag-frete { 
+            border: 1px solid var(--primary); color: var(--primary); 
+            font-size: 0.6rem; padding: 1px 4px; border-radius: 2px; 
+        }
+        
+        .p-price-row { display: flex; align-items: baseline; justify-content: space-between; }
+        .p-price { color: var(--primary); font-size: 1.1rem; font-weight: bold; }
+        .p-sold { font-size: 0.7rem; color: var(--text-muted); }
+        
+        .btn-add-mini {
+            position: absolute; bottom: 10px; right: 10px; 
+            background: var(--primary); color: #000; width: 25px; height: 25px; 
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
-            transition: 0.3s; font-size: 1.5rem; position: relative;
-        }
-        .status-dot { width: 12px; height: 12px; background: #00ff00; border-radius: 50%; position: absolute; top: 2px; right: 2px; }
-
-        .chat-window {
-            position: absolute; bottom: 80px; right: 0; width: 320px; height: 450px;
-            background: #2d3436; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px; display: none; flex-direction: column; overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        .chat-header { background: #1e1e1e; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .message { padding: 10px 15px; border-radius: 10px; max-width: 85%; font-size: 0.9rem; }
-        .message.bot { background: #3d3d3d; align-self: flex-start; border-bottom-left-radius: 0; }
-        .message.user { background: var(--secondary); align-self: flex-end; border-bottom-right-radius: 0; }
-        .chat-input { display: flex; padding: 10px; background: #1e1e1e; }
-        .chat-input input { flex: 1; background: transparent; border: none; color: white; outline: none; padding: 5px; }
-        .chat-input button { background: none; border: none; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
+        /* MENU INFERIOR FIXO */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #1a1a1a;
+            display: flex; justify-content: space-around; padding: 10px 0;
+            border-top: 1px solid #333; z-index: 900;
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; 
+            color: var(--text-muted); text-decoration: none; font-size: 0.7rem; flex: 1;
+        }
+        .nav-item i { font-size: 1.3rem; margin-bottom: 4px; }
+        .nav-item.active { color: var(--primary); }
 
-        /* Nota Fiscal */
+        /* MODAL CARRINHO */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 1000;
-            display: none; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.8); z-index: 2000; display: none; 
+            justify-content: center; align-items: flex-end; backdrop-filter: blur(2px);
         }
-        .invoice-box { width: 90%; max-width: 400px; padding: 20px; border-radius: 10px; text-align: center; }
-        .invoice-paper {
-            background: #fff8e1; color: #000; padding: 20px; font-family: 'Courier New', monospace;
-            text-align: left; font-size: 0.85rem; margin-bottom: 20px;
+        .modal-content {
+            background: #1f1f1f; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0;
+            padding: 20px; animation: slideUp 0.3s; max-height: 85vh; overflow-y: auto; border: 1px solid #333;
         }
-        .dashed-line { border-bottom: 1px dashed #000; margin: 10px 0; }
-        .total-row { font-weight: bold; font-size: 1.1rem; display: flex; justify-content: space-between; margin-top: 10px; }
-        .send-wa-btn {
-            width: 100%; background: #25D366; color: white; border: none;
-            padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; gap: 10px; font-size: 1.1rem;
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .checkout-btn {
+            background: #25D366; color: white; border: none; width: 100%; padding: 16px;
+            font-size: 1.1rem; font-weight: bold; border-radius: 8px; margin-top: 15px;
+            display: flex; justify-content: center; gap: 10px; align-items: center;
         }
-        .close-btn { margin-top: 15px; background: transparent; border: none; color: #888; cursor: pointer; text-decoration: underline; }
 
-        @media (max-width: 600px) {
-            .chat-window { width: 300px; right: -10px; }
-        }
     </style>
 </head>
 <body>
 
-    <nav class="glass-nav">
-        <div class="logo"><i class="fas fa-utensils"></i> Delícias da Casa</div>
-        <div class="menu-links">
-            <a href="https://www.instagram.com/jr_delicias_da_casa?igsh=NHBrMTIxaDhla2Vn" target="_blank">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
-        </div>
-        <div class="cart-icon" onclick="toggleChat()">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Sabor Caseiro, <br><span class="highlight">Tecnologia de Ponta</span></h1>
-            <p>Peça com nossa Inteligência Artificial.</p>
-            <button class="cta-btn" onclick="document.getElementById('menu').scrollIntoView()">Fazer Pedido</button>
+    <header>
+        <div class="top-bar">
+            <img src="logo.jpeg" style="height: 35px; width: 35px; border-radius: 50%; border: 1px solid var(--primary);" alt="Logo">
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar delícias...">
+            </div>
+            
+            <div class="header-icons">
+                <div class="cart-icon-head" onclick="openCart()">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.4rem; color: #fff;"></i>
+                    <span id="badge-count" class="badge">0</span>
+                </div>
+                <i class="far fa-comment-dots" style="font-size: 1.4rem; color: #fff;"></i>
+            </div>
         </div>
     </header>
 
-    <section id="menu" class="container">
-        <h2 class="section-title">Nossas Delícias</h2>
-        <div class="products-grid" id="products-container">
-            </div>
-    </section>
+    <div class="banner-container">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="banner-img" alt="Promoção">
+    </div>
 
-    <div class="ai-assistant">
-        <div class="ai-trigger" onclick="toggleChat()">
-            <i class="fas fa-robot"></i>
-            <span class="status-dot"></span>
+    <div class="categories-scroll">
+        <div class="cat-item" onclick="filterCategory('burgers')">
+            <div class="cat-icon"><i class="fas fa-hamburger"></i></div>
+            <div class="cat-name">Burgers</div>
         </div>
-        
-        <div class="chat-window" id="chat-
+        <div class="cat-item" onclick="filterCategory('combos')">
+            <div class="cat-icon"><i class="fas fa-box-open"></i></div>
+            <div class="cat-name">Combos</div>
+        </div>
+        <div class="cat-item" onclick="filterCategory('bebidas')">
+            <div class="cat-icon"><i class="fas fa-glass-soda"></i></div>
+            <div class="cat-name">Bebidas</div>
+        </div>
+        <div class="cat-item" onclick="filterCategory('doces')">
+            <div class="cat-icon"><i class="fas fa-ice-cream"></i></div>
+            <div class="cat-name">Doces</div>
+        </div>
+        <div class="cat-item">
+            <div class="cat-icon" style="border-color: #25D366; color: #25D366;"><i class="fab fa-whatsapp"></i></div>
+            <div class="cat-name">Zap</div>
+        </div>
+    </div>
+
+    <div class="coupon-section">
+        <div class="coupon-card">
+            <div class="coupon-title">FRETE GRÁTIS</div>
+            <div class="coupon-desc">Pedidos acima de R$50</div>
+            <button class="btn-resgatar" onclick="alert('Cupom Aplicado!')">PEGAR</button>
+        </div>
+        <div class="coupon-card">
+            <div class="coupon-title">5% OFF</div>
+            <div class="coupon-desc">Primeira compra</div>
+            <button class="btn-resgatar" onclick="alert('Cupom Aplicado!')">PEGAR</button>
+        </div>
+    </div>
+
+    <div class="flash-sale">
+        <div class="fs-header">
+            <div class="fs-title"><i class="fas fa-bolt"></i> RELÂMPAGO <span class="countdown" id="timer">00:00:00</span></div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Ver mais ></span>
+        </div>
+        <div class="fs-grid" id="flash-items">
+            </div>
+    </div>
+
+    <div class="section-header">Recomendado para Você</div>
+    <div class="products-grid" id="main-products">
+        </div>
+
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fas fa-store"></i>Início</a>
+        <a href="#" class="nav-item"><i class="fas fa-ticket-alt"></i>Cupons</a>
+        <a href="#" class="nav-item" onclick="openCart()">
+            <div style="position:relative;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="nav-badge" class="badge" style="display:none;">0</span>
+            </div>
+            Sacola
+        </a>
+        <a href="#" class="nav-item"><i class="fas fa-user-circle"></i>Perfil</a>
+    </div>
+
+    <div id="cart-modal" class="modal-overlay" onclick="if(event.target === this) closeCart()">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px; color:var(--primary);">
+                <i class="fas fa-receipt"></i> Sua Sacola
+            </h2>
+            <div id="cart-items-container">
+                <p style="color:#666; text-align:center; padding:30px;">Sua sacola está vazia.</p>
+            </div>
+            
+            <div style="margin-top:20px; border-top:1px solid #333; padding-top:15px;">
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem;">
+                    <span>Total:</span>
+                    <span id="cart-total" style="color:var(--primary);">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="checkout-btn" onclick="startCheckout()">
+                Finalizar no WhatsApp <i class="fab fa-whatsapp"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- DADOS DOS PRODUTOS ---
+        const products = [
+            // OFERTAS RELÂMPAGO
+            { id: 101, name: "Combo X-Tudo + Refri", price: 22.90, img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5", sold: 142, type: 'flash', tag: '-30%' },
+            { id: 102, name: "Batata Cheddar Bacon", price: 18.90, img: "https://images.unsplash.com/photo-1541592106381-b31e96716230", sold: 89, type: 'flash', tag: 'QUENTE' },
+            { id: 103, name: "Milkshake Morango", price: 14.00, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699", sold: 210, type: 'flash', tag: 'DOCE' },
+
+            // VITRINE (PRINCIPAL)
+            { id: 1, name: "X-Burger Clássico JR", price: 19.90, sold: '1.2mil', img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd", tag: "Grátis" },
+            { id: 2, name: "Coca-Cola 2L Gelada", price: 12.00, sold: '3mil', img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97", tag: "Rápido" },
+            { id: 3, name: "Pizza Calabresa (8 fat)", price: 45.00, sold: '540', img: "https://images.unsplash.com/photo-1628840042765-356cda07504e", tag: "Promo" },
+            { id: 4, name: "Açaí no Copo 500ml", price: 15.00, sold: '900', img: "https://images.unsplash.com/photo-1490818387583-1baba5e638af", tag: "Verão" },
+            { id: 5, name: "Dogão Duplo Salsicha", price: 16.50, sold: '200', img: "https://images.unsplash.com/photo-1619860860774-1e7e17397526", tag: "Novo" },
+            { id: 6, name: "Pastel de Carne", price: 8.00, sold: '4k', img: "https://images.unsplash.com/photo-1626425143329-87309990715e", tag: "Top 1" }
+        ];
+
+        let cart = [];
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFlashSale();
+            renderMainProducts();
+            startTimer();
+        });
+
+        // Cronômetro Fake (Cria urgência)
+        function startTimer() {
+            let hours = 2, minutes = 15, seconds = 0;
+            setInterval(() => {
+                if(seconds == 0) {
+                    if(minutes == 0) { hours--; minutes = 59; } else { minutes--; }
+                    seconds = 59;
+                } else { seconds--; }
+                document.getElementById('timer').innerText = 
+                    `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+            }, 1000);
+        }
+
+        function renderFlashSale() {
+            const container = document.getElementById('flash-items');
+            products.filter(p => p.type === 'flash').forEach(item => {
+                container.innerHTML += `
+                    <div class="fs-card" onclick="addToCart(${item.id})">
+                        <div class="fs-img-box">
+                            <img src="${item.img}" class="fs-img">
+                            <div class="fs-tag">${item.tag}</div>
+                        </div>
+                        <div class="fs-price">R$ ${item.price.toFixed(2)}</div>
+                        <div class="fs-bar"><div class="fs-fill" style="width:${Math.random() * (90 - 40) + 40}%"></div></div>
+                        <div style="font-size:0.6rem; color:#888; margin-top:2px;">${item.sold} vendidos</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderMainProducts() {
+            const container = document.getElementById('main-products');
+            products.filter(p => p.type !== 'flash').forEach(item => {
+                container.innerHTML += `
+                    <div class="product-card" onclick="addToCart(${item.id})">
+                        <div class="p-img-box">
+                            <img src="${item.img}" class="p-img">
+                        </div>
+                        <div class="p-info">
+                            <div class="p-name">${item.name}</div>
+                            <div class="tag-row">
+                                <span class="tag-frete">${item.tag}</span>
+                            </div>
+                            <div class="p-price-row">
+                                <span class="p-price">R$ ${item.price.toFixed(2)}</span>
+                                <span class="p-sold">${item.sold} vendidos</span>
+                            </div>
+                        </div>
+                        <div class="btn-add-mini"><i class="fas fa-plus"></i></div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- SISTEMA DE CARRINHO ---
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCartUI();
+            
+            // Efeito visual (Vibração no ícone)
+            const icon = document.querySelector('.cart-icon-head');
+            icon.style.transform = "scale(1.2)";
+            setTimeout(() => icon.style.transform = "scale(1)", 200);
+        }
+
+        function updateCartUI() {
+            document.getElementById('badge-count').innerText = cart.length;
+            
+            // Badge do menu inferior também
+            const navBadge = document.getElementById('nav-badge');
+            navBadge.innerText = cart.length;
+            navBadge.style.display = cart.length > 0 ? 'block' : 'none';
+            
+            const total = cart.reduce((acc, item) => acc + item.price, 0);
+            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2)}`;
+            
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            if(cart.length === 0) {
+                container.innerHTML = '<p style="color:#666; text-align:center; padding:20px;">Sua sacola está vazia.</p>';
+                return;
+            }
+            
+            let html = '';
+            cart.forEach((item, index) => {
+                html += `
+                    <div class="cart-item">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:6px;">
+                            <div>
+                                <div style="color:white; font-size:0.9rem;">${item.name}</div>
+                                <div style="color:var(--primary); font-weight:bold;">R$ ${item.price.toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <button onclick="removeItem(${index})" style="background:none; border:none; color:#ff4444; font-size:1.1rem;"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function openCart() { document.getElementById('cart-modal').style.display = 'flex'; }
+        function closeCart() { document.getElementById('cart-modal').style.display = 'none'; }
+
+        // --- CHECKOUT WHATSAPP ---
+        function startCheckout() {
+            if(cart.length === 0) return alert('Sua sacola está vazia!');
+            
+            const nome = prompt("Qual seu nome?");
+            if(!nome) return;
+            const endereco = prompt("Endereço de entrega:");
+            const pag = prompt("Pagamento (Pix, Cartão ou Dinheiro):");
+
+            let msg = `🛍️ *PEDIDO JR DELÍCIAS* \n`;
+            msg += `👤 *Cliente:* ${nome}\n`;
+            msg += `📍 *Endereço:* ${endereco}\n`;
+            msg += `--------------------------------\n`;
+            
+            let total = 0;
+            cart.forEach(item => {
+                msg += `▫️ ${item.name} - R$ ${item.price.toFixed(2)}\n`;
+                total += item.price;
+            });
+            
+            msg += `--------------------------------\n`;
+            msg += `💰 *TOTAL: R$ ${total.toFixed(2)}*\n`;
+            msg += `💳 *Pagamento:* ${pag}\n`;
+            msg += `✅ *Pedido via Site Marketplace*`;
+
+            const phone = "5581989131430"; 
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
