@@ -1,331 +1,400 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>S.N.A. • Sistema Nacional de Amor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Império | Área Restrita</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #f2f4f8; font-family: 'Poppins', sans-serif; color: #333; height: 100vh; overflow: hidden; }
-
+        /* --- 🎨 CONFIGURAÇÃO DE CORES (Mude aqui) --- */
         :root {
-            --primary: #003366; 
-            --accent: #c0392b;  
-            --gold: #d4af37;
+            --bg-color: #050505;          /* Fundo do site */
+            --glass-bg: rgba(255, 255, 255, 0.05); /* Vidro */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-color: #6C63FF;      /* Cor Principal (Roxo) */
+            --accent-glow: rgba(108, 99, 255, 0.5);
+            --text-color: #ffffff;
+            --chat-me: #6C63FF;           /* Minha bolha */
+            --chat-ai: #1F1F1F;           /* Bolha da IA */
+            --font-main: 'Outfit', sans-serif;
+            --font-title: 'Playfair Display', serif;
         }
 
-        /* --- TELA DE LOGIN (CONFIGURAÇÃO) --- */
-        #login-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #f2f4f8; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; overflow-y: auto;
-        }
-        .login-card {
-            background: white; padding: 30px; border-radius: 15px; width: 100%; max-width: 380px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 5px solid var(--primary);
-        }
-        .login-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary); margin-bottom: 5px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        .input-group { text-align: left; margin-bottom: 15px; }
-        .input-label { font-size: 0.8rem; font-weight: bold; color: #555; margin-left: 5px; }
-        .login-input {
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px;
-            font-size: 0.95rem; background: #f9f9f9; color: #333;
-        }
-        .login-btn {
-            width: 100%; padding: 15px; background: var(--primary); color: white; border: none;
-            border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0,51,102,0.3);
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            height: 100vh;
+            overflow: hidden; /* Evita rolagem na tela de bloqueio */
         }
 
-        /* --- SISTEMA --- */
-        #app-container {
-            display: none; width: 100%; height: 100%; overflow-y: auto;
-            background: #f8f9fa; padding-bottom: 90px;
+        /* --- 🔒 TELA DE BLOQUEIO (Glassmorphism) --- */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a1a1a, #000);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        .header {
-            background: var(--primary); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            width: 400px;
         }
 
-        .section { display: none; padding: 20px; animation: fadeIn 0.4s; }
-        .section.active { display: block; }
-
-        .card {
-            background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;
-        }
-
-        /* SUBMENUS */
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .menu-item {
-            background: white; padding: 20px; border-radius: 12px; text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee;
-        }
-        .menu-icon { font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
-
-        /* DOCUMENTOS */
-        .doc-paper {
-            background: #fffdf0; border: 1px solid #d4af37; padding: 30px; margin-bottom: 20px;
-            font-family: 'Courier Prime', monospace; font-size: 0.85rem; line-height: 1.6;
-            color: #000; position: relative;
-        }
-        .stamp {
-            position: absolute; bottom: 50px; right: 30px; width: 100px; height: 100px;
-            border: 4px double var(--accent); border-radius: 50%; color: var(--accent);
-            display: flex; justify-content: center; align-items: center; font-weight: bold;
-            transform: rotate(-20deg); opacity: 0.8; font-size: 0.8rem; text-align: center;
-        }
-
-        /* NAV */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 70px; background: white;
-            display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #eee; z-index: 1000;
-        }
-        .nav-btn { display: flex; flex-direction: column; align-items: center; color: #999; font-size: 0.75rem; }
-        .nav-btn i { font-size: 1.4rem; margin-bottom: 3px; }
-        .nav-btn.active { color: var(--primary); }
-
-        /* ELEMENTOS DINÂMICOS */
-        .dynamic-name { text-transform: capitalize; font-weight: bold; }
+        .lock-icon { font-size: 50px; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        input.password-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            padding: 15px;
+            border-radius: 12px;
+            color: white;
+            font-family: var(--font-main);
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 5px;
+            width: 100%;
+            margin-top: 20px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input.password-input:focus { border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
+
+        button.btn-enter {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        button.btn-enter:active { transform: scale(0.95); }
+
+        /* --- 🏠 DASHBOARD (O Sistema) --- */
+        #dashboard {
+            display: none; /* Começa escondido */
+            height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 20px;
+        }
+
+        h1.logo { font-family: var(--font-title); font-style: italic; font-size: 28px; }
+
+        /* Grid de Módulos */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .module-card {
+            background: #111;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            height: 500px; /* Altura fixa para scroll interno */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 📜 ESTILO DO CONTRATO --- */
+        .contract-content {
+            overflow-y: auto;
+            padding-right: 10px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #ccc;
+        }
+        .contract-content h3 { color: var(--accent-color); margin-top: 20px; font-family: var(--font-title); }
+        .contract-content strong { color: white; }
+
+        /* --- 💬 ESTILO DO CHAT (Custom UI) --- */
+        .chat-ui {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            line-height: 1.4;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+            background: var(--chat-me);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg.ai {
+            align-self: flex-start;
+            background: var(--chat-ai);
+            color: #ddd;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            background: #1a1a1a;
+            padding: 5px;
+            border-radius: 50px;
+            border: 1px solid #333;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            outline: none;
+        }
+
+        .btn-send-chat {
+            background: var(--accent-color);
+            border: none;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Scrollbar Personalizada */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        /* Animações */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        .shake { animation: shake 0.4s ease-in-out; border-color: red !important; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop><source src="musica.mp3" type="audio/mpeg"></audio>
-
-    <div id="login-screen">
-        <div class="login-card">
-            <div class="login-title">S.N.A.</div>
-            <p style="margin-bottom: 20px; color:#666; font-size:0.8rem;">Sistema Nacional de Amor</p>
+    <div id="lock-screen">
+        <div class="glass-card">
+            <div class="lock-icon">🔒</div>
+            <h2 style="font-family: var(--font-title); font-weight: normal;">Acesso Restrito</h2>
+            <p style="color: #888; font-size: 14px; margin-top: 5px;">Identifique-se para entrar no Império.</p>
             
-            <div class="input-group">
-                <label class="input-label">Nome da Namorada(o):</label>
-                <input type="text" id="targetName" class="login-input" placeholder="Ex: Maria">
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Data do Início (Namoro/Conheceram):</label>
-                <input type="date" id="targetDate" class="login-input">
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">Senha de Acesso:</label>
-                <input type="password" id="passwordInput" class="login-input" placeholder="Senha">
-            </div>
-            
-            <button class="login-btn" onclick="enterSystem()">Acessar Sistema</button>
-            <p style="margin-top:15px; font-size: 0.7rem; color:#999;">Rubens Pereira Fernandes</p>
+            <input type="password" id="password" class="password-input" placeholder="SENHA" onkeypress="checkEnter(event)">
+            <button class="btn-enter" onclick="unlockSystem()">ACESSAR</button>
+            <p id="error-msg" style="color: #ff4d4d; font-size: 12px; margin-top: 15px; min-height: 20px;"></p>
         </div>
     </div>
 
-    <div id="app-container">
-        
-        <div class="header">
-            <span>Olá, <span class="d-name">Amor</span></span>
-            <i class="fas fa-heart"></i>
-        </div>
-
-        <div id="tab-home" class="section active">
-            <div class="card" style="background: linear-gradient(135deg, #003366, #0056b3); color: white;">
-                <h3>Nosso Tempo Juntos</h3>
-                <div style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;" id="daysCount">0</div>
-                <small id="fullDateDisplay">Dias de Felicidade</small>
+    <div id="dashboard">
+        <header>
+            <div>
+                <h1 class="logo">Império & Família</h1>
+                <p style="font-size: 12px; color: #666;">Sistema de Gestão de Relacionamento v1.0</p>
             </div>
-
-            <div class="card">
-                <h2 class="title" style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 10px;">Carta para <span class="d-name">Você</span></h2>
-                <div style="text-align: justify; line-height: 1.7; font-size: 0.9rem;">
-                    <p>Ô meu amor, se tem uma pessoa q tem q agradecer todos os dias sou eu, por ter uma pessoa tão incrível do meu lado, vc n sabe o quanto eu sou feliz só de ter vc comigo.</p><br>
-                    <p>Vc realmente conseguiu me mostrar q nem tudo era do jeito q sempre foi, vc realmente entrou na minha vida para fazer a diferença e eu te agradeço muito por isso.</p><br>
-                    <p>Eu te escolhi e pode ter certeza q eu te escolheria mais 10 vezes se fosse possível, vc é muito mais do q só uma amiga, acabou se tornando uma parte de mim.</p><br>
-                    <p><strong>Te amo, <span class="d-name">___</span>. 💙💑💖✨</strong></p>
-                </div>
+            <div style="text-align: right;">
+                <span style="display: block; font-size: 12px; color: #888;">STATUS</span>
+                <span style="color: #00ff88; font-size: 14px;">● Online</span>
             </div>
-        </div>
+        </header>
 
-        <div id="tab-docs" class="section">
-            <div class="card">
-                <h3>Contrato de Namoro</h3>
-                <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">Preencha os dados faltantes para gerar o PDF.</p>
-                
-                <div id="contract-content" class="doc-paper">
-                    <div style="text-align: center; font-weight: bold; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">CONTRATO DE NAMORO E AFETO</div>
+        <div class="modules-grid">
+            
+            <div class="module-card">
+                <h3 style="margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">📜 Cláusulas Pétreas</h3>
+                <div class="contract-content">
+                    <p><strong>Cláusula 01 - Fundamento:</strong> Deus é o centro e a base de todas as decisões deste relacionamento.</p>
+                    <br>
+                    <p><strong>Cláusula 02 - Pacificação:</strong> É estritamente proibido dormir brigado. Toda desavença deve ser resolvida ou mitigada antes do descanso.</p>
+                    <br>
+                    <p><strong>Cláusula 03 - Decoro e Imagem:</strong> Visando a preservação da intimidade, fica vedado o uso de roupas excessivamente curtas ou decotadas que exponham a privacidade do casal.</p>
+                    <br>
+                    <p><strong>Cláusula 04 - Transparência:</strong> Não haverá segredos. Senhas e acessos são compartilhados para garantir confiança total.</p>
+                    <br>
+                    <p><strong>Cláusula 05 - Lealdade Pública:</strong> Em público, somos uma frente única. Discordâncias são resolvidas apenas no privado.</p>
                     
-                    <p style="margin-bottom: 15px;">
-                        <strong>I. PARTES:</strong><br>
-                        De um lado, <strong>RUBENS PEREIRA FERNANDES</strong>, e de outro, <strong class="d-name-upper">___</strong>.
-                    </p>
-
-                    <p style="margin-bottom: 15px;">
-                        <strong>II. OBJETO:</strong><br>
-                        O presente contrato firma o compromisso de união, carinho e parceria iniciado em <strong class="d-date">___</strong>.
-                    </p>
-
-                    <p style="margin-bottom: 15px;">
-                        <strong>III. DADOS DA CONTRATANTE:</strong><br>
-                        Nascida em: <input type="date" style="border:none; border-bottom:1px solid #000; background:transparent; font-family:inherit;">,<br>
-                        Portadora do CPF (Fictício): <input type="text" placeholder="000.000.000-00" style="border:none; border-bottom:1px solid #000; width:120px;">.
-                    </p>
-
-                    <p style="margin-bottom: 15px;">
-                        <strong>IV. CLÁUSULAS:</strong><br>
-                        1. É proibido dormir brigado.<br>
-                        2. Beijos de bom dia são obrigatórios.<br>
-                        3. A fidelidade e o respeito são a base deste acordo.
-                    </p>
-                    
-                    <div style="margin-top: 50px; text-align: center;">
-                        ________________________________<br>
-                        <span class="d-name">Assinatura</span>
+                    <div style="margin-top: 30px; text-align: center; border: 1px dashed #444; padding: 10px; border-radius: 10px;">
+                        <p style="font-size: 12px; color: #666;">ASSINATURA DIGITAL</p>
+                        <h4 style="font-family: var(--font-title); color: var(--accent-color); font-size: 20px;">Autorizado</h4>
                     </div>
+                </div>
+            </div>
 
-                    <div class="stamp">REGISTRADO<br>EM CARTÓRIO</div>
+            <div class="module-card">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                    <h3>🤖 Consigliere IA</h3>
+                    <span style="font-size: 10px; background: #333; padding: 2px 8px; border-radius: 10px;">Gemini Pro</span>
                 </div>
                 
-                <button style="background: #e74c3c; color: white; padding: 10px; width: 100%; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="downloadPDF()">
-                    <i class="fas fa-file-pdf"></i> Baixar e Imprimir (PDF)
-                </button>
-            </div>
-        </div>
-
-        <div id="tab-menu" class="section">
-            <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 15px;">Serviços</h2>
-            <div class="menu-grid">
-                <div class="menu-item" onclick="serviceAction('bank')">
-                    <div class="menu-icon"><i class="fas fa-piggy-bank"></i></div>
-                    <div class="menu-label">Banco do Amor</div>
-                </div>
-                <div class="menu-item" onclick="serviceAction('date')">
-                    <div class="menu-icon"><i class="fas fa-calendar-check"></i></div>
-                    <div class="menu-label">Agendar Date</div>
-                </div>
-                <div class="menu-item" onclick="serviceAction('chat')">
-                    <div class="menu-icon"><i class="fas fa-comments"></i></div>
-                    <div class="menu-label">Ouvidoria</div>
-                </div>
-                <div class="menu-item" onclick="serviceAction('music')">
-                    <div class="menu-icon"><i class="fas fa-music"></i></div>
-                    <div class="menu-label">Playlist</div>
+                <div class="chat-ui">
+                    <div class="chat-messages" id="chat-output">
+                        <div class="msg ai">Olá. Sou a Inteligência Artificial do casal. Conheço todas as regras do contrato. Como posso ajudar?</div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <input type="text" id="user-input" placeholder="Digite aqui..." onkeypress="checkEnterChat(event)">
+                        <button class="btn-send-chat" onclick="sendMessage()">➤</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="bottom-nav">
-            <a onclick="nav('tab-home', this)" class="nav-btn active"><i class="fas fa-home"></i>Início</a>
-            <a onclick="nav('tab-docs', this)" class="nav-btn"><i class="fas fa-file-signature"></i>Contrato</a>
-            <a onclick="nav('tab-menu', this)" class="nav-btn"><i class="fas fa-th-large"></i>Serviços</a>
         </div>
     </div>
 
-    <script>
-        // --- DADOS GLOBAIS ---
-        const MY_PHONE = "5581989501999"; 
-        const PASS = "19122025";
-        
-        let globalName = "Amor";
-        let globalDate = new Date(); // Será substituída pelo input
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-        // 1. ENTRAR NO SISTEMA (Lógica Inteligente)
-        function enterSystem() {
-            const nameInput = document.getElementById('targetName').value;
-            const dateInput = document.getElementById('targetDate').value; // Pega a data do calendário
-            const passInput = document.getElementById('passwordInput').value;
+        // --- ⚠️ CONFIGURAÇÃO (EDITE AQUI) ⚠️ ---
+        const PASSWORD_SYSTEM = "2024"; // Sua senha
+        const GEMINI_API_KEY = "COLE_SUA_CHAVE_AQUI"; // Pegue no Google AI Studio
+        // ---------------------------------------
 
-            if(passInput !== PASS) {
-                alert("Senha incorreta!");
-                return;
+        // 1. SISTEMA DE BLOQUEIO
+        window.unlockSystem = function() {
+            const input = document.getElementById('password');
+            const lockScreen = document.getElementById('lock-screen');
+            const dashboard = document.getElementById('dashboard');
+            const errorMsg = document.getElementById('error-msg');
+
+            if(input.value === PASSWORD_SYSTEM) {
+                // Sucesso: Animação de saída
+                lockScreen.style.opacity = "0";
+                lockScreen.style.transform = "scale(1.1)";
+                setTimeout(() => {
+                    lockScreen.style.display = "none";
+                    dashboard.style.display = "block";
+                }, 800);
+            } else {
+                // Erro
+                input.classList.add('shake');
+                errorMsg.innerText = "Senha Incorreta. Tente novamente.";
+                setTimeout(() => input.classList.remove('shake'), 400);
             }
-
-            if(!nameInput || !dateInput) {
-                alert("Por favor, preencha o nome dela e a data!");
-                return;
-            }
-
-            // Salva os dados
-            globalName = nameInput;
-            globalDate = new Date(dateInput);
-
-            // Substitui textos no site
-            updateInterface();
-
-            // Troca de tela
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-container').style.display = 'block';
-
-            // Inicia contador com a data escolhida
-            startTimer();
-            
-            // Tenta tocar música
-            document.getElementById('bgMusic').play().catch(()=>{});
         }
 
-        // 2. ATUALIZA NOME E DATA EM TUDO
-        function updateInterface() {
-            // Nomes
-            document.querySelectorAll('.d-name').forEach(el => el.innerText = globalName);
-            document.querySelectorAll('.d-name-upper').forEach(el => el.innerText = globalName.toUpperCase());
-            
-            // Data Formatada (Ex: 15/05/2024)
-            const dateStr = globalDate.toLocaleDateString('pt-BR');
-            document.querySelectorAll('.d-date').forEach(el => el.innerText = dateStr);
+        window.checkEnter = function(e) { if(e.key === "Enter") unlockSystem(); }
+
+        // 2. SISTEMA DE CHAT (GEMINI)
+        const chatOutput = document.getElementById('chat-output');
+        let genAI, model;
+
+        // Tenta inicializar a IA
+        try {
+            genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+            model = genAI.getGenerativeModel({ model: "gemini-pro"});
+        } catch(e) {
+            console.log("Aguardando API Key...");
         }
 
-        // 3. CONTADOR DE DIAS (DINÂMICO)
-        function startTimer() {
-            setInterval(() => {
-                const now = new Date();
-                const diff = now - globalDate; // Diferença entre hoje e a data escolhida
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                
-                if(days < 0) {
-                    document.getElementById('daysCount').innerText = "0"; // Data futura
-                } else {
-                    document.getElementById('daysCount').innerText = days;
+        window.sendMessage = async function() {
+            const input = document.getElementById('user-input');
+            const text = input.value;
+            if(!text) return;
+
+            // Adiciona mensagem do usuário
+            appendMessage(text, 'user');
+            input.value = '';
+
+            // Adiciona "Digitando..."
+            const loadingId = appendMessage("Consultando as leis...", 'ai', true);
+
+            try {
+                if(GEMINI_API_KEY === "COLE_SUA_CHAVE_AQUI") {
+                    throw new Error("Chave de API não configurada.");
                 }
-            }, 1000);
+
+                // Instrução da Personalidade
+                const prompt = `
+                    Você é um 'Consigliere' (Conselheiro) virtual de um casal cristão.
+                    O casal tem um contrato rígido: Deus no centro, proibido dormir brigado, proibido roupas curtas/decotadas, transparência total.
+                    Responda de forma curta, elegante, talvez um pouco formal (estilo máfia/advogado), mas acolhedora.
+                    O usuário disse: "${text}"
+                `;
+
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                
+                // Remove o loading e mostra a resposta
+                document.getElementById(loadingId).remove();
+                appendMessage(response.text(), 'ai');
+
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                appendMessage("Erro: Configure sua API Key do Gemini no código.", 'ai');
+            }
         }
 
-        // 4. DOWNLOAD PDF
-        function downloadPDF() {
-            const element = document.getElementById('contract-content');
-            const opt = {
-                margin: 10,
-                filename: `Contrato_${globalName}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            alert("Gerando PDF... Aguarde!");
-            html2pdf().set(opt).from(element).save();
-        }
+        window.checkEnterChat = function(e) { if(e.key === "Enter") sendMessage(); }
 
-        // 5. NAVEGAÇÃO
-        function nav(tabId, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        // 6. AÇÕES DOS SERVIÇOS
-        function serviceAction(type) {
-            let msg = "";
-            if(type === 'bank') msg = "Amor, quero fazer um saque no Banco do Amor! 🏦❤️";
-            if(type === 'date') msg = "Solicito agendamento de um Date Oficial! 📅";
-            if(type === 'chat') msg = "Tenho um comunicado para a Ouvidoria do Amor. 🗣️";
-            if(type === 'music') return alert("A música já está tocando no fundo! 🎵");
-            
-            window.open(`https://wa.me/${MY_PHONE}?text=${encodeURIComponent(msg)}`, '_blank');
+        function appendMessage(text, sender, isLoading = false) {
+            const div = document.createElement('div');
+            div.className = `msg ${sender}`;
+            div.innerText = text;
+            if(isLoading) {
+                div.id = "loading-" + Date.now();
+                div.style.opacity = "0.7";
+                div.style.fontStyle = "italic";
+            }
+            chatOutput.appendChild(div);
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+            return div.id;
         }
     </script>
 </body>
