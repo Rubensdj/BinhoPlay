@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BinhoFlix - Player Automático</title>
+    <style>
+        /* --- CSS (ESTILO) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #111; color: white; }
+        
+        /* Menu Glassmorphism */
+        .nav {
+            position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between;
+            padding: 20px; z-index: 100; transition: all 0.5s;
+        }
+        .nav.active {
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-logo { color: #e50914; font-size: 1.8rem; font-weight: bold; text-shadow: 2px 2px 4px black; }
+
+        /* Banner Principal */
+        .banner {
+            background-image: url("https://image.tmdb.org/t/p/original/t5zCBSB5xMDKcDqe91qahCOUYVV.jpg"); /* Capa Five Nights at Freddy's */
+            background-size: cover; background-position: center; height: 500px;
+            display: flex; flex-direction: column; justify-content: center; padding-left: 30px;
+            position: relative;
+        }
+        .banner-fade {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+            background: linear-gradient(to bottom, transparent, #111);
+        }
+        .banner h1 { font-size: 3rem; margin-bottom: 10px; text-shadow: 2px 2px 4px black;}
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1rem; margin-right: 10px;
+        }
+        .btn-play { background: white; color: black; }
+        .btn-play:hover { opacity: 0.8; }
+        
+        /* Listas de Filmes */
+        .row { padding: 20px; }
+        .row h2 { margin-bottom: 10px; }
+        .posters { display: flex; overflow-x: scroll; padding: 10px; }
+        .posters::-webkit-scrollbar { display: none; }
+        .poster {
+            width: 150px; margin-right: 10px; transition: transform 0.3s; border-radius: 5px; cursor: pointer;
+        }
+        .poster:hover { transform: scale(1.1); }
+
+        /* MODAL (TELA DE TV) */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            width: 90%; max-width: 900px; height: 60vh; background: #000; position: relative;
+            box-shadow: 0 0 30px rgba(229, 9, 20, 0.6);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+        .close-btn {
+            position: absolute; top: -40px; right: 0; font-size: 40px; color: white; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav">
+        <div class="nav-logo">BINHOFLIX</div>
+    </header>
+
+    <div class="banner">
+        <h1>Five Nights at Freddy's</h1>
+        <div>
+            <button class="btn btn-play" onclick="abrirFilme('tt21356994')">▶ Assistir</button>
+        </div>
+        <div class="banner-fade"></div>
+    </div>
+
+    <div class="row">
+        <h2>Populares (Clique para testar)</h2>
+        <div class="posters">
+            <img class="poster" src="https://image.tmdb.org/t/p/w200/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" 
+                 onclick="abrirFilme('tt0133093')">
+            
+            <img class="poster" src="https://image.tmdb.org/t/p/w200/fVzXp3NwovUlLe7fvoRynCmBPNc.jpg" 
+                 onclick="abrirFilme('tt10872600')">
+
+            <img class="poster" src="https://image.tmdb.org/t/p/w200/q6725aR8Zs4IwGMXzZT8aC8qb41.jpg" 
+                 onclick="abrirFilme('tt4154796')">
+                 
+            <img class="poster" src="https://image.tmdb.org/t/p/w200/r3pPehX4ik80fqe814Mwdaqdoy6.jpg" 
+                 onclick="abrirFilme('tt0137523')">
+        </div>
+    </div>
+
+    <div id="tv-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="fecharTV()">&times;</span>
+            <iframe id="video-frame" src="" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // --- JAVASCRIPT ---
+
+        // 1. Efeito do Menu
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 50) nav.classList.add('active');
+            else nav.classList.remove('active');
+        });
+
+        // 2. Lógica do Player Automático (API Externa)
+        function abrirFilme(imdbId) {
+            const modal = document.getElementById('tv-modal');
+            const videoFrame = document.getElementById('video-frame');
+            
+            // AQUI ESTÁ O SEGREDO: Usamos uma API que busca pelo ID do IMDB
+            // Nota: Isso usa o serviço SuperEmbed (gratuito e externo)
+            const urlApi = `https://superembed.stream/movie/${imdbId}`;
+            
+            videoFrame.src = urlApi;
+            modal.style.display = 'flex';
+        }
+
+        function fecharTV() {
+            const modal = document.getElementById('tv-modal');
+            const videoFrame = document.getElementById('video-frame');
+            modal.style.display = 'none';
+            videoFrame.src = ""; // Para o vídeo
+        }
+    </script>
+</body>
+</html>
