@@ -3,297 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa História | Binho & Ela</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
+    <title>Nosso Acordo Oficial</title>
     <style>
-        /* --- ESTILO GERAL (VIBE APP MODERNO) --- */
+        /* ESTILO GERAL (CSS) */
         :root {
-            --primary: #ff4b1f;
-            --secondary: #ff9068;
-            --gradient: linear-gradient(to right, #ff4b1f, #ff9068);
-            --dark: #1a1a1a;
-            --light: #ffffff;
-            --glass: rgba(255, 255, 255, 0.1);
+            --cor-primaria: #800020; /* Vinho/Burgundy (Toque Máfia/Romântico) */
+            --cor-secundaria: #1a1a1a;
+            --cor-fundo: #f4f4f9;
+            --cor-papel: #fffaf0; /* Cor de papel antigo */
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--dark);
-            color: var(--light);
-            font-family: 'Poppins', sans-serif;
-            overflow-x: hidden;
+            font-family: 'Times New Roman', serif;
+            background-color: var(--cor-fundo);
+            margin: 0;
+            padding: 0;
+            color: #333;
         }
 
-        /* --- HERO SECTION (O CONTADOR) --- */
-        .hero {
-            height: 80vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1920&auto=format&fit=crop'); /* FOTO DE FUNDO (Troque pelo link da foto de vocês) */
-            background-size: cover;
-            background-position: center;
+        /* TELA DE LOGIN */
+        #login-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--cor-secundaria);
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+        }
+
+        #login-screen input {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-top: 10px;
             text-align: center;
+        }
+
+        #login-screen button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: var(--cor-primaria);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        #main-content {
+            display: none; /* Escondido até logar */
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* MENU DE NAVEGAÇÃO */
+        nav {
+            background: var(--cor-secundaria);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: none;
+            border: 1px solid #555;
+            color: white;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 5px;
+            transition: 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background: var(--cor-primaria);
+            border-color: var(--cor-primaria);
+        }
+
+        /* SEÇÕES (Abas) */
+        .section {
+            display: none;
+            background: var(--cor-papel);
+            padding: 40px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--cor-primaria);
+            border-bottom: 2px solid var(--cor-primaria);
+            padding-bottom: 10px;
+        }
+
+        /* ESTILO DO CONTRATO */
+        .contract-container {
+            max-height: 500px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .clause-item {
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+        }
+
+        .inputs-contrato {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .inputs-contrato input {
+            flex: 1;
+            padding: 8px;
+        }
+
+        /* BOTÕES DE AÇÃO */
+        .btn-action {
+            background: var(--cor-primaria);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-print {
+            background: #333;
+            margin-top: 10px;
+        }
+
+        /* ESTILO DO CARTÃO */
+        .card-identity {
+            width: 350px;
+            height: 220px;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            border: 2px solid var(--cor-primaria);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 0 auto;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             position: relative;
         }
 
-        .hero h1 { font-size: 3rem; margin-bottom: 10px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.2rem; margin-bottom: 30px; letter-spacing: 2px; }
-
-        .contador {
+        .card-photo {
+            width: 100px;
+            height: 120px;
+            background: #ccc;
+            border: 1px solid #999;
             display: flex;
-            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
         
-        .time-box {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 15px;
-            min-width: 80px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .time-box span { display: block; font-size: 2rem; font-weight: bold; color: var(--secondary); }
-        .time-box small { font-size: 0.8rem; text-transform: uppercase; }
-
-        /* --- TIMELINE (NOSSA HISTÓRIA) --- */
-        .section { padding: 50px 20px; max-width: 800px; margin: 0 auto; }
-        .titulo-secao { text-align: center; font-size: 2rem; margin-bottom: 40px; color: var(--secondary); }
-
-        .timeline { border-left: 2px solid var(--secondary); margin-left: 20px; padding-left: 20px; }
-        .evento { margin-bottom: 40px; position: relative; }
-        .evento::before {
-            content: ''; position: absolute; left: -29px; top: 0; width: 16px; height: 16px;
-            background: var(--primary); border-radius: 50%; border: 4px solid var(--dark);
-        }
-        .data-evento { color: var(--secondary); font-size: 0.9rem; font-weight: bold; margin-bottom: 5px; display: block; }
-        .card-evento {
-            background: #222; padding: 20px; border-radius: 15px; border-bottom: 4px solid var(--primary);
+        .card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        /* --- CHECKLIST (METAS DO CASAL) --- */
-        .checklist { display: grid; gap: 15px; }
-        .meta-item {
-            background: #222; padding: 15px; border-radius: 10px; display: flex; align-items: center; gap: 15px;
-            transition: 0.3s; cursor: pointer;
+        .card-info h3 {
+            margin: 0 0 5px 0;
+            color: var(--cor-primaria);
+            font-size: 14px;
+            text-transform: uppercase;
         }
-        .meta-item:hover { background: #333; }
-        .check-box {
-            width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .meta-item.concluido .check-box { background: var(--primary); }
-        .meta-item.concluido .check-box::after { content: '✔'; font-size: 12px; }
-        .meta-item.concluido span { text-decoration: line-through; color: #666; }
 
-        /* --- ÁREA SECRETA (COFRE) --- */
-        .cofre-area {
-            margin-top: 50px;
-            background: linear-gradient(135deg, #111, #222);
-            padding: 40px;
-            border-radius: 20px;
+        .card-info p {
+            font-size: 12px;
+            margin: 3px 0;
+            font-weight: bold;
+        }
+
+        .card-footer {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 10px;
+            color: var(--cor-primaria);
+        }
+
+        /* ESTILO DA CERTIDÃO */
+        .certificate-border {
+            border: 10px double var(--cor-primaria);
+            padding: 30px;
             text-align: center;
-            border: 1px dashed #444;
-        }
-        
-        .input-senha {
-            padding: 10px; border-radius: 30px; border: none; text-align: center;
-            font-size: 1.2rem; width: 200px; margin: 20px 0; outline: none; letter-spacing: 3px;
-        }
-        .btn-acessar {
-            background: var(--gradient); border: none; padding: 10px 30px; border-radius: 30px;
-            color: white; font-weight: bold; cursor: pointer; font-size: 1rem;
         }
 
-        /* O Conteúdo Escondido */
-        #conteudo-secreto { display: none; text-align: left; animation: fadeIn 1s; }
-        .btn-carta {
-            display: block; width: 100%; padding: 20px; background: #fff; color: #000;
-            text-align: center; border-radius: 15px; font-weight: bold; margin-bottom: 20px;
-            cursor: pointer; transition: 0.3s;
+        .signature-line {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
         }
-        .btn-carta:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
 
-        /* --- MODAL CARTA --- */
-        #modal-carta {
-            display: none; position: fixed; inset: 0; background: black; z-index: 999;
-            align-items: center; justify-content: center; padding: 30px;
+        .sig-block {
+            border-top: 1px solid #000;
+            width: 40%;
+            padding-top: 5px;
         }
-        .texto-carta { font-family: 'Poppins', sans-serif; font-size: 1.2rem; line-height: 1.6; max-width: 600px; }
-        .close { position: absolute; top: 20px; right: 20px; font-size: 2rem; cursor: pointer; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* OCULTAR ELEMENTOS NA IMPRESSÃO */
+        @media print {
+            nav, .btn-action, .contract-container, h1 { display: none; }
+            #contrato-final { display: block !important; border: none; }
+            .section { box-shadow: none; border: none; }
+            body { background: white; }
+        }
 
+        /* Área do contrato final (só aparece após assinar) */
+        #contrato-final {
+            display: none;
+            padding: 20px;
+            border: 2px solid #000;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="hero">
-        <p>JUNTOS HÁ</p>
-        
-        <div class="contador">
-            <div class="time-box"><span id="anos">0</span><small>Anos</small></div>
-            <div class="time-box"><span id="dias">0</span><small>Dias</small></div>
-            <div class="time-box"><span id="horas">0</span><small>Horas</small></div>
-        </div>
-
-        <h1 style="margin-top: 30px;">Binho & [Ela]</h1>
-        <p style="font-size: 0.9rem;">Construindo nosso império.</p>
+    <div id="login-screen">
+        <h2>Área Restrita do Casal</h2>
+        <p>Digite a senha de acesso:</p>
+        <input type="password" id="passwordInput" placeholder="Senha">
+        <button onclick="checkLogin()">Entrar</button>
+        <p id="error-msg" style="color: red; display: none;">Senha incorreta!</p>
     </div>
 
-    <div class="section">
-        <h2 class="titulo-secao">Nossa Jornada</h2>
-        
-        <div class="timeline">
-            <div class="evento">
-                <span class="data-evento">01/01/2024</span>
-                <div class="card-evento">
-                    <h3>O Início</h3>
-                    <p style="color: #aaa; font-size: 0.9rem;">O dia que tudo começou. Onde nossos olhares se cruzaram pela primeira vez.</p>
+    <div id="main-content">
+        <nav>
+            <button onclick="showSection('contrato')" class="active">📜 Contrato</button>
+            <button onclick="showSection('cartao')">💳 Carteirinha</button>
+            <button onclick="showSection('certidao')">🎖️ Certidão</button>
+            <button onclick="showSection('comprovante')">✅ Comprovante</button>
+        </nav>
+
+        <div id="contrato" class="section active">
+            <h2>Contrato de Relacionamento Vitalício</h2>
+            <p>Preencha os dados e selecione as cláusulas desejadas.</p>
+            
+            <div class="inputs-contrato">
+                <input type="text" id="nomeEle" placeholder="Nome dele (Ex: Ruben DJ)">
+                <input type="text" id="nomeEla" placeholder="Nome dela">
+                <select id="tipoRelacionamento">
+                    <option value="Namoro">Namoro</option>
+                    <option value="Noivado">Noivado</option>
+                    <option value="Casamento">Casamento</option>
+                    <option value="União Eterna">União Eterna</option>
+                </select>
+            </div>
+
+            <h3>Seleção de Cláusulas (Role para ver todas)</h3>
+            <div class="contract-container" id="clause-list">
                 </div>
-            </div>
-            
-            <div class="evento">
-                <span class="data-evento">14/02/2024</span>
-                <div class="card-evento">
-                    <h3>Primeiro "Eu te amo"</h3>
-                    <p style="color: #aaa; font-size: 0.9rem;">Um momento que nunca vou esquecer.</p>
+
+            <button class="btn-action" onclick="gerarContrato()">✍️ Assinar e Gerar Contrato</button>
+
+            <div id="contrato-final">
+                <h2 style="text-align: center;">CONTRATO DE <span id="final-type">RELACIONAMENTO</span></h2>
+                <p>Pelo presente instrumento particular, as partes:</p>
+                <p><strong>CONTRATANTE 1:</strong> <span id="final-ele"></span></p>
+                <p><strong>CONTRATANTE 2:</strong> <span id="final-ela"></span></p>
+                <p>Firmam entre si o seguinte acordo regido pelas cláusulas abaixo:</p>
+                <hr>
+                <div id="final-clauses-text"></div>
+                <br><br>
+                <p>E por estarem assim justos e contratados, assinam o presente.</p>
+                <br><br>
+                <div class="signature-line">
+                    <div class="sig-block">Assinatura Dele</div>
+                    <div class="sig-block">Assinatura Dela</div>
                 </div>
-            </div>
-
-            </div>
-    </div>
-
-    <div class="section">
-        <h2 class="titulo-secao">Nossas Metas</h2>
-        <div class="checklist">
-            <div class="meta-item concluido">
-                <div class="check-box"></div>
-                <span>Começar a namorar</span>
-            </div>
-            
-            <div class="meta-item">
-                <div class="check-box"></div>
-                <span>Viajar para a praia juntos</span>
-            </div>
-            
-            <div class="meta-item">
-                <div class="check-box"></div>
-                <span>Casar</span>
-            </div>
-            
-            <div class="meta-item">
-                <div class="check-box"></div>
-                <span>Ter nossa casa própria</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="cofre-area">
-            <i class="ph ph-lock-key" style="font-size: 40px; color: var(--primary);"></i>
-            <h3>Cofre do Casal</h3>
-            <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Área restrita para documentos oficiais e declarações.</p>
-            
-            <div id="tela-bloqueio">
-                <input type="password" id="senha" class="input-senha" placeholder="****" onkeyup="checkEnter(event)">
                 <br>
-                <button class="btn-acessar" onclick="abrirCofre()">Destrancar</button>
-                <p id="erro" style="color: #ff4b1f; margin-top: 10px; font-size: 0.8rem;"></p>
+                <p style="text-align: center; font-size: 0.8rem;">Data: <span id="data-atual"></span> | ID: MÁFIA-B20</p>
             </div>
-
-            <div id="conteudo-secreto">
-                <hr style="border-color: #333; margin: 30px 0;">
-                
-                <div class="btn-carta" onclick="lerCarta()">
-                    <span style="font-size: 1.5rem;">💌</span><br>
-                    Ler Carta de Amor
-                </div>
-
-                <div style="background: #222; padding: 20px; border-radius: 15px; text-align: left;">
-                    <h4 style="color: var(--secondary);">📜 Contrato de Relacionamento</h4>
-                    <ul style="list-style: none; padding: 0; margin-top: 10px; color: #ccc; font-size: 0.9rem;">
-                        <li style="margin-bottom: 10px;">1. <strong>Deus no Centro:</strong> Base de tudo.</li>
-                        <li style="margin-bottom: 10px;">2. <strong>Paz:</strong> Proibido dormir brigado.</li>
-                        <li style="margin-bottom: 10px;">3. <strong>Respeito:</strong> Vestimenta e postura adequadas.</li>
-                        <li style="margin-bottom: 10px;">4. <strong>Transparência:</strong> Sem segredos.</li>
-                    </ul>
-                </div>
-            </div>
+            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
         </div>
-    </div>
 
-    <div id="modal-carta">
-        <span class="close" onclick="fecharCarta()">&times;</span>
-        <div class="texto-carta" id="texto-digitado"></div>
+        <div id="cartao" class="section">
+            <h2>Carteirinha Oficial</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <label>Carregar Foto: <input type="file" id="photoInput" onchange="previewPhoto(event)"></label>
+            </div>
+            
+            <div class="card-identity">
+                <div class="card-photo">
+                    <img id="card-img-preview" src="" alt="Foto">
+                    <span id="no-photo-text" style="font-size: 10px; text-align: center; padding: 5px;">Sem foto</span>
+                </div>
+                <div class="card-info">
+                    <h3>Carteira de <span class="lbl-tipo">Amor</span></h3>
+                    <p>Titular 1: <span class="lbl-ele">Nome Dele</span></p>
+                    <p>Titular 2: <span class="lbl-ela">Nome Dela</span></p>
+                    <p>Início: <span class="lbl-data">19/05/2000</span></p>
+                    <p>ID da Família: #B20 (Máfia)</p>
+                    <p>Validade: INDETERMINADA</p>
+                </div>
+                <div class="card-footer">Emissão Oficial</div>
+            </div>
+            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Cartão</button>
+        </div>
+
+        <div id="certidao" class="section">
+            <div class="certificate-border">
+                <h1>CERTIDÃO DE UNIÃO</h1>
+                <p style="font-size: 1.2rem; margin-top: 30px;">
+                    Certificamos para os devidos fins de felicidade e compromisso que
+                </p>
+                <h2 style="font-family: cursive; font-size: 2rem; border: none;">
+                    <span class="lbl-ele">Ele</span> & <span class="lbl-ela">Ela</span>
+                </h2>
+                <p style="font-size: 1.2rem;">
+                    Estão oficialmente sob o regime de <strong class="lbl-tipo">Namoro</strong>.
+                </p>
+                <p>
+                    Este documento sela o compromisso de lealdade, respeito e parceria,
+                    sob o código de honra da família.
+                </p>
+                
+                <div class="signature-line" style="margin-top: 80px;">
+                    <div class="sig-block">Testemunha Oficial</div>
+                    <div class="sig-block">Oficial de Registro</div>
+                </div>
+            </div>
+            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Certidão</button>
+        </div>
+
+        <div id="comprovante" class="section">
+            <h2>Comprovante de Situação</h2>
+            <div style="border: 1px solid #333; padding: 20px; font-family: 'Courier New', monospace;">
+                <h3 style="text-align: center; border: none;">RECIBO DE COMPROMISSO</h3>
+                <p><strong>CÓDIGO DE TRANSAÇÃO:</strong> <span id="trans-code">XYZ-2025-LOVE</span></p>
+                <p><strong>DATA DE EMISSÃO:</strong> <span id="receipt-date"></span></p>
+                <hr style="border-top: 1px dashed #333;">
+                <p><strong>PARTE A:</strong> <span class="lbl-ele">---</span></p>
+                <p><strong>PARTE B:</strong> <span class="lbl-ela">---</span></p>
+                <p><strong>STATUS ATUAL:</strong> <span class="lbl-tipo" style="background: #ddd; padding: 2px;">PENDENTE</span></p>
+                <p><strong>SITUAÇÃO DO CONTRATO:</strong> ASSINADO E VIGENTE</p>
+                <hr style="border-top: 1px dashed #333;">
+                <p style="text-align: center; font-size: 0.8rem;">Este comprovante tem validade jurídica no tribunal do coração.</p>
+            </div>
+            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Comprovante</button>
+        </div>
+
     </div>
 
     <script>
-        // --- 1. CONFIGURAÇÃO DA DATA DE INÍCIO ---
-        const DATA_INICIO = new Date("2024-01-01T00:00:00"); // <--- MUDE A DATA AQUI (Ano-Mês-Dia)
-
-        // --- 2. LÓGICA DO CONTADOR ---
-        function atualizarContador() {
-            const agora = new Date();
-            const diff = agora - DATA_INICIO;
-
-            const anos = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
-            const dias = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-            document.getElementById('anos').innerText = anos;
-            document.getElementById('dias').innerText = dias;
-            document.getElementById('horas').innerText = horas;
-        }
-        setInterval(atualizarContador, 1000);
-        atualizarContador();
-
-        // --- 3. LÓGICA DO COFRE (SENHA) ---
-        const SENHA_CERTA = "19052000";
-
-        function abrirCofre() {
-            const input = document.getElementById('senha');
-            if(input.value === SENHA_CERTA) {
-                document.getElementById('tela-bloqueio').style.display = 'none';
-                document.getElementById('conteudo-secreto').style.display = 'block';
+        // --- 1. SISTEMA DE LOGIN ---
+        function checkLogin() {
+            const pass = document.getElementById('passwordInput').value;
+            if(pass === "19052000") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                iniciarSistema();
             } else {
-                document.getElementById('erro').innerText = "Senha incorreta.";
+                document.getElementById('error-msg').style.display = 'block';
             }
         }
-        function checkEnter(e) { if(e.key === "Enter") abrirCofre(); }
 
-        // --- 4. LÓGICA DA CARTA ---
-        const MENSAGEM = "Meu amor... \n\nCada dia ao seu lado é um presente. Criei este espaço para guardar nossas memórias e reafirmar meu compromisso com você. \n\nEu prometo te amar, te respeitar e construir uma vida onde Deus seja o nosso guia. \n\nPara sempre, seu Binho.";
-
-        function lerCarta() {
-            document.getElementById('modal-carta').style.display = 'flex';
-            document.getElementById('texto-digitado').innerText = "";
-            let i = 0;
-            function digitar() {
-                if(i < MENSAGEM.length) {
-                    document.getElementById('texto-digitado').innerText += MENSAGEM.charAt(i);
-                    i++;
-                    setTimeout(digitar, 50);
-                }
-            }
-            digitar();
+        // --- 2. NAVEGAÇÃO DE ABAS ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
         }
-        function fecharCarta() { document.getElementById('modal-carta').style.display = 'none'; }
 
-        // --- 5. LÓGICA DO CHECKLIST (VISUAL) ---
-        const itens = document.querySelectorAll('.meta-item');
-        itens.forEach(item => {
-            item.addEventListener('click', () => {
-                item.classList.toggle('concluido');
+        // --- 3. GERADOR DE CLÁUSULAS (SIMULANDO MILHARES) ---
+        function iniciarSistema() {
+            const container = document.getElementById('clause-list');
+            const clausulasBase = [
+                "Cláusula de Fidelidade Absoluta",
+                "Cláusula de Compartilhamento de Senhas de Streaming",
+                "Cláusula de Respeito Mútuo",
+                "Cláusula de Nunca Dormir Brigado",
+                "Cláusula de Apoio nos Projetos Pessoais",
+                "Cláusula de Direito a Cafuné Diário",
+                "Cláusula de Paciência na TPM/Stress",
+                "Cláusula de Prioridade na Vida",
+                "Cláusula de Honestidade Brutal (com carinho)",
+                "Cláusula de Viagens Anuais Obrigatórias"
+            ];
+
+            let html = "";
+            // Gerando "milhares" de cláusulas (simulação visual com loop)
+            // Vou fazer 100 para não travar o navegador, mas numerar até 3000
+            for(let i = 1; i <= 50; i++) {
+                // Cláusulas reais
+                let texto = clausulasBase[(i-1) % clausulasBase.length];
+                html += `
+                <div class="clause-item">
+                    <input type="checkbox" id="c${i}" checked>
+                    <label for="c${i}"><strong>Cláusula ${i}ª:</strong> ${texto} - O compromisso deve ser mantido sob qualquer circunstância.</label>
+                </div>`;
+            }
+            
+            // Adicionando cláusulas genéricas para dar volume até a 3000 (visual)
+            html += `<div style="text-align: center; padding: 10px; color: #888;">... [2.950 cláusulas padrão de amor e respeito ocultas para economizar papel] ...</div>`;
+            
+            // Últimas cláusulas importantes
+            html += `
+            <div class="clause-item">
+                <input type="checkbox" id="c3000" checked>
+                <label for="c3000"><strong>Cláusula 3.000ª:</strong> Do Amor Eterno - Esta união não tem data de validade.</label>
+            </div>`;
+
+            container.innerHTML = html;
+
+            // Define data atual
+            const hoje = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('data-atual').innerText = hoje;
+            document.getElementById('receipt-date').innerText = hoje;
+        }
+
+        // --- 4. FUNÇÃO GERAR CONTRATO E ATUALIZAR DADOS ---
+        function gerarContrato() {
+            const nomeEle = document.getElementById('nomeEle').value || "______________";
+            const nomeEla = document.getElementById('nomeEla').value || "______________";
+            const tipo = document.getElementById('tipoRelacionamento').value;
+
+            // Atualiza todos os labels nas outras abas
+            document.querySelectorAll('.lbl-ele').forEach(el => el.innerText = nomeEle);
+            document.querySelectorAll('.lbl-ela').forEach(el => el.innerText = nomeEla);
+            document.querySelectorAll('.lbl-tipo').forEach(el => el.innerText = tipo);
+
+            // Atualiza o Contrato Final
+            document.getElementById('final-ele').innerText = nomeEle;
+            document.getElementById('final-ela').innerText = nomeEla;
+            document.getElementById('final-type').innerText = tipo.toUpperCase();
+
+            // Pega as cláusulas selecionadas
+            let clausulasTexto = "";
+            let checkboxes = document.querySelectorAll('.clause-item input[type="checkbox"]:checked');
+            
+            checkboxes.forEach((chk) => {
+                let label = chk.nextElementSibling.innerText;
+                clausulasTexto += `<p style="margin-bottom: 5px; text-align: justify;">${label}</p>`;
             });
-        });
 
+            // Adiciona o texto extra de volume se necessário
+            clausulasTexto += `<p style="font-style: italic; color: #555;">... (Seguem-se as disposições padrão de convivência, totalizando 3.000 termos de acordo mútuo) ...</p>`;
+
+            document.getElementById('final-clauses-text').innerHTML = clausulasTexto;
+
+            // Mostra o contrato final e esconde a seleção
+            document.getElementById('contrato-final').style.display = 'block';
+            document.querySelector('.contract-container').style.display = 'none';
+            alert("Contrato Gerado com Sucesso! Verifique os dados abaixo.");
+        }
+
+        // --- 5. PREVIEW DA FOTO ---
+        function previewPhoto(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const output = document.getElementById('card-img-preview');
+                output.src = reader.result;
+                document.getElementById('no-photo-text').style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
     </script>
 </body>
 </html>
