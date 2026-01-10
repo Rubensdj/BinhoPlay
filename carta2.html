@@ -3,379 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BinhoPlay | O Império</title>
+    <title>Nossa História</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Space+Grotesk:wght@300;600&display=swap" rel="stylesheet">
-
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 🎨 PALETA VIBRANTE & DARK --- */
+        /* --- CORES VIBRANTES E MODERNAS --- */
         :root {
-            --bg-deep: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border-glow: rgba(255, 255, 255, 0.1);
-            
-            /* Cores Vibrantes (Gradients) */
-            --neon-pink: #ff0055;
-            --neon-blue: #00ccff;
-            --neon-purple: #9d00ff;
-            --gradient-main: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-            
-            --font-main: 'Outfit', sans-serif;
-            --font-display: 'Space Grotesk', sans-serif;
+            --cor-fundo: #0a0a0a;
+            --cor-texto: #ffffff;
+            /* Gradiente Vibrante (Roxo para Rosa/Laranja) */
+            --gradiente-principal: linear-gradient(45deg, #FF416C, #FF4B2B); 
+            --cor-detalhe: #FF416C;
+            --vidro: rgba(255, 255, 255, 0.05);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-deep);
-            color: white;
-            font-family: var(--font-main);
-            height: 100vh;
-            overflow: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 0, 85, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(0, 204, 255, 0.1) 0%, transparent 40%);
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* --- HEADER --- */
+        /* --- CABEÇALHO --- */
         header {
-            padding: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-top: 50px;
+            text-align: center;
         }
-        
-        .brand {
-            font-family: var(--font-display);
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(to right, #fff, #aaa);
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin: 0;
+            background: var(--gradiente-principal);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-        
-        .status-badge {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; }
-
-        /* --- GRID PRINCIPAL (O DASHBOARD) --- */
-        .hub-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 Colunas */
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px 40px;
-            height: calc(100vh - 100px);
         }
 
-        /* Responsivo para celular */
-        @media (max-width: 900px) {
-            .hub-container { grid-template-columns: 1fr; overflow-y: auto; padding-bottom: 50px; }
+        p.subtitulo {
+            font-size: 1.1rem;
+            color: #aaa;
+            letter-spacing: 2px;
+            margin-top: 10px;
         }
 
-        /* --- ESTILO DOS CARDS (MODERN GLASS) --- */
-        .card {
-            background: var(--glass);
-            border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            padding: 25px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s, border-color 0.3s;
-            display: flex;
-            flex-direction: column;
+        /* --- BOTÃO DA CARTA (MODERNO) --- */
+        .area-carta {
+            margin: 60px 0;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            font-size: 32px;
-            padding: 12px;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.05);
-            color: white;
-        }
-
-        .card-title { font-family: var(--font-display); font-size: 22px; margin-bottom: 5px; }
-        .card-desc { font-size: 14px; color: #888; line-height: 1.4; }
-
-        /* Cores Específicas dos Cards */
-        .card.romance:hover .card-icon { background: var(--neon-pink); box-shadow: 0 0 20px var(--neon-pink); }
-        .card.contract:hover .card-icon { background: var(--neon-purple); box-shadow: 0 0 20px var(--neon-purple); }
-        .card.ai:hover .card-icon { background: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); }
-
-        /* --- CONTEÚDO INTERNO DOS CARDS --- */
-        
-        /* 1. A CARTA */
-        .letter-preview {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            cursor: pointer;
-        }
-        .btn-open-letter {
-            padding: 15px 40px;
-            background: var(--gradient-main);
+        .btn-pulsante {
+            background: var(--gradiente-principal);
             border: none;
-            border-radius: 30px;
+            padding: 20px 60px;
             color: white;
-            font-weight: 600;
-            font-size: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 65, 108, 0.4);
+            transition: transform 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-pulsante:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 65, 108, 0.6);
+        }
+
+        /* --- ÁREA DO CONTRATO (ESTILO CARTÃO DE VIDRO) --- */
+        .card-contrato {
+            background: var(--vidro);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            margin-bottom: 50px;
+            overflow: hidden;
+        }
+
+        /* Camada de Bloqueio (Senha) */
+        .bloqueio {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .input-senha {
+            background: transparent;
+            border: 2px solid #333;
+            padding: 15px;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px 0;
+            width: 200px;
+            outline: none;
             transition: 0.3s;
         }
-        .btn-open-letter:hover { transform: scale(1.05); box-shadow: 0 15px 40px rgba(255, 0, 85, 0.5); }
 
-        /* 2. O CONTRATO (BLOQUEIO) */
-        .lock-screen {
-            position: absolute; inset: 0;
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(15px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .input-senha:focus {
+            border-color: var(--cor-detalhe);
+        }
+
+        .btn-desbloquear {
+            background: white;
+            color: var(--cor-detalhe);
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Conteúdo do Contrato */
+        .conteudo-contrato {
+            opacity: 0.3;
+            filter: blur(8px);
+            transition: 0.8s ease;
+        }
+        
+        /* Títulos das cláusulas */
+        .clausula-titulo {
+            color: var(--cor-detalhe);
+            font-weight: 800;
+            margin-top: 20px;
+            display: block;
+        }
+
+        /* --- MODAL DA CARTA (TELA CHEIA) --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            z-index: 999;
             justify-content: center;
-            z-index: 10;
-            transition: opacity 0.5s;
+            align-items: center;
+            padding: 40px;
         }
-        .input-pass {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid #333;
-            padding: 12px;
-            border-radius: 8px;
+
+        .texto-digitado {
+            font-size: 1.5rem;
+            line-height: 1.6;
             color: white;
+            max-width: 800px;
             text-align: center;
-            letter-spacing: 4px;
-            margin: 15px 0;
-            font-size: 18px;
-            outline: none;
         }
-        .btn-unlock { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
-        .btn-unlock:hover { background: var(--neon-purple); }
-        
-        .contract-text { font-size: 14px; line-height: 1.6; color: #ccc; height: 100%; overflow-y: auto; padding-right: 5px; opacity: 0.3; filter: blur(5px); transition: 0.5s; }
-        .unlocked .contract-text { opacity: 1; filter: blur(0); }
 
-        /* 3. CHAT IA */
-        .chat-box {
-            flex: 1; background: rgba(0,0,0,0.3); border-radius: 15px;
-            display: flex; flex-direction: column; overflow: hidden;
+        .fechar-modal {
+            position: absolute;
+            top: 30px; right: 30px;
+            font-size: 2rem;
+            color: #555;
+            cursor: pointer;
         }
-        .chat-log { flex: 1; padding: 15px; overflow-y: auto; font-size: 13px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-input { display: flex; padding: 10px; border-top: 1px solid #333; }
-        .chat-input input { flex: 1; background: transparent; border: none; color: white; outline: none; }
-        
-        .msg-ia { align-self: flex-start; background: #222; padding: 8px 12px; border-radius: 12px; color: #ddd; border: 1px solid #333; }
-        .msg-user { align-self: flex-end; background: var(--neon-blue); padding: 8px 12px; border-radius: 12px; color: #000; font-weight: 500; }
 
-        /* --- MODAL DA CARTA (FULLSCREEN) --- */
-        #letter-modal {
-            position: fixed; inset: 0; background: #000; z-index: 999;
-            display: none; align-items: center; justify-content: center;
-            padding: 40px; text-align: center;
-        }
-        .typing-text { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--neon-pink); line-height: 1.6; max-width: 800px; }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: white; cursor: pointer; font-size: 30px; }
+        /* Estados de Ativação */
+        .desbloqueado .bloqueio { opacity: 0; visibility: hidden; }
+        .desbloqueado .conteudo-contrato { opacity: 1; filter: blur(0); }
 
     </style>
 </head>
 <body>
 
     <header>
-        <div class="brand">BinhoPlay <span style="font-size: 14px; font-weight: 300; opacity: 0.7;">Project</span></div>
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            Sistema Ativo
-        </div>
+        <h1>Eu & Você</h1> <p class="subtitulo">NOSSO MUNDO PARTICULAR</p>
     </header>
 
-    <div class="hub-container">
-
-        <div class="card romance">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">A Declaração</h3>
-                    <p class="card-desc">Para o amor da minha vida.</p>
-                </div>
-                <div class="card-icon"><i class="ph ph-heart-straight"></i></div>
-            </div>
-            <div class="letter-preview">
-                <i class="ph ph-envelope-open" style="font-size: 80px; color: var(--neon-pink); margin-bottom: 20px; opacity: 0.8;"></i>
-                <button class="btn-open-letter" onclick="abrirCarta()">Ler Carta</button>
-            </div>
-        </div>
-
-        <div class="card contract" id="card-contrato">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">Contrato Oficial</h3>
-                    <p class="card-desc">Leis e Cláusulas Pétreas.</p>
-                </div>
-                <div class="card-icon"><i class="ph ph-scroll"></i></div>
-            </div>
-
-            <div class="lock-screen" id="lock-overlay">
-                <i class="ph ph-lock-key" style="font-size: 40px; color: var(--neon-purple); margin-bottom: 10px;"></i>
-                <span style="font-size: 12px; letter-spacing: 1px; color: #aaa;">ACESSO RESTRITO</span>
-                <input type="password" id="pass-input" class="input-pass" placeholder="****" onkeyup="verificarSenha(event)">
-                <button class="btn-unlock" onclick="desbloquear()">Acessar</button>
-                <p id="error-msg" style="color: #ff0055; font-size: 12px; margin-top: 10px; height: 15px;"></p>
-            </div>
-
-            <div class="contract-text">
-                <p><strong style="color: var(--neon-purple);">Cláusula 01:</strong> Deus é o centro e o alicerce deste relacionamento.</p><br>
-                <p><strong style="color: var(--neon-purple);">Cláusula 02:</strong> Proibido dormir brigado. A paz deve reinar antes do sono.</p><br>
-                <p><strong style="color: var(--neon-purple);">Cláusula 03:</strong> Preservação da intimidade. Roupas excessivamente curtas ou decotadas são vetadas para proteção da nossa imagem.</p><br>
-                <p><strong style="color: var(--neon-purple);">Cláusula 04:</strong> Transparência total. Sem segredos, senhas compartilhadas.</p><br>
-                <p><strong style="color: var(--neon-purple);">Cláusula 05:</strong> Lealdade pública. Somos um time na frente dos outros.</p>
-            </div>
-        </div>
-
-        <div class="card ai">
-            <div class="card-header">
-                <div>
-                    <h3 class="card-title">Consigliere IA</h3>
-                    <p class="card-desc">Tire dúvidas sobre as regras.</p>
-                </div>
-                <div class="card-icon"><i class="ph ph-robot"></i></div>
-            </div>
-            
-            <div class="chat-box">
-                <div class="chat-log" id="chat-output">
-                    <div class="msg-ia">Olá. Sou a inteligência do sistema. Pergunte sobre o contrato ou peça um conselho.</div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="user-msg" placeholder="Digite aqui..." onkeyup="enterChat(event)">
-                    <i class="ph ph-paper-plane-right" onclick="enviarMsg()" style="cursor: pointer; color: var(--neon-blue); font-size: 20px;"></i>
-                </div>
-            </div>
-        </div>
-
+    <div class="area-carta">
+        <button class="btn-pulsante" onclick="abrirCarta()">💌 Ler Minha Carta</button>
     </div>
 
-    <div id="letter-modal">
-        <div class="close-modal" onclick="fecharCarta()">&times;</div>
-        <div class="typing-text" id="texto-carta"></div>
-    </div>
-
-    <script type="module">
-        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
-
-        // --- 1. CONFIGURAÇÕES ---
-        const SENHA_REAL = "19052000";
-        const API_KEY = "COLE_SUA_CHAVE_GEMINI_AQUI"; 
-        // ------------------------
-
-        // --- 2. LÓGICA DO CONTRATO ---
-        window.verificarSenha = (e) => { if(e.key === "Enter") window.desbloquear(); }
+    <div class="card-contrato" id="box-contrato">
         
-        window.desbloquear = () => {
-            const input = document.getElementById('pass-input');
-            const overlay = document.getElementById('lock-overlay');
-            const card = document.getElementById('card-contrato');
-            const error = document.getElementById('error-msg');
+        <div class="bloqueio" id="tela-senha">
+            <h3 style="margin-bottom: 0;">Área Privada</h3>
+            <p style="color: #666; font-size: 0.9rem;">Contrato de Relacionamento</p>
+            
+            <input type="password" id="campo-senha" class="input-senha" placeholder="SENHA" onkeyup="checarEnter(event)">
+            
+            <button class="btn-desbloquear" onclick="verificarSenha()">Acessar</button>
+            <p id="erro-msg" style="color: #FF4B2B; font-size: 0.8rem; margin-top: 10px;"></p>
+        </div>
 
-            if(input.value === SENHA_REAL) {
-                overlay.style.opacity = '0';
-                setTimeout(() => { overlay.style.display = 'none'; }, 500);
-                card.classList.add('unlocked'); // Tira o borrão
+        <div class="conteudo-contrato">
+            <h2 style="text-align: center; border-bottom: 1px solid #333; padding-bottom: 20px;">Nossas Regras de Ouro</h2>
+            
+            <span class="clausula-titulo">01. O CENTRO</span>
+            <p>Deus é a base de tudo. Nenhuma decisão será tomada sem considerar nossos princípios espirituais.</p>
+            
+            <span class="clausula-titulo">02. SONO DE PAZ</span>
+            <p>Proibido dormir brigado. O orgulho nunca deve ser maior que o nosso descanso em paz.</p>
+            
+            <span class="clausula-titulo">03. PROTEÇÃO DA IMAGEM</span>
+            <p>Preservamos nossa intimidade. Roupas e condutas devem refletir o respeito que temos um pelo outro.</p>
+            
+            <span class="clausula-titulo">04. TRANSPARÊNCIA</span>
+            <p>Acesso total. A confiança é construída na ausência de segredos.</p>
+
+            <br>
+            <div style="text-align: center; margin-top: 30px; color: #555;">
+                <p>Status: <span style="color: #00ff88; font-weight: bold;">ATIVO</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-carta">
+        <div class="fechar-modal" onclick="fecharCarta()">✕</div>
+        <div class="texto-digitado" id="container-texto"></div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO
+        const SENHA_SISTEMA = "19052000";
+        // Edite sua carta aqui dentro das aspas:
+        const TEXTO_CARTA = "Meu amor... \n\nEscrevi este site para eternizar o que sinto por você. Quero construir um futuro onde Deus seja o centro, onde a gente cresça juntos e onde o respeito seja inegociável. \n\nEste contrato abaixo é a minha promessa de lealdade a você. \n\nEu te amo.";
+
+        // Função Senha
+        function verificarSenha() {
+            const input = document.getElementById('campo-senha');
+            const box = document.getElementById('box-contrato');
+            const erro = document.getElementById('erro-msg');
+
+            if (input.value === SENHA_SISTEMA) {
+                box.classList.add('desbloqueado');
             } else {
-                error.innerText = "Senha Incorreta";
-                input.style.borderColor = "#ff0055";
+                erro.innerText = "Senha incorreta.";
+                input.style.borderColor = "red";
             }
         }
+        function checarEnter(e) { if(e.key === "Enter") verificarSenha(); }
 
-        // --- 3. LÓGICA DA CARTA ANIMADA ---
-        window.abrirCarta = () => {
-            const modal = document.getElementById('letter-modal');
-            const container = document.getElementById('texto-carta');
+        // Função Carta (Máquina de Escrever)
+        let index = 0;
+        function abrirCarta() {
+            const modal = document.getElementById('modal-carta');
+            const container = document.getElementById('container-texto');
+            
             modal.style.display = 'flex';
+            container.innerText = "";
+            index = 0;
             
-            // Texto da sua carta (Pode editar aqui)
-            const mensagem = "Meu amor... Desde o dia que te conheci, tudo mudou. Você é a minha parceira, minha vida e meu futuro. Este site é a prova do meu compromisso com você. Eu te amo.";
-            
-            container.innerHTML = ""; // Limpa
-            let i = 0;
-            
-            // Efeito de digitação
-            function typeWriter() {
-                if (i < mensagem.length) {
-                    container.innerHTML += mensagem.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 50); // Velocidade
+            function digitar() {
+                if (index < TEXTO_CARTA.length) {
+                    container.innerText += TEXTO_CARTA.charAt(index);
+                    index++;
+                    setTimeout(digitar, 50);
                 }
             }
-            typeWriter();
+            digitar();
         }
 
-        window.fecharCarta = () => {
-            document.getElementById('letter-modal').style.display = 'none';
+        function fecharCarta() {
+            document.getElementById('modal-carta').style.display = 'none';
         }
-
-        // --- 4. LÓGICA DA IA (GEMINI) ---
-        let genAI, model;
-        try {
-            genAI = new GoogleGenerativeAI(API_KEY);
-            model = genAI.getGenerativeModel({ model: "gemini-pro"});
-        } catch(e) {}
-
-        window.enviarMsg = async () => {
-            const input = document.getElementById('user-msg');
-            const log = document.getElementById('chat-output');
-            const text = input.value;
-            if(!text) return;
-
-            // Msg User
-            log.innerHTML += `<div class="msg-user">${text}</div>`;
-            input.value = '';
-            log.scrollTop = log.scrollHeight;
-
-            // Loading
-            const loading = document.createElement('div');
-            loading.className = 'msg-ia';
-            loading.innerText = '...';
-            log.appendChild(loading);
-
-            try {
-                if(API_KEY.includes("COLE_SUA")) throw new Error("Sem Chave");
-                const prompt = `Você é um conselheiro cristão e sério. Regras: Deus, sem briga, recato. Responda curto. Usuário: ${text}`;
-                const result = await model.generateContent(prompt);
-                loading.innerText = result.response.text();
-            } catch(e) {
-                loading.innerText = "Erro: Configure a API Key no código.";
-            }
-            log.scrollTop = log.scrollHeight;
-        }
-        window.enterChat = (e) => { if(e.key === "Enter") window.enviarMsg(); }
-
     </script>
 </body>
 </html>
