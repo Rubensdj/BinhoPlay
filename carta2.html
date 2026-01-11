@@ -1,486 +1,588 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nosso Acordo Oficial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LoveGov • Portal do Amor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
-        /* ESTILO GERAL (CSS) */
         :root {
-            --cor-primaria: #800020; /* Vinho/Burgundy (Toque Máfia/Romântico) */
-            --cor-secundaria: #1a1a1a;
-            --cor-fundo: #f4f4f9;
-            --cor-papel: #fffaf0; /* Cor de papel antigo */
+            /* Paleta de Cores Vibrante e Romântica */
+            --primary: #ff3366; /* Rosa Vibrante */
+            --primary-dark: #c40b4a;
+            --secondary: #6c5ce7; /* Roxo Moderno */
+            --accent: #ffd700; /* Dourado */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-color: #2d3436;
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: 'Times New Roman', serif;
-            background-color: var(--cor-fundo);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        /* TELA DE LOGIN */
-        #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--cor-secundaria);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
-        }
-
-        #login-screen input {
-            padding: 10px;
-            font-size: 1.2rem;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        #login-screen button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background: var(--cor-primaria);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        /* CONTEÚDO PRINCIPAL */
-        #main-content {
-            display: none; /* Escondido até logar */
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* MENU DE NAVEGAÇÃO */
-        nav {
-            background: var(--cor-secundaria);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-
-        nav button {
-            background: none;
-            border: 1px solid #555;
-            color: white;
-            padding: 10px 15px;
-            cursor: pointer;
-            margin: 5px;
-            transition: 0.3s;
-        }
-
-        nav button:hover, nav button.active {
-            background: var(--cor-primaria);
-            border-color: var(--cor-primaria);
-        }
-
-        /* SEÇÕES (Abas) */
-        .section {
-            display: none;
-            background: var(--cor-papel);
-            padding: 40px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        h1, h2 {
-            text-align: center;
-            color: var(--cor-primaria);
-            border-bottom: 2px solid var(--cor-primaria);
-            padding-bottom: 10px;
-        }
-
-        /* ESTILO DO CONTRATO */
-        .contract-container {
-            max-height: 500px;
-            overflow-y: scroll;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: white;
-        }
-
-        .clause-item {
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #eee;
-            padding-bottom: 5px;
-        }
-
-        .inputs-contrato {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .inputs-contrato input {
-            flex: 1;
-            padding: 8px;
-        }
-
-        /* BOTÕES DE AÇÃO */
-        .btn-action {
-            background: var(--cor-primaria);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-print {
-            background: #333;
-            margin-top: 10px;
-        }
-
-        /* ESTILO DO CARTÃO */
-        .card-identity {
-            width: 350px;
-            height: 220px;
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            border: 2px solid var(--cor-primaria);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 0 auto;
-            display: flex;
-            gap: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
             position: relative;
         }
 
-        .card-photo {
-            width: 100px;
-            height: 120px;
-            background: #ccc;
-            border: 1px solid #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+        /* Animação do Fundo */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Partículas Flutuantes (Corações) */
+        .background-hearts {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; pointer-events: none;
+        }
+        .heart-bg {
+            position: absolute; bottom: -100px;
+            font-size: 2rem; color: rgba(255, 255, 255, 0.3);
+            animation: floatUp 10s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.5; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* === TELA DE LOGIN === */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 5000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px; transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         
-        .card-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .gov-logo {
+            font-family: 'Playfair Display', serif; font-size: 3rem; 
+            background: -webkit-linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; text-align: center;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
 
-        .card-info h3 {
-            margin: 0 0 5px 0;
-            color: var(--cor-primaria);
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        .card-info p {
-            font-size: 12px;
-            margin: 3px 0;
-            font-weight: bold;
-        }
-
-        .card-footer {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            font-size: 10px;
-            color: var(--cor-primaria);
-        }
-
-        /* ESTILO DA CERTIDÃO */
-        .certificate-border {
-            border: 10px double var(--cor-primaria);
-            padding: 30px;
+        .login-box {
+            background: white; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 350px;
             text-align: center;
         }
 
-        .signature-line {
-            margin-top: 50px;
-            display: flex;
-            justify-content: space-around;
+        .login-input {
+            width: 100%; padding: 15px; margin-bottom: 15px;
+            border: 2px solid #eee; border-radius: 12px;
+            font-size: 1rem; text-align: center; transition: 0.3s;
+            background: #f9f9f9;
+        }
+        .login-input:focus { border-color: var(--primary); background: #fff; outline: none; }
+
+        .btn-modern {
+            width: 100%; padding: 15px; 
+            background: linear-gradient(45deg, var(--primary), #ff6b81);
+            color: white; border: none; border-radius: 12px;
+            font-weight: 600; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-modern:active { transform: scale(0.95); box-shadow: 0 2px 5px rgba(255, 51, 102, 0.2); }
+
+        /* === APP CONTAINER === */
+        #app-container { display: none; width: 100%; height: 100%; padding-bottom: 90px; overflow-y: auto; }
+        
+        .app-header {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 25px;
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        /* Seções e Cards */
+        .content-section { display: none; padding: 20px; }
+        .content-section.active-section { display: block; animation: slideUp 0.5s ease forwards; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card { 
+            background: var(--glass-bg); border-radius: 20px; padding: 25px; margin-bottom: 25px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
         }
 
-        .sig-block {
-            border-top: 1px solid #000;
-            width: 40%;
-            padding-top: 5px;
+        .title { 
+            font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-dark); 
+            margin-bottom: 15px; position: relative; display: inline-block;
+        }
+        .title::after {
+            content: ''; display: block; width: 40px; height: 3px; 
+            background: var(--primary); margin-top: 5px; border-radius: 2px;
         }
 
-        /* OCULTAR ELEMENTOS NA IMPRESSÃO */
-        @media print {
-            nav, .btn-action, .contract-container, h1 { display: none; }
-            #contrato-final { display: block !important; border: none; }
-            .section { box-shadow: none; border: none; }
-            body { background: white; }
+        /* === DOCUMENTOS === */
+        .contract-paper {
+            background: #fffdf0 url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            border: 1px solid #d4af37; padding: 25px; 
+            font-family: 'Courier Prime', monospace; font-size: 0.9rem; line-height: 1.6;
+            color: #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            position: relative; transform: rotate(-1deg); margin: 10px;
+        }
+        
+        .stamp-signed {
+            position: absolute; bottom: 80px; right: 20px; width: 100px; height: 100px;
+            border: 4px double #27ae60; border-radius: 50%; color: #27ae60;
+            display: flex; justify-content: center; align-items: center; font-weight: 900;
+            transform: rotate(-20deg) scale(0); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: sans-serif; text-transform: uppercase; font-size: 1rem; text-align: center; background: rgba(39, 174, 96, 0.1);
+            z-index: 10;
         }
 
-        /* Área do contrato final (só aparece após assinar) */
-        #contrato-final {
-            display: none;
-            padding: 20px;
-            border: 2px solid #000;
-            margin-top: 20px;
+        /* CARTEIRINHA ESTILO CARTÃO DE CRÉDITO */
+        .id-card {
+            background: linear-gradient(135deg, #1e1e1e, #333); 
+            color: #ecf0f1; border-radius: 15px; padding: 20px; 
+            position: relative; overflow: hidden; display: none; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid #444;
+            transform-style: preserve-3d; transition: transform 0.5s;
         }
+        .id-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(125deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%);
+            pointer-events: none;
+        }
+        .id-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .id-chip { 
+            width: 45px; height: 35px; background: linear-gradient(135deg, #d4af37, #f1c40f); 
+            border-radius: 6px; margin-bottom: 15px; border: 1px solid #b7950b;
+        }
+        .id-photo-area { display: flex; align-items: center; gap: 15px; }
+        .id-photo-frame {
+            width: 70px; height: 70px; border-radius: 50%; border: 2px solid #d4af37;
+            background: #fff; overflow: hidden; display: flex; justify-content: center; align-items: center;
+        }
+        .id-photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .id-name { font-family: 'Courier Prime', monospace; font-size: 1.1rem; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 2px rgba(0,0,0,0.5); }
+
+        /* CALENDÁRIO */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 15px; }
+        .cal-day { 
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; font-size: 0.9rem; background: rgba(255,255,255,0.6); 
+            cursor: pointer; transition: 0.3s; font-weight: 500;
+        }
+        .cal-day:hover { background: var(--primary); color: white; transform: translateY(-2px); }
+        .cal-day.special { background: var(--primary); color: white; font-weight: bold; box-shadow: 0 3px 10px rgba(255, 51, 102, 0.4); }
+        .cal-day.today { border: 2px solid var(--secondary); color: var(--secondary); font-weight: bold; }
+
+        /* URSINHO */
+        .bear-container { position: relative; height: 200px; display: flex; justify-content: center; align-items: center; }
+        .big-bear-img { width: 160px; cursor: pointer; transition: 0.3s; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2)); }
+        .big-bear-img:hover { transform: scale(1.05) rotate(5deg); }
+        .big-bear-img:active { transform: scale(0.95); }
+        
+        .bubble { 
+            position: absolute; top: -10px; right: 20px;
+            background: white; padding: 15px; border-radius: 20px 20px 0 20px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-size: 0.9rem;
+            display: none; border: 1px solid #eee; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* NAV */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 70px;
+            background: var(--nav-bg); border-radius: 50px;
+            display: flex; justify-content: space-evenly; align-items: center;
+            z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px); padding: 0 10px;
+        }
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            color: #b2bec3; text-decoration: none; font-size: 1.3rem; 
+            transition: 0.3s; width: 50px; height: 50px; border-radius: 50%;
+        }
+        .nav-item.active { 
+            color: white; background: var(--primary); transform: translateY(-15px); 
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        /* PLAYER FLUTUANTE */
+        .music-fab {
+            position: fixed; top: 85px; right: 20px; width: 40px; height: 40px;
+            background: var(--secondary); color: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4); cursor: pointer; z-index: 200;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(108, 92, 231, 0); } 100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); } }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 6000; display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-box {
+            background: white; width: 100%; max-width: 350px; padding: 30px;
+            border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center;
+            animation: popIn 0.4s ease;
+        }
+
     </style>
 </head>
 <body>
+    
+    <div class="background-hearts" id="bgHearts"></div>
 
-    <div id="login-screen">
-        <h2>Área Restrita do Casal</h2>
-        <p>Digite a senha de acesso:</p>
-        <input type="password" id="passwordInput" placeholder="Senha">
-        <button onclick="checkLogin()">Entrar</button>
-        <p id="error-msg" style="color: red; display: none;">Senha incorreta!</p>
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-fab" onclick="toggleMusic()">
+        <i class="fas fa-music" id="musicIcon"></i>
     </div>
 
-    <div id="main-content">
-        <nav>
-            <button onclick="showSection('contrato')" class="active">📜 Contrato</button>
-            <button onclick="showSection('cartao')">💳 Carteirinha</button>
-            <button onclick="showSection('certidao')">🎖️ Certidão</button>
-            <button onclick="showSection('comprovante')">✅ Comprovante</button>
-        </nav>
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="gov-logo"><i class="fas fa-heart"></i> LoveGov</div>
+            <p style="margin-bottom: 25px; color: #777; font-size: 0.9rem;">Autenticação Biométrica do Coração</p>
+            <input type="password" id="passwordInput" class="login-input" placeholder="Senha (Data Mágica)">
+            <button class="btn-modern" onclick="checkLogin()">ACESSAR SISTEMA</button>
+            <p style="margin-top:15px; font-size: 11px; color: #aaa;">Dica: 19122025</p>
+        </div>
+    </div>
 
-        <div id="contrato" class="section active">
-            <h2>Contrato de Relacionamento Vitalício</h2>
-            <p>Preencha os dados e selecione as cláusulas desejadas.</p>
-            
-            <div class="inputs-contrato">
-                <input type="text" id="nomeEle" placeholder="Nome dele (Ex: Ruben DJ)">
-                <input type="text" id="nomeEla" placeholder="Nome dela">
-                <select id="tipoRelacionamento">
-                    <option value="Namoro">Namoro</option>
-                    <option value="Noivado">Noivado</option>
-                    <option value="Casamento">Casamento</option>
-                    <option value="União Eterna">União Eterna</option>
-                </select>
+    <div id="app-container">
+        
+        <div class="app-header">
+            <div>
+                <span style="font-weight: 700; color: var(--primary-dark); font-size: 1.2rem;">PORTAL DO AMOR</span>
+                <span style="font-size: 0.8rem; display: block; color: #888;">Ana Gabriele & Rubens</span>
             </div>
-
-            <h3>Seleção de Cláusulas (Role para ver todas)</h3>
-            <div class="contract-container" id="clause-list">
-                </div>
-
-            <button class="btn-action" onclick="gerarContrato()">✍️ Assinar e Gerar Contrato</button>
-
-            <div id="contrato-final">
-                <h2 style="text-align: center;">CONTRATO DE <span id="final-type">RELACIONAMENTO</span></h2>
-                <p>Pelo presente instrumento particular, as partes:</p>
-                <p><strong>CONTRATANTE 1:</strong> <span id="final-ele"></span></p>
-                <p><strong>CONTRATANTE 2:</strong> <span id="final-ela"></span></p>
-                <p>Firmam entre si o seguinte acordo regido pelas cláusulas abaixo:</p>
-                <hr>
-                <div id="final-clauses-text"></div>
-                <br><br>
-                <p>E por estarem assim justos e contratados, assinam o presente.</p>
-                <br><br>
-                <div class="signature-line">
-                    <div class="sig-block">Assinatura Dele</div>
-                    <div class="sig-block">Assinatura Dela</div>
-                </div>
-                <br>
-                <p style="text-align: center; font-size: 0.8rem;">Data: <span id="data-atual"></span> | ID: MÁFIA-B20</p>
-            </div>
-            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+            <i class="fas fa-heart" style="color: var(--primary); font-size: 1.5rem; animation: pulse 1s infinite;"></i>
         </div>
 
-        <div id="cartao" class="section">
-            <h2>Carteirinha Oficial</h2>
-            <div style="text-align: center; margin-bottom: 20px;">
-                <label>Carregar Foto: <input type="file" id="photoInput" onchange="previewPhoto(event)"></label>
-            </div>
-            
-            <div class="card-identity">
-                <div class="card-photo">
-                    <img id="card-img-preview" src="" alt="Foto">
-                    <span id="no-photo-text" style="font-size: 10px; text-align: center; padding: 5px;">Sem foto</span>
+        <section id="home" class="content-section active-section">
+            <div class="card">
+                <h2 class="title">Status Oficial</h2>
+                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                    <div style="width: 10px; height: 10px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 10px #2ecc71;"></div>
+                    <strong style="color: #2d3436;">Conexão Estável</strong>
                 </div>
-                <div class="card-info">
-                    <h3>Carteira de <span class="lbl-tipo">Amor</span></h3>
-                    <p>Titular 1: <span class="lbl-ele">Nome Dele</span></p>
-                    <p>Titular 2: <span class="lbl-ela">Nome Dela</span></p>
-                    <p>Início: <span class="lbl-data">19/05/2000</span></p>
-                    <p>ID da Família: #B20 (Máfia)</p>
-                    <p>Validade: INDETERMINADA</p>
-                </div>
-                <div class="card-footer">Emissão Oficial</div>
-            </div>
-            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Cartão</button>
-        </div>
-
-        <div id="certidao" class="section">
-            <div class="certificate-border">
-                <h1>CERTIDÃO DE UNIÃO</h1>
-                <p style="font-size: 1.2rem; margin-top: 30px;">
-                    Certificamos para os devidos fins de felicidade e compromisso que
-                </p>
-                <h2 style="font-family: cursive; font-size: 2rem; border: none;">
-                    <span class="lbl-ele">Ele</span> & <span class="lbl-ela">Ela</span>
-                </h2>
-                <p style="font-size: 1.2rem;">
-                    Estão oficialmente sob o regime de <strong class="lbl-tipo">Namoro</strong>.
-                </p>
-                <p>
-                    Este documento sela o compromisso de lealdade, respeito e parceria,
-                    sob o código de honra da família.
-                </p>
                 
-                <div class="signature-line" style="margin-top: 80px;">
-                    <div class="sig-block">Testemunha Oficial</div>
-                    <div class="sig-block">Oficial de Registro</div>
+                <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
+                    <p style="font-size: 0.9rem; color: #1565c0; margin-bottom: 5px;">Juntos há:</p>
+                    <h1 id="timerDisplay" style="color: #0d47a1; font-size: 2.5rem; margin: 0;">Calculando...</h1>
+                    <p style="font-size: 0.8rem; color: #1565c0;">Dias de pura felicidade</p>
+                </div>
+                
+                <p style="text-align: justify; line-height: 1.6; font-size: 0.95rem; color: #555;">
+                    Olá, <strong>Ana Gabriele</strong>! Este sistema foi desenvolvido exclusivamente para gerenciar nosso amor. Aqui suas ordens são lei e meus beijos são impostos obrigatórios. ❤️
+                </p>
+            </div>
+
+            <div class="card" style="text-align: center; overflow: visible;">
+                <h2 class="title" style="font-size: 1.5rem;">Urso do Amor</h2>
+                <div class="bear-container">
+                    <div id="bearBubble" class="bubble">...</div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712593.png" class="big-bear-img" onclick="bearSpeak()">
+                </div>
+                <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Toque no urso para receber um recado.</p>
+            </div>
+        </section>
+
+        <section id="docs" class="content-section">
+            <div id="contractArea" class="card">
+                <h2 class="title">Contrato Vitalício</h2>
+                <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">Leia as cláusulas com atenção:</p>
+                
+                <div class="contract-paper">
+                    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 15px; font-weight: bold;">
+                        REPÚBLICA FEDERATIVA DO AMOR<br>MINISTÉRIO DO NAMORO
+                    </div>
+                    
+                    <p><strong>CLÁUSULA 1ª:</strong> Fica decretado que o Sr. RUBENS e a Sra. ANA GABRIELE pertencem um ao outro, sem direito a devolução.</p>
+                    <br>
+                    <p><strong>CLÁUSULA 2ª:</strong> O "Boa Noite" e o "Bom Dia" são obrigatórios, sob pena de cócegas excessivas.</p>
+                    <br>
+                    <p><strong>CLÁUSULA 3ª:</strong> É proibido ir dormir chateado(a). A reconciliação deve ocorrer antes da meia-noite.</p>
+                    <br>
+                    <p><strong>CLÁUSULA 4ª:</strong> Em caso de filmes de terror, o abraço é obrigatório.</p>
+                    <br>
+                    <div id="signatureArea" style="text-align: center; margin-top: 30px; font-family: 'Dancing Script', cursive; font-size: 1.5rem; color: #888;">
+                        (Aguardando Assinatura da Ana...)
+                    </div>
+                    
+                    <div id="stamp" class="stamp-signed">APROVADO<br>EM CARTÓRIO</div>
+                </div>
+                
+                <button class="btn-modern" style="margin-top: 20px; background: linear-gradient(45deg, #27ae60, #2ecc71);" onclick="signContract()">
+                    <i class="fas fa-pen-fancy"></i> ASSINAR CONTRATO
+                </button>
+            </div>
+
+            <div id="certArea" style="display:none; text-align: center; margin-top: 20px;">
+                 <div class="card" style="border: 4px double var(--primary);">
+                    <i class="fas fa-certificate" style="font-size: 4rem; color: var(--accent); margin-bottom: 10px;"></i>
+                    <h2 style="font-family: 'Playfair Display'; color: #333;">Certidão de União</h2>
+                    <p style="margin: 20px 0;">Certificamos que <strong>Ana & Rubens</strong> possuem um vínculo inquebrável.</p>
+                    <p style="font-size: 0.8rem; color: #777;">Registrado em: <span id="certDate"></span></p>
+                 </div>
+            </div>
+
+            <div id="idCardArea" class="id-card" style="margin-top: 30px;">
+                <div class="id-header">
+                    <span style="font-weight: bold; font-family: 'Courier Prime'; font-size: 1.2rem;">LOVE CARD • BLACK</span>
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <div class="id-chip"></div>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div class="id-photo-frame">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Foto dela">
+                    </div>
+                    <div>
+                        <div class="id-name">ANA GABRIELE</div>
+                        <div style="font-size: 0.7rem; opacity: 0.8;">MEMBRO DESDE 2025</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px; color: var(--accent);">★★★★★ VIP</div>
+                    </div>
+                </div>
+                <div style="margin-top: 25px; display: flex; justify-content: space-between; font-family: 'Courier Prime'; font-size: 0.8rem;">
+                    <span>ID: MÁFIA-B20</span>
+                    <span>VALIDADE: ETERNA</span>
                 </div>
             </div>
-            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Certidão</button>
-        </div>
+        </section>
 
-        <div id="comprovante" class="section">
-            <h2>Comprovante de Situação</h2>
-            <div style="border: 1px solid #333; padding: 20px; font-family: 'Courier New', monospace;">
-                <h3 style="text-align: center; border: none;">RECIBO DE COMPROMISSO</h3>
-                <p><strong>CÓDIGO DE TRANSAÇÃO:</strong> <span id="trans-code">XYZ-2025-LOVE</span></p>
-                <p><strong>DATA DE EMISSÃO:</strong> <span id="receipt-date"></span></p>
-                <hr style="border-top: 1px dashed #333;">
-                <p><strong>PARTE A:</strong> <span class="lbl-ele">---</span></p>
-                <p><strong>PARTE B:</strong> <span class="lbl-ela">---</span></p>
-                <p><strong>STATUS ATUAL:</strong> <span class="lbl-tipo" style="background: #ddd; padding: 2px;">PENDENTE</span></p>
-                <p><strong>SITUAÇÃO DO CONTRATO:</strong> ASSINADO E VIGENTE</p>
-                <hr style="border-top: 1px dashed #333;">
-                <p style="text-align: center; font-size: 0.8rem;">Este comprovante tem validade jurídica no tribunal do coração.</p>
+        <section id="calendar" class="content-section">
+            <div class="card">
+                <h2 class="title">Nossa Agenda 📅</h2>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <p style="font-size: 0.8rem; color: #888; text-align: center; margin-top: 15px;">Toque no dia 19!</p>
             </div>
-            <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir Comprovante</button>
-        </div>
+        </section>
 
+        <section id="chat" class="content-section">
+            <div class="card">
+                <h2 class="title">Correio do Amor 💌</h2>
+                <p style="font-size: 0.9rem; margin-bottom: 10px;">Mande uma mensagem direta para meu coração (WhatsApp):</p>
+                <textarea id="chatInput" style="width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 15px; margin-bottom: 15px; font-family: inherit; background: #f9f9f9;" rows="4" placeholder="Escreva algo fofo ou uma reclamação..."></textarea>
+                <button class="btn-modern" style="background: linear-gradient(45deg, #25D366, #128C7E);" onclick="sendWhatsapp()">
+                    <i class="fab fa-whatsapp"></i> ENVIAR MENSAGEM
+                </button>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
+            <a href="#" class="nav-item" onclick="nav('docs', this)"><i class="fas fa-file-contract"></i></a>
+            <a href="#" class="nav-item" onclick="nav('calendar', this)"><i class="fas fa-calendar-check"></i></a>
+            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-comment-dots"></i></a>
+        </nav>
+    </div>
+
+    <div id="eventModal" class="modal-overlay">
+        <div class="modal-box">
+            <i class="fas fa-calendar-alt" style="font-size: 2rem; color: var(--secondary); margin-bottom: 10px;"></i>
+            <h3 style="color: var(--secondary); margin-bottom: 5px;">Agendar Date</h3>
+            <p id="selectedDateText" style="margin-bottom: 20px; font-weight: bold; color: #555;">Dia: --/--</p>
+            
+            <input type="text" id="eventTitle" class="login-input" style="text-align: left;" placeholder="O que vamos fazer? (Jantar, Filme...)">
+            <input type="time" id="eventTime" class="login-input" style="text-align: left;">
+
+            <button class="btn-modern" onclick="confirmEvent()">CONFIRMAR</button>
+            <button style="background: none; border: none; color: #999; margin-top: 15px; cursor: pointer; text-decoration: underline;" onclick="closeModal()">Cancelar</button>
+        </div>
     </div>
 
     <script>
-        // --- 1. SISTEMA DE LOGIN ---
+        // CONFIGURAÇÕES
+        const MEU_NUMERO = "5581989501999"; 
+        const SENHA = "19122025";
+        const DATA_INICIO = new Date("2025-12-19T00:00:00");
+
+        // --- GERAÇÃO DE CORAÇÕES NO FUNDO ---
+        function createHearts() {
+            const container = document.getElementById('bgHearts');
+            for(let i=0; i<15; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'heart-bg';
+                heart.innerHTML = Math.random() > 0.5 ? '❤️' : '💖';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // --- SISTEMA DE LOGIN ---
         function checkLogin() {
             const pass = document.getElementById('passwordInput').value;
-            if(pass === "19052000") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                iniciarSistema();
+            if(pass === SENHA) {
+                // Efeito de saída
+                document.querySelector('.login-box').style.transform = "scale(0.8) translateY(-50px)";
+                document.querySelector('.login-box').style.opacity = "0";
+                
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = "none";
+                    document.getElementById('app-container').style.display = "block";
+                    renderCalendar();
+                    setInterval(timer, 1000);
+                    toggleMusic(true); // Tenta iniciar musica
+                }, 500);
             } else {
-                document.getElementById('error-msg').style.display = 'block';
+                alert("Senha Incorreta! Tente a data do nosso início (19122025).");
+                // Vibração no celular
+                if(navigator.vibrate) navigator.vibrate(200);
             }
         }
 
-        // --- 2. NAVEGAÇÃO DE ABAS ---
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+        // --- NAVEGAÇÃO ---
+        function nav(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
-            document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
         }
 
-        // --- 3. GERADOR DE CLÁUSULAS (SIMULANDO MILHARES) ---
-        function iniciarSistema() {
-            const container = document.getElementById('clause-list');
-            const clausulasBase = [
-                "Cláusula de Fidelidade Absoluta",
-                "Cláusula de Compartilhamento de Senhas de Streaming",
-                "Cláusula de Respeito Mútuo",
-                "Cláusula de Nunca Dormir Brigado",
-                "Cláusula de Apoio nos Projetos Pessoais",
-                "Cláusula de Direito a Cafuné Diário",
-                "Cláusula de Paciência na TPM/Stress",
-                "Cláusula de Prioridade na Vida",
-                "Cláusula de Honestidade Brutal (com carinho)",
-                "Cláusula de Viagens Anuais Obrigatórias"
+        // --- CONTRATO E CONFETE ---
+        function signContract() {
+            if(confirm("Ana Gabriele, você aceita oficialmente Rubens DJ como dono do seu coração? ❤️")) {
+                
+                // Assinatura Visual
+                const sigArea = document.getElementById('signatureArea');
+                sigArea.innerHTML = `<span style="color: var(--primary); font-family: 'Dancing Script'; font-size: 2rem;">Ana Gabriele ❤️</span>`;
+                
+                // Carimbo
+                const stamp = document.getElementById('stamp');
+                stamp.style.transform = "rotate(-20deg) scale(1)";
+
+                // Solta Confetes
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff3366', '#ffd700', '#ffffff']
+                });
+
+                // Mostra os outros docs com delay
+                setTimeout(() => {
+                    document.getElementById('certArea').style.display = 'block';
+                    document.getElementById('idCardArea').style.display = 'block';
+                    document.getElementById('certDate').innerText = new Date().toLocaleDateString('pt-BR');
+                    
+                    alert("PARABÉNS! Contrato renovado com sucesso! 🎉");
+                    window.scrollTo(0, document.body.scrollHeight);
+                }, 1000);
+            }
+        }
+
+        // --- PLAYER DE MÚSICA ---
+        function toggleMusic(forcePlay = false) {
+            const audio = document.getElementById('bgMusic');
+            const icon = document.getElementById('musicIcon');
+            
+            if (forcePlay || audio.paused) {
+                audio.play().then(() => {
+                    icon.className = "fas fa-pause";
+                }).catch(e => console.log("Audio bloqueado pelo browser"));
+            } else {
+                audio.pause();
+                icon.className = "fas fa-music";
+            }
+        }
+
+        // --- CALENDÁRIO ---
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const now = new Date();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+            
+            grid.innerHTML = "";
+
+            for(let i=1; i<=daysInMonth; i++) {
+                const d = document.createElement('div');
+                d.className = 'cal-day';
+                d.innerText = i;
+                
+                if(i === now.getDate()) d.classList.add('today');
+                if(i === 19) d.classList.add('special'); // Dia 19 Especial
+
+                d.onclick = () => openEventModal(i, now.getMonth()+1, now.getFullYear());
+                grid.appendChild(d);
+            }
+        }
+
+        // --- MODAL DE EVENTOS ---
+        let selectedDateStr = "";
+        function openEventModal(d, m, y) {
+            selectedDateStr = `${d}/${m}/${y}`;
+            document.getElementById('selectedDateText').innerText = `Agendar para: ${selectedDateStr}`;
+            document.getElementById('eventModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').style.display = 'none';
+        }
+
+        function confirmEvent() {
+            const title = document.getElementById('eventTitle').value;
+            const time = document.getElementById('eventTime').value;
+            if(!title) return alert("Escreva algo!");
+            
+            const msg = `📅 *NOVO AGENDAMENTO*\n\nData: ${selectedDateStr}\nHorário: ${time}\nEvento: ${title}\n\nConfirma amor? ❤️`;
+            window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
+            closeModal();
+        }
+
+        // --- URSINHO FALANTE ---
+        function bearSpeak() {
+            const msgs = [
+                "Você é a mulher mais linda!", 
+                "Rubens te ama muito!", 
+                "Já bebeu água hoje, princesa?", 
+                "Hoje o dia é todo seu!",
+                "Você merece o mundo! 🌎"
             ];
-
-            let html = "";
-            // Gerando "milhares" de cláusulas (simulação visual com loop)
-            // Vou fazer 100 para não travar o navegador, mas numerar até 3000
-            for(let i = 1; i <= 50; i++) {
-                // Cláusulas reais
-                let texto = clausulasBase[(i-1) % clausulasBase.length];
-                html += `
-                <div class="clause-item">
-                    <input type="checkbox" id="c${i}" checked>
-                    <label for="c${i}"><strong>Cláusula ${i}ª:</strong> ${texto} - O compromisso deve ser mantido sob qualquer circunstância.</label>
-                </div>`;
-            }
+            const bubble = document.getElementById('bearBubble');
+            bubble.style.display = 'block';
+            bubble.innerText = msgs[Math.floor(Math.random()*msgs.length)];
             
-            // Adicionando cláusulas genéricas para dar volume até a 3000 (visual)
-            html += `<div style="text-align: center; padding: 10px; color: #888;">... [2.950 cláusulas padrão de amor e respeito ocultas para economizar papel] ...</div>`;
-            
-            // Últimas cláusulas importantes
-            html += `
-            <div class="clause-item">
-                <input type="checkbox" id="c3000" checked>
-                <label for="c3000"><strong>Cláusula 3.000ª:</strong> Do Amor Eterno - Esta união não tem data de validade.</label>
-            </div>`;
-
-            container.innerHTML = html;
-
-            // Define data atual
-            const hoje = new Date().toLocaleDateString('pt-BR');
-            document.getElementById('data-atual').innerText = hoje;
-            document.getElementById('receipt-date').innerText = hoje;
+            // Esconde depois de 3s
+            setTimeout(() => bubble.style.display = 'none', 3000);
         }
 
-        // --- 4. FUNÇÃO GERAR CONTRATO E ATUALIZAR DADOS ---
-        function gerarContrato() {
-            const nomeEle = document.getElementById('nomeEle').value || "______________";
-            const nomeEla = document.getElementById('nomeEla').value || "______________";
-            const tipo = document.getElementById('tipoRelacionamento').value;
-
-            // Atualiza todos os labels nas outras abas
-            document.querySelectorAll('.lbl-ele').forEach(el => el.innerText = nomeEle);
-            document.querySelectorAll('.lbl-ela').forEach(el => el.innerText = nomeEla);
-            document.querySelectorAll('.lbl-tipo').forEach(el => el.innerText = tipo);
-
-            // Atualiza o Contrato Final
-            document.getElementById('final-ele').innerText = nomeEle;
-            document.getElementById('final-ela').innerText = nomeEla;
-            document.getElementById('final-type').innerText = tipo.toUpperCase();
-
-            // Pega as cláusulas selecionadas
-            let clausulasTexto = "";
-            let checkboxes = document.querySelectorAll('.clause-item input[type="checkbox"]:checked');
-            
-            checkboxes.forEach((chk) => {
-                let label = chk.nextElementSibling.innerText;
-                clausulasTexto += `<p style="margin-bottom: 5px; text-align: justify;">${label}</p>`;
-            });
-
-            // Adiciona o texto extra de volume se necessário
-            clausulasTexto += `<p style="font-style: italic; color: #555;">... (Seguem-se as disposições padrão de convivência, totalizando 3.000 termos de acordo mútuo) ...</p>`;
-
-            document.getElementById('final-clauses-text').innerHTML = clausulasTexto;
-
-            // Mostra o contrato final e esconde a seleção
-            document.getElementById('contrato-final').style.display = 'block';
-            document.querySelector('.contract-container').style.display = 'none';
-            alert("Contrato Gerado com Sucesso! Verifique os dados abaixo.");
+        // --- CHAT WHATSAPP ---
+        function sendWhatsapp() {
+            const txt = document.getElementById('chatInput').value;
+            if(txt) window.open(`https://wa.me/${MEU_NUMERO}?text=${encodeURIComponent("💌 Portal do Amor diz: " + txt)}`, '_blank');
         }
 
-        // --- 5. PREVIEW DA FOTO ---
-        function previewPhoto(event) {
-            const reader = new FileReader();
-            reader.onload = function(){
-                const output = document.getElementById('card-img-preview');
-                output.src = reader.result;
-                document.getElementById('no-photo-text').style.display = 'none';
-            };
-            reader.readAsDataURL(event.target.files[0]);
+        // --- CONTADOR DE DIAS ---
+        function timer() {
+            const now = new Date();
+            const diff = now - DATA_INICIO;
+            const days = Math.floor(diff/(1000*60*60*24));
+            document.getElementById('timerDisplay').innerText = days;
         }
     </script>
 </body>
