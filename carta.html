@@ -84,18 +84,76 @@
         .btn-yes { background: #2ecc71; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; z-index: 10; }
         .btn-no { background: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; position: relative; transition: 0.2s; }
 
+        /* === MODAL DE REGRAS === */
+        .rules-modal {
+            display: none; /* Escondido por padrão */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); /* Fundo escuro */
+            z-index: 6000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .rules-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 4px solid var(--primary);
+            text-align: left;
+        }
+        .rules-content h3 {
+            color: var(--primary-dark);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+        .rules-list {
+            list-style: none;
+        }
+        .rules-list li {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #333;
+        }
+        .rules-list li::before {
+            content: '⚠️';
+            position: absolute;
+            left: -5px;
+            top: 0;
+        }
+        .rules-btn {
+            background: #000;
+            color: #fff;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
         /* === EDITOR DE CORREIO === */
         .editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; background: #eee; padding: 10px; border-radius: 10px; flex-wrap: wrap; align-items: center; }
         .tool-btn { background: white; border: 1px solid #ccc; border-radius: 5px; width: 35px; height: 35px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .font-select { padding: 5px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 1; }
         .paper-options { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
         .paper-color { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; }
-        .paper-color.selected { border-color: #333; transform: scale(1.1); }
         .rich-editor { width: 100%; min-height: 150px; padding: 15px; border-radius: 10px; border: 1px solid #d4af37; background: #fffdf0; font-family: 'Poppins', sans-serif; outline: none; overflow-y: auto; margin-bottom: 15px; }
         .emoji-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
         .emoji-item { font-size: 1.5rem; cursor: pointer; text-align: center; }
 
-        /* === COMPONENTES DO PRESENTE (CORRIGIDO) === */
+        /* === COMPONENTES DO PRESENTE === */
         .gift-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; perspective: 1000px; margin-top: 50px; position: relative; }
         .gift-box { position: relative; width: 150px; height: 120px; background: var(--primary); border-radius: 0 0 10px 10px; cursor: pointer; z-index: 10; transition: transform 0.5s;}
         .gift-box::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
@@ -105,42 +163,19 @@
         .gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 30px; height: 30px; border: 5px solid var(--accent); border-radius: 50% 50% 0 50%; transform: rotate(45deg); top: 0; left: 0; }
         .gift-bow::after { left: auto; right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
         
-        /* CARTA AGORA É UM POPUP CENTRALIZADO */
         .gift-letter { 
-            position: fixed; /* Fixa na tela */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0); /* Começa invisível */
-            width: 85%; /* Largura boa no mobile */
-            max-width: 400px;
-            height: auto;
-            max-height: 80vh; /* Não passa de 80% da tela */
-            background: #fffdf0; 
-            padding: 25px; 
-            border: 2px solid #d4af37; 
-            border-radius: 10px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0; 
-            z-index: 2000; /* Fica na frente de TUDO */
-            font-family: 'Dancing Script', cursive; 
-            overflow-y: auto; /* Rolagem se precisar */
-            box-shadow: 0 0 0 100vw rgba(0,0,0,0.5); /* Fundo escuro atrás */
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
+            width: 85%; max-width: 400px; height: auto; max-height: 80vh; 
+            background: #fffdf0; padding: 25px; border: 2px solid #d4af37; border-radius: 10px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; z-index: 2000; 
+            font-family: 'Dancing Script', cursive; overflow-y: auto; 
+            box-shadow: 0 0 0 100vw rgba(0,0,0,0.5);
         }
         
         .box-open .gift-lid { transform: rotateX(-110deg); }
-        /* Quando aberto, a carta cresce no meio da tela */
         .box-open .gift-letter { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 
-        .close-letter {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 1.5rem;
-            color: #d4af37;
-            cursor: pointer;
-            font-family: sans-serif;
-            font-weight: bold;
-        }
+        .close-letter { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; color: #d4af37; cursor: pointer; font-family: sans-serif; font-weight: bold; }
 
         .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: var(--nav-bg); border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
         .nav-item { color: #b2bec3; font-size: 1.3rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;}
@@ -152,6 +187,25 @@
 <body>
 
     <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
+
+    <div id="rulesModal" class="rules-modal">
+        <div class="rules-content">
+            <h3>⚠️ INSTRUÇÕES</h3>
+            <ul class="rules-list">
+                <li>Tome banho.</li>
+                <li>Lave bem as mãos e os dedos.</li>
+                <li>Esqueça os problemas.</li>
+                <li>Desligue-se do mundo lá fora.</li>
+                <li>Foque apenas no momento.</li>
+                <li>Escute bem o que o instrutor ou dominador vai falar.</li>
+                <li>Obedeça as instruções.</li>
+                <li>Não usar roupas apertadas.</li>
+                <li>Proibido fazer coisas fora da hora ou sem permissão.</li>
+                <li>Pode ser aplicado castigo por desobediência.</li>
+            </ul>
+            <button class="rules-btn" onclick="confirmarRegras()">ESTOU CIENTE E OBEDEÇO</button>
+        </div>
+    </div>
 
     <div id="login-screen">
         <div class="login-box">
@@ -199,16 +253,16 @@
                 <div class="quiz-container">
                     <div class="question-text">1. Vai me dar a bunda?</div>
                     <div class="btn-group">
-                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Vai dar o cuzinho?')">SIM 😍</button>
-                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'vai me dar o cuzinho?')">NÃO</button>
+                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Vai dar a bunda?')">SIM 😍</button>
+                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Vai dar a bunda?')">NÃO</button>
                     </div>
                 </div>
 
                 <div class="quiz-container">
-                    <div class="question-text">2. Hoje tem Gf?? 🔥</div>
+                    <div class="question-text">2. Hoje tem?? 🔥</div>
                     <div class="btn-group">
-                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Hoje tem GF?')">SIM 😍</button>
-                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Hoje tem GF?')">NÃO</button>
+                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Hoje tem?')">SIM 😍</button>
+                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Hoje tem?')">NÃO</button>
                     </div>
                 </div>
 
@@ -221,19 +275,13 @@
                 
                 <div class="gift-letter" onclick="event.stopPropagation()">
                     <div class="close-letter" onclick="toggleGift()">×</div>
-                    
                     <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 15px; padding-bottom: 10px;">Para <span class="user-name">...</span> ❤️</h3>
-                    
                     <div style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
                         <p style="margin-bottom: 15px;">Falar de você não é tão simples assim.</p>
-                        
                         <p style="margin-bottom: 15px;">Não é fácil descrever algo que eu não consigo medir o que significa pra mim. Gostar de você é uma passagem de ida pra felicidade, estar ao seu lado é não querer mais voltar pra realidade.</p>
-                        
                         <p style="margin-bottom: 15px;">Me perdoe pelas vezes que fui falho. Uma mulher como você só merece motivos pra ficar com esse sorriso lindo estampado no rosto. Quero te proteger, cuidar de você e te fazer feliz, assim como você me faz só de me olhar com esses olhinhos puxados.</p>
-                        
                         <p style="margin-bottom: 15px;">Sou grato por todos os momentos e, principalmente, por ser exatamente VOCÊ a mulher da minha vida.</p>
-                        
-                        <p style="text-align: right; font-weight: bold; margin-top: 25px;">Eu te amo,<br>RUBENS FERNANDES.</p>
+                        <p style="text-align: right; font-weight: bold; margin-top: 25px;">Eu te amo,<br>Seu Rubens DJ.</p>
                     </div>
                 </div>
 
@@ -298,8 +346,6 @@
 
             if(!nomeInput || !dataInput || !senhaInput) return alert("Preencha todos os campos!");
             
-            // SENHA LIBERADA - QUALQUER COISA ENTRA
-
             userData.nome = nomeInput;
             userData.dataInicio = new Date(dataInput + "T00:00:00");
             atualizarInterface();
@@ -327,6 +373,25 @@
         }
 
         function responderQuiz(resposta, pergunta) {
+            // VERIFICA SE É A PERGUNTA DO "HOJE TEM" E SE A RESPOSTA FOI "SIM"
+            if (pergunta.includes('Hoje tem') && resposta === 'Sim') {
+                // Abre o modal das regras
+                document.getElementById('rulesModal').style.display = 'flex';
+            } else {
+                // Comportamento normal para as outras perguntas
+                enviarMsgWhatsapp(resposta, pergunta);
+            }
+        }
+
+        // Função chamada quando ela clica no botão "ESTOU CIENTE E OBEDEÇO"
+        function confirmarRegras() {
+            document.getElementById('rulesModal').style.display = 'none';
+            // Envia msg confirmando que aceitou as regras
+            const msg = `🔥 *HOJE TEM!* \n\n👤 ${userData.nome} respondeu: *SIM*\n\n✅ *ELA LEU E ACEITOU AS INSTRUÇÕES DO DOMINADOR.*`;
+            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function enviarMsgWhatsapp(resposta, pergunta) {
             const msg = `🔥 *PESQUISA OFICIAL DO AMOR*\n\n👤 Respondido por: *${userData.nome}*\n❓ Pergunta: ${pergunta}\n🗣️ Resposta: *${resposta.toUpperCase()}*`;
             window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -356,7 +421,6 @@
         let isGiftOpen = false;
         function toggleGift() {
             const c = document.getElementById('giftContainer');
-            // Toggle na classe do container
             if(c.classList.contains('box-open')) {
                 c.classList.remove('box-open');
                 isGiftOpen = false;
