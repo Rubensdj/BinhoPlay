@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HEMILLY VITÓRIA • ESSA É PRA VOCÉ </title>
+    <title>Hemilly Vitória ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -105,14 +105,15 @@
         .gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 30px; height: 30px; border: 5px solid var(--accent); border-radius: 50% 50% 0 50%; transform: rotate(45deg); top: 0; left: 0; }
         .gift-bow::after { left: auto; right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
         
-        /* Ajuste na carta para caber o texto maior */
+        /* CARTA DE PRESENTE */
         .gift-letter { 
             position: absolute; 
             bottom: 10px; 
             left: 50%; 
             transform: translateX(-50%); 
-            width: 290px; 
-            height: 380px; 
+            width: 90%; 
+            max-width: 320px; 
+            height: 420px; 
             background: #fffdf0; 
             padding: 20px; 
             border: 1px solid #d4af37; 
@@ -125,7 +126,7 @@
         }
         
         .box-open .gift-lid { transform: rotateX(-110deg); }
-        .box-open .gift-letter { transform: translate(-50%, -150px); opacity: 1; z-index: 15; }
+        .box-open .gift-letter { transform: translate(-50%, -220px); opacity: 1; z-index: 15; }
 
         .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: var(--nav-bg); border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
         .nav-item { color: #b2bec3; font-size: 1.3rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;}
@@ -140,18 +141,19 @@
 
     <div id="login-screen">
         <div class="login-box">
-            <div style="font-family: 'Playfair Display'; font-size: 2.5rem; color: var(--primary); margin-bottom: 10px;">
-                <i class="fas fa-heart"></i> Hemilly EU TE AMO
+            <div style="font-family: 'Playfair Display'; font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2;">
+                <i class="fas fa-heart"></i> Hemilly Vitória
             </div>
-            <p style="margin-bottom: 20px; color: #555;">Sistema de Gestão Amorosa</p>
+            <p style="margin-bottom: 20px; color: #555;">Portal Oficial do Amor</p>
+            
             <label class="label-input">Seu Nome:</label>
-            <input type="text" id="inputName" class="login-input" placeholder="Ex: RUBENS FERNANDES">
+            <input type="text" id="inputName" class="login-input" placeholder="Digite seu nome...">
             
             <label class="label-input">O dia que a gente se conheceu..</label>
             <input type="date" id="inputDate" class="login-input">
             
             <label class="label-input">Senha de Acesso:</label>
-            <input type="password" id="inputPass" class="login-input" placeholder="Senha">
+            <input type="password" id="inputPass" class="login-input" placeholder="Qualquer senha serve ❤️">
             <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR PORTAL</button>
             <div class="credits">Desenvolvido por<br><strong>Rubens Pereira Fernandes</strong></div>
         </div>
@@ -160,7 +162,7 @@
     <div id="app-container">
         
         <div class="app-header">
-            <span style="font-weight: 700; color: var(--primary-dark);">PORTAL DO AMOR</span>
+            <span style="font-weight: 700; color: var(--primary-dark);">HEMILLY VITÓRIA</span>
             <i class="fas fa-heart" style="color: var(--primary);"></i>
         </div>
 
@@ -184,7 +186,7 @@
                     <div class="question-text">1. Vai me dar a bunda?</div>
                     <div class="btn-group">
                         <button class="btn-yes" onclick="responderQuiz('Sim', 'Vai dar a bunda?')">SIM 😍</button>
-                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Vai dar o cuzinho ?')">NÃO</button>
+                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Vai dar a bunda?')">NÃO</button>
                     </div>
                 </div>
 
@@ -206,16 +208,16 @@
                 <div class="gift-letter">
                     <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 10px;">Para <span class="user-name">...</span> ❤️</h3>
                     
-                    <div style="font-size: 0.9rem; line-height: 1.4; text-align: justify;">
-                        <p style="margin-bottom: 8px;">Falar de você não é tão simples assim.</p>
+                    <div style="font-size: 1rem; line-height: 1.5; text-align: justify;">
+                        <p style="margin-bottom: 10px;">Falar de você não é tão simples assim.</p>
                         
-                        <p style="margin-bottom: 8px;">Não é fácil descrever algo que eu não consigo medir o que significa pra mim. Gostar de você é uma passagem de ida pra felicidade, estar ao seu lado é não querer mais voltar pra realidade.</p>
+                        <p style="margin-bottom: 10px;">Não é fácil descrever algo que eu não consigo medir o que significa pra mim. Gostar de você é uma passagem de ida pra felicidade, estar ao seu lado é não querer mais voltar pra realidade.</p>
                         
-                        <p style="margin-bottom: 8px;">Me perdoe pelas vezes que fui falho. Uma mulher como você só merece motivos pra ficar com esse sorriso lindo estampado no rosto. Quero te proteger, cuidar de você e te fazer feliz, assim como você me faz só de me olhar com esses olhinhos puxados.</p>
+                        <p style="margin-bottom: 10px;">Me perdoe pelas vezes que fui falho. Uma mulher como você só merece motivos pra ficar com esse sorriso lindo estampado no rosto. Quero te proteger, cuidar de você e te fazer feliz, assim como você me faz só de me olhar com esses olhinhos puxados.</p>
                         
-                        <p style="margin-bottom: 8px;">Sou grato por todos os momentos e, principalmente, por ser exatamente VOCÊ a mulher da minha vida.</p>
+                        <p style="margin-bottom: 10px;">Sou grato por todos os momentos e, principalmente, por ser exatamente VOCÊ a mulher da minha vida.</p>
                         
-                        <p style="text-align: right; font-weight: bold; margin-top: 15px;">Eu te amo,<br>Seu Rubens DJ.</p>
+                        <p style="text-align: right; font-weight: bold; margin-top: 20px;">Eu te amo,<br>Seu Rubens DJ.</p>
                     </div>
                 </div>
 
@@ -271,7 +273,6 @@
 
     <script>
         let userData = { nome: "", dataInicio: null };
-        const SENHA_MESTRA = "19052000"; 
         const TEL_RUBENS = "5581989501999"; 
 
         function entrarNoSistema() {
@@ -279,8 +280,11 @@
             const dataInput = document.getElementById('inputDate').value;
             const senhaInput = document.getElementById('inputPass').value;
 
-            if(!nomeInput || !dataInput || !senhaInput) return alert("Preencha tudo!");
-            if(senhaInput !== SENHA_MESTRA) return alert("Senha incorreta!");
+            // Mantive a verificação só para garantir que ela preencha algo, mas a senha pode ser qualquer coisa.
+            if(!nomeInput || !dataInput || !senhaInput) return alert("Preencha todos os campos!");
+            
+            // AQUI ESTAVA A SENHA. REMOVIDO.
+            // O acesso é liberado para qualquer senha digitada.
 
             userData.nome = nomeInput;
             userData.dataInicio = new Date(dataInput + "T00:00:00");
@@ -308,11 +312,8 @@
             el.classList.add('active');
         }
 
-        // === LÓGICA DO QUIZ ===
         function responderQuiz(resposta, pergunta) {
-            // Mensagem dinâmica com o nome da pessoa
             const msg = `🔥 *PESQUISA OFICIAL DO AMOR*\n\n👤 Respondido por: *${userData.nome}*\n❓ Pergunta: ${pergunta}\n🗣️ Resposta: *${resposta.toUpperCase()}*`;
-            
             window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -320,7 +321,6 @@
             if(window.innerWidth > 0) { 
                 const x = Math.random() * (window.innerWidth - 100);
                 const y = Math.random() * (window.innerHeight - 100);
-                
                 btn.style.position = 'fixed';
                 btn.style.left = x + 'px';
                 btn.style.top = y + 'px';
@@ -328,7 +328,6 @@
             }
         }
 
-        // === OUTROS (CORREIO, ETC) ===
         function formatDoc(cmd, value = null) { document.execCommand(cmd, false, value); }
         function toggleEmojis() { const grid = document.getElementById('emojiGrid'); grid.style.display = grid.style.display === 'grid' ? 'none' : 'grid'; }
         function addEmoji(emoji) { document.getElementById('richEditor').focus(); document.execCommand('insertText', false, emoji); }
