@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LoveGov • Portal do Amor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff3366;
+            --primary-dark: #c40b4a;
+            --secondary: #6c5ce7;
+            --accent: #ffd700;
+            --glass-bg: rgba(255, 255, 255, 0.90);
+            --text-color: #2d3436;
+            --nav-bg: rgba(255, 255, 255, 0.98);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            height: 100vh;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* === LOGIN === */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; transition: transform 0.8s ease-in-out; overflow-y: auto;
+        }
+        .login-box { width: 100%; max-width: 320px; text-align: center; }
+        .login-input {
+            width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 12px;
+            font-size: 1rem; text-align: center; background: #f9f9f9; outline: none;
+        }
+        .login-input:focus { border-color: var(--primary); background: #fff; }
+        .label-input { display: block; text-align: left; margin-bottom: 5px; font-size: 0.8rem; color: #666; font-weight: bold; margin-left: 5px; }
+        .btn-modern {
+            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #ff6b81);
+            color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+        }
+        .credits { margin-top: 30px; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* === APP === */
+        #app-container { 
+            display: none; width: 100%; height: 100vh; overflow-y: auto; padding-bottom: 100px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .app-header {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
+        }
+        .content-section { display: none; padding: 20px; animation: slideUp 0.5s ease forwards; }
+        .content-section.active-section { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: var(--glass-bg); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+
+        /* === QUIZ === */
+        .quiz-container { text-align: center; padding: 20px 0; border-bottom: 1px dashed #ccc; margin-bottom: 20px; }
+        .quiz-container:last-child { border-bottom: none; }
+        .question-text { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .btn-group { display: flex; justify-content: center; gap: 15px; position: relative; height: 50px; }
+        .btn-yes { background: #2ecc71; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; z-index: 10; }
+        .btn-no { background: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; position: relative; transition: 0.2s; }
+
+        /* === EDITOR DE CORREIO === */
+        .editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; background: #eee; padding: 10px; border-radius: 10px; flex-wrap: wrap; align-items: center; }
+        .tool-btn { background: white; border: 1px solid #ccc; border-radius: 5px; width: 35px; height: 35px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+        .font-select { padding: 5px; border-radius: 5px; border: 1px solid #ccc; flex-grow: 1; }
+        .paper-options { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
+        .paper-color { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; }
+        .paper-color.selected { border-color: #333; transform: scale(1.1); }
+        .rich-editor { width: 100%; min-height: 150px; padding: 15px; border-radius: 10px; border: 1px solid #d4af37; background: #fffdf0; font-family: 'Poppins', sans-serif; outline: none; overflow-y: auto; margin-bottom: 15px; }
+        .emoji-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
+        .emoji-item { font-size: 1.5rem; cursor: pointer; text-align: center; }
+
+        /* === COMPONENTES GERAIS === */
+        .gift-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; perspective: 1000px; margin-top: 50px; position: relative; }
+        .gift-box { position: relative; width: 150px; height: 120px; background: var(--primary); border-radius: 0 0 10px 10px; cursor: pointer; z-index: 10; }
+        .gift-box::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
+        .gift-lid { position: absolute; width: 170px; height: 40px; background: var(--primary-dark); top: -40px; left: -10px; border-radius: 10px 10px 0 0; transform-origin: bottom; transition: transform 0.6s cubic-bezier(0.4, 2.5, 0.6, 1); z-index: 20; }
+        .gift-lid::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
+        .gift-bow { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 60px; height: 30px; }
+        .gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 30px; height: 30px; border: 5px solid var(--accent); border-radius: 50% 50% 0 50%; transform: rotate(45deg); top: 0; left: 0; }
+        .gift-bow::after { left: auto; right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
+        
+        /* Ajuste na carta para caber o texto maior */
+        .gift-letter { 
+            position: absolute; 
+            bottom: 10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 290px; 
+            height: 380px; 
+            background: #fffdf0; 
+            padding: 20px; 
+            border: 1px solid #d4af37; 
+            transition: 0.8s ease-in-out; 
+            opacity: 0; 
+            z-index: 5; 
+            font-family: 'Dancing Script', cursive; 
+            overflow-y: auto; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .box-open .gift-lid { transform: rotateX(-110deg); }
+        .box-open .gift-letter { transform: translate(-50%, -150px); opacity: 1; z-index: 15; }
+
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: var(--nav-bg); border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
+        .nav-item { color: #b2bec3; font-size: 1.3rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;}
+        .nav-item.active { color: white; background: var(--primary); transform: translateY(-15px); box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4); }
+        .contract-paper { background: #fffdf0; border: 1px solid #d4af37; padding: 20px; font-family: 'Courier Prime'; margin-bottom: 15px; position: relative; }
+        .stamp-signed { position: absolute; bottom: 10px; right: 10px; border: 4px double #27ae60; color: #27ae60; border-radius: 50%; padding: 10px; transform: rotate(-20deg) scale(0); transition: transform 0.5s; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <div style="font-family: 'Playfair Display'; font-size: 2.5rem; color: var(--primary); margin-bottom: 10px;">
+                <i class="fas fa-heart"></i> LoveGov
+            </div>
+            <p style="margin-bottom: 20px; color: #555;">Sistema de Gestão Amorosa</p>
+            <label class="label-input">Seu Nome:</label>
+            <input type="text" id="inputName" class="login-input" placeholder="Ex: Ana Gabriele">
+            
+            <label class="label-input">O dia que a gente se conheceu..</label>
+            <input type="date" id="inputDate" class="login-input">
+            
+            <label class="label-input">Senha de Acesso:</label>
+            <input type="password" id="inputPass" class="login-input" placeholder="Senha">
+            <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR PORTAL</button>
+            <div class="credits">Desenvolvido por<br><strong>Rubens Pereira Fernandes</strong></div>
+        </div>
+    </div>
+
+    <div id="app-container">
+        
+        <div class="app-header">
+            <span style="font-weight: 700; color: var(--primary-dark);">PORTAL DO AMOR</span>
+            <i class="fas fa-heart" style="color: var(--primary);"></i>
+        </div>
+
+        <section id="home" class="content-section active-section">
+            <div class="card">
+                <h2 class="title">Olá, <span class="user-name">Amor</span>!</h2>
+                <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 15px; text-align: center;">
+                    <p style="margin-bottom: 5px; color: #1565c0;">Juntos há:</p>
+                    <h1 id="timerDisplay" style="color: #0d47a1; font-size: 2.5rem; margin: 0;">0</h1>
+                    <p style="color: #1565c0;">Dias de Felicidade</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="content-section">
+            <div class="card">
+                <h2 class="title">Pesquisa Oficial 🔞</h2>
+                <p style="color: #666; margin-bottom: 30px; text-align:center;">Censo oficial obrigatório:</p>
+                
+                <div class="quiz-container">
+                    <div class="question-text">1. Vai me dar a bunda?</div>
+                    <div class="btn-group">
+                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Vai dar a bunda?')">SIM 😍</button>
+                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Vai dar a bunda?')">NÃO</button>
+                    </div>
+                </div>
+
+                <div class="quiz-container">
+                    <div class="question-text">2. Hoje tem?? 🔥</div>
+                    <div class="btn-group">
+                        <button class="btn-yes" onclick="responderQuiz('Sim', 'Hoje tem?')">SIM 😍</button>
+                        <button class="btn-no" onmouseover="fugirBotao(this)" onclick="responderQuiz('Não', 'Hoje tem?')">NÃO</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="gift" class="content-section">
+            <h2 class="title">Surpresa!</h2>
+            <div class="gift-container" id="giftContainer" onclick="toggleGift()">
+                
+                <div class="gift-letter">
+                    <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 10px;">Para <span class="user-name">...</span> ❤️</h3>
+                    
+                    <div style="font-size: 0.9rem; line-height: 1.4; text-align: justify;">
+                        <p style="margin-bottom: 8px;">Falar de você não é tão simples assim.</p>
+                        
+                        <p style="margin-bottom: 8px;">Não é fácil descrever algo que eu não consigo medir o que significa pra mim. Gostar de você é uma passagem de ida pra felicidade, estar ao seu lado é não querer mais voltar pra realidade.</p>
+                        
+                        <p style="margin-bottom: 8px;">Me perdoe pelas vezes que fui falho. Uma mulher como você só merece motivos pra ficar com esse sorriso lindo estampado no rosto. Quero te proteger, cuidar de você e te fazer feliz, assim como você me faz só de me olhar com esses olhinhos puxados.</p>
+                        
+                        <p style="margin-bottom: 8px;">Sou grato por todos os momentos e, principalmente, por ser exatamente VOCÊ a mulher da minha vida.</p>
+                        
+                        <p style="text-align: right; font-weight: bold; margin-top: 15px;">Eu te amo,<br>Seu Rubens DJ.</p>
+                    </div>
+                </div>
+
+                <div class="gift-box"><div class="gift-lid"><div class="gift-bow"></div></div></div>
+            </div>
+        </section>
+
+        <section id="chat" class="content-section">
+            <div class="card">
+                <h2 class="title">Correio do Amor 💌</h2>
+                <div class="paper-options">
+                    <div class="paper-color" style="background:#fffdf0;" onclick="changePaper('#fffdf0', this)"></div>
+                    <div class="paper-color" style="background:#ffebee;" onclick="changePaper('#ffebee', this)"></div>
+                    <div class="paper-color" style="background:#e3f2fd;" onclick="changePaper('#e3f2fd', this)"></div>
+                </div>
+                <div class="editor-toolbar">
+                    <button class="tool-btn" onclick="formatDoc('bold')"><i class="fas fa-bold"></i></button>
+                    <button class="tool-btn" onclick="formatDoc('italic')"><i class="fas fa-italic"></i></button>
+                    <button class="tool-btn" onclick="toggleEmojis()">😀</button>
+                </div>
+                <div class="emoji-grid" id="emojiGrid">
+                    <div class="emoji-item" onclick="addEmoji('❤️')">❤️</div>
+                    <div class="emoji-item" onclick="addEmoji('😈')">😈</div>
+                    <div class="emoji-item" onclick="addEmoji('🔥')">🔥</div>
+                </div>
+                <div id="richEditor" class="rich-editor" contenteditable="true">Escreva aqui...</div>
+                <button class="btn-modern" onclick="sendWhatsapp()">ENVIAR CARTA</button>
+            </div>
+        </section>
+
+        <section id="docs" class="content-section">
+            <div class="card">
+                <h2 class="title">Contrato Oficial</h2>
+                <div class="contract-paper">
+                    <p>CONTRATANTE: Rubens Pereira Fernandes</p>
+                    <p>CONTRATADA: <span class="user-name">___</span></p>
+                    <div id="signatureArea" style="margin-top:20px; text-align:center; color:#888;">Assinatura Pendente</div>
+                    <div id="stamp" class="stamp-signed">REGISTRADO</div>
+                </div>
+                <button class="btn-modern" onclick="signContract()">ASSINAR</button>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
+            <a href="#" class="nav-item" onclick="nav('quiz', this)"><i class="fas fa-question-circle"></i></a>
+            <a href="#" class="nav-item" onclick="nav('gift', this)"><i class="fas fa-gift"></i></a>
+            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-envelope-open-text"></i></a>
+            <a href="#" class="nav-item" onclick="nav('docs', this)"><i class="fas fa-file-contract"></i></a>
+        </nav>
+
+    </div>
+
+    <script>
+        let userData = { nome: "", dataInicio: null };
+        const SENHA_MESTRA = "19052000"; 
+        const TEL_RUBENS = "5581989501999"; 
+
+        function entrarNoSistema() {
+            const nomeInput = document.getElementById('inputName').value;
+            const dataInput = document.getElementById('inputDate').value;
+            const senhaInput = document.getElementById('inputPass').value;
+
+            if(!nomeInput || !dataInput || !senhaInput) return alert("Preencha tudo!");
+            if(senhaInput !== SENHA_MESTRA) return alert("Senha incorreta!");
+
+            userData.nome = nomeInput;
+            userData.dataInicio = new Date(dataInput + "T00:00:00");
+            atualizarInterface();
+            document.getElementById('login-screen').style.transform = "translateY(-100%)";
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = "none";
+                document.getElementById('app-container').style.display = "block";
+                document.getElementById('bgMusic').play().catch(()=>{});
+            }, 500);
+        }
+
+        function atualizarInterface() {
+            document.querySelectorAll('.user-name').forEach(el => el.innerText = userData.nome);
+            setInterval(() => {
+                const dias = Math.floor((new Date() - userData.dataInicio) / (1000 * 60 * 60 * 24));
+                document.getElementById('timerDisplay').innerText = dias;
+            }, 1000);
+        }
+
+        function nav(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
+        }
+
+        // === LÓGICA DO QUIZ ===
+        function responderQuiz(resposta, pergunta) {
+            // Mensagem dinâmica com o nome da pessoa
+            const msg = `🔥 *PESQUISA OFICIAL DO AMOR*\n\n👤 Respondido por: *${userData.nome}*\n❓ Pergunta: ${pergunta}\n🗣️ Resposta: *${resposta.toUpperCase()}*`;
+            
+            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function fugirBotao(btn) {
+            if(window.innerWidth > 0) { 
+                const x = Math.random() * (window.innerWidth - 100);
+                const y = Math.random() * (window.innerHeight - 100);
+                
+                btn.style.position = 'fixed';
+                btn.style.left = x + 'px';
+                btn.style.top = y + 'px';
+                btn.style.zIndex = '1000';
+            }
+        }
+
+        // === OUTROS (CORREIO, ETC) ===
+        function formatDoc(cmd, value = null) { document.execCommand(cmd, false, value); }
+        function toggleEmojis() { const grid = document.getElementById('emojiGrid'); grid.style.display = grid.style.display === 'grid' ? 'none' : 'grid'; }
+        function addEmoji(emoji) { document.getElementById('richEditor').focus(); document.execCommand('insertText', false, emoji); }
+        function changePaper(color, el) { document.getElementById('richEditor').style.background = color; }
+        
+        function sendWhatsapp() {
+            const text = document.getElementById('richEditor').innerText;
+            const msg = `💌 *Carta:*\n\n${text}\n\nAss: ${userData.nome}`;
+            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        let isGiftOpen = false;
+        function toggleGift() {
+            const c = document.getElementById('giftContainer');
+            isGiftOpen ? c.classList.remove('box-open') : c.classList.add('box-open');
+            if(!isGiftOpen) confetti();
+            isGiftOpen = !isGiftOpen;
+        }
+
+        function signContract() {
+            if(confirm("Confirma?")) {
+                document.getElementById('signatureArea').innerHTML = `<h3 style='font-family:Dancing Script; color:#ff3366;'>${userData.nome} ❤️</h3>`;
+                document.getElementById('stamp').style.transform = "rotate(-20deg) scale(1)";
+                confetti();
+            }
+        }
+    </script>
+</body>
+</html>
