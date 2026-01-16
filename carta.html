@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rubens Projetos ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <style>
         :root {
@@ -16,7 +17,8 @@
             --primary-dark: #c40b4a;
             --secondary: #6c5ce7;
             --accent: #ffd700;
-            --glass-bg: rgba(255, 255, 255, 0.95);
+            --gold: #d4af37;
+            --paper-bg: #fffdf0;
             --text-color: #2d3436;
             --nav-bg: rgba(255, 255, 255, 0.98);
         }
@@ -57,7 +59,9 @@
             width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #ff6b81);
             color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer;
             box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+            transition: 0.3s;
         }
+        .btn-modern:active { transform: scale(0.98); }
         .credits { margin-top: 30px; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
         /* === APP === */
@@ -83,44 +87,13 @@
         .btn-yes { background: #00b894; color: white; border: none; padding: 10px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; z-index: 10; font-size: 1rem; }
         .btn-no { background: #d63031; color: white; border: none; padding: 10px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; position: relative; transition: 0.2s; font-size: 1rem; }
 
-        /* Estilos do formulário escondido */
         #hiddenQuestions {
-            display: none;
-            text-align: left;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
-            animation: slideUp 0.5s ease forwards;
+            display: none; text-align: left; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; animation: slideUp 0.5s ease forwards;
         }
-        .sub-question {
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #2d3436;
-        }
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .check-label {
-            background: #f1f2f6;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
-        .check-label:hover { background: #dfe6e9; }
-        .check-input:checked + .check-label {
-            background: #ff7675;
-            color: white;
-            border-color: #ff3366;
-        }
+        .sub-question { margin-bottom: 15px; font-weight: 600; color: #2d3436; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .check-label { background: #f1f2f6; padding: 10px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s; border: 1px solid transparent; }
+        .check-input:checked + .check-label { background: #ff7675; color: white; border-color: #ff3366; }
         .check-input { display: none; } 
 
         /* === EDITOR === */
@@ -132,7 +105,7 @@
         .emoji-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
         .emoji-item { font-size: 1.5rem; cursor: pointer; text-align: center; }
 
-        /* === PRESENTE === */
+        /* === PRESENTE E CARTA 3D === */
         .gift-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; perspective: 1000px; margin-top: 50px; position: relative; }
         .gift-box { position: relative; width: 150px; height: 120px; background: var(--primary); border-radius: 0 0 10px 10px; cursor: pointer; z-index: 10; transition: transform 0.5s;}
         .gift-box::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
@@ -142,19 +115,60 @@
         .gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 30px; height: 30px; border: 5px solid var(--accent); border-radius: 50% 50% 0 50%; transform: rotate(45deg); top: 0; left: 0; }
         .gift-bow::after { left: auto; right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
         
-        .gift-letter { 
+        /* ESTILO NOVO DA CARTA 3D */
+        .gift-letter-popup { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
-            width: 85%; max-width: 400px; height: auto; max-height: 80vh; 
-            background: #fffdf0; padding: 25px; border: 2px solid #d4af37; border-radius: 10px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; z-index: 2000; 
-            font-family: 'Dancing Script', cursive; overflow-y: auto; 
-            box-shadow: 0 0 0 100vw rgba(0,0,0,0.5);
+            width: 90%; max-width: 420px; height: auto; max-height: 85vh; 
+            z-index: 2000; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; 
+            perspective: 1000px;
+        }
+
+        /* O papel da carta em si */
+        .paper-content {
+            background: var(--paper-bg);
+            /* Textura de papel antigo sutil */
+            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            padding: 30px 25px; 
+            border-radius: 5px;
+            /* Sombra 3D profunda e borda interna dourada */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 0 8px #f0e6c9 inset, 0 0 0 9px var(--gold) inset;
+            font-family: 'Dancing Script', cursive; 
+            overflow-y: auto; 
+            max-height: 85vh;
+            position: relative;
+            /* Efeito de borda queimada sutil */
+            border: 1px solid #d3c6a3;
         }
         
         .box-open .gift-lid { transform: rotateX(-110deg); }
-        .box-open .gift-letter { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        .box-open .gift-letter-popup { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 
-        .close-letter { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; color: #d4af37; cursor: pointer; font-family: sans-serif; font-weight: bold; }
+        /* Ornamentos */
+        .letter-header-icon { text-align: center; font-size: 2rem; color: var(--gold); margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+        .letter-divider { text-align: center; margin: 15px 0; color: var(--gold); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .letter-divider::before, .letter-divider::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+        
+        .close-letter { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--text-color); cursor: pointer; z-index: 10; transition: 0.3s; }
+        .close-letter:hover { color: var(--primary); transform: scale(1.1); }
+
+        /* Botão de Download */
+        .download-btn {
+            display: block;
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            background: linear-gradient(45deg, var(--gold), #b88a00);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
 
         .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: var(--nav-bg); border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
         .nav-item { color: #b2bec3; font-size: 1.3rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;}
@@ -171,13 +185,10 @@
                 <i class="fas fa-heart"></i> Rubens Projetos
             </div>
             <p style="margin-bottom: 20px; color: #555;">Área Exclusiva</p>
-            
             <label class="label-input">Seu Nome:</label>
             <input type="text" id="inputName" class="login-input" placeholder="Nome...">
-            
             <label class="label-input">Data do nosso início:</label>
             <input type="date" id="inputDate" class="login-input">
-            
             <label class="label-input">Senha de Acesso:</label>
             <input type="password" id="inputPass" class="login-input" placeholder="Qualquer senha serve ❤️">
             <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR</button>
@@ -186,7 +197,6 @@
     </div>
 
     <div id="app-container">
-        
         <div class="app-header">
             <span style="font-weight: 700; color: var(--primary-dark);">RUBENS PROJETOS</span>
             <i class="fas fa-heart" style="color: var(--primary);"></i>
@@ -212,9 +222,7 @@
                         <button class="btn-yes" onclick="revelarFormulario()">SIM 😍</button>
                         <button class="btn-no" onmouseover="fugirBotao(this)">NÃO</button>
                     </div>
-
                     <div id="hiddenQuestions">
-                        
                         <p class="sub-question">O que você sente? (Escolha quantos quiser)</p>
                         <div class="options-grid">
                             <label><input type="checkbox" class="check-input" value="Muito Amor"> <span class="check-label">Muito Amor ❤️</span></label>
@@ -224,7 +232,6 @@
                             <label><input type="checkbox" class="check-input" value="Saudade"> <span class="check-label">Saudade 🥺</span></label>
                             <label><input type="checkbox" class="check-input" value="Tudo isso"> <span class="check-label">Tudo isso ✨</span></label>
                         </div>
-
                         <p class="sub-question">O que você achou de mim?</p>
                         <div class="options-grid">
                             <label><input type="checkbox" class="check-input" value="O Homem da Minha Vida"> <span class="check-label">Homem da Vida 💍</span></label>
@@ -234,7 +241,6 @@
                             <label><input type="checkbox" class="check-input" value="Irresistível"> <span class="check-label">Irresistível 🤤</span></label>
                             <label><input type="checkbox" class="check-input" value="Protetor"> <span class="check-label">Protetor ⚓</span></label>
                         </div>
-
                         <button class="btn-modern" style="background: #00b894; margin-top: 15px;" onclick="enviarRespostasDetalhadas()">ENVIAR RESPOSTAS ✅</button>
                     </div>
                 </div>
@@ -245,23 +251,31 @@
             <h2 class="title">Surpresa!</h2>
             <div class="gift-container" id="giftContainer" onclick="toggleGift()">
                 
-                <div class="gift-letter" onclick="event.stopPropagation()">
+                <div class="gift-letter-popup" onclick="event.stopPropagation()">
                     <div class="close-letter" onclick="toggleGift()">×</div>
-                    <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 15px; padding-bottom: 10px;">Para minha web filha, <span class="user-name">...</span> ❤️</h3>
                     
-                    <div style="font-size: 1.0rem; line-height: 1.5; text-align: justify;">
-                        <p style="margin-bottom: 10px;">Meu amor, hoje não é nenhuma data especial, mas mesmo assim queria agradecer.</p>
+                    <div class="paper-content" id="printableLetter">
+                        <div class="letter-header-icon"><i class="fab fa-envira"></i></div>
                         
-                        <p style="margin-bottom: 10px;">Você é a pessoa mais maravilhosa da minha vida, é quem coloca cor nos meus dias, é quem faz meu coração bater mais forte.</p>
+                        <h3 style="text-align: center; font-family: 'Cinzel Decorative', cursive; color: var(--text-color); margin-bottom: 5px;">Para minha web filha,</h3>
+                        <h2 style="text-align: center; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary); margin-top: 0;"><span class="user-name">...</span> ❤️</h2>
                         
-                        <p style="margin-bottom: 10px;">Eu já não sei mais quem eu seria sem você, então, por favor, não vá embora, não. Muito obrigado por estar sempre ao meu lado, fazendo o possível e impossível para sempre me ver sorrindo.</p>
-                        
-                        <p style="margin-bottom: 10px;">O amor que sinto por você é o sentimento mais real que já senti. Queria te agradecer por você ter gostado de mim do jeito que sou... Por ter me aceitado com meus defeitos e por saber também elogiar minhas virtudes.</p>
-                        
-                        <p style="margin-bottom: 10px;">Obrigado pelos carinhos, pelas palavras doces e pelo respeito que tem por mim. Obrigado por compartilhar juntos alegrias e tristezas.</p>
-                        
-                        <p style="text-align: right; font-weight: bold; margin-top: 20px;">Obrigado por você existir em minha vida.<br>Eu te amo.</p>
+                        <div class="letter-divider"><i class="fas fa-heart"></i></div>
+
+                        <div style="font-size: 1.15rem; line-height: 1.6; text-align: justify; color: #4a4a4a;">
+                            <p style="margin-bottom: 15px;">Meu amor, hoje não é nenhuma data especial, mas mesmo assim queria agradecer.</p>
+                            <p style="margin-bottom: 15px;">Você é a pessoa mais maravilhosa da minha vida, é quem coloca cor nos meus dias, é quem faz meu coração bater mais forte.</p>
+                            <p style="margin-bottom: 15px;">Eu já não sei mais quem eu seria sem você, então, por favor, não vá embora, não. Muito obrigado por estar sempre ao meu lado, fazendo o possível e impossível para sempre me ver sorrindo.</p>
+                            <p style="margin-bottom: 15px;">O amor que sinto por você é o sentimento mais real que já senti. Queria te agradecer por você ter gostado de mim do jeito que sou... Por ter me aceitado com meus defeitos e por saber também elogiar minhas virtudes.</p>
+                            <p style="margin-bottom: 15px;">Obrigado pelos carinhos, pelas palavras doces e pelo respeito que tem por mim. Obrigado por compartilhar juntos alegrias e tristezas.</p>
+                            
+                            <div class="letter-divider"><i class="fas fa-feather-alt"></i></div>
+
+                            <p style="text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.3rem;">Obrigado por você existir em minha vida.<br>Eu te amo. ❤️</p>
+                        </div>
                     </div>
+
+                    <button class="download-btn" onclick="downloadLetter()"><i class="fas fa-download"></i> BAIXAR CARTA COMO IMAGEM</button>
                 </div>
 
                 <div class="gift-box"><div class="gift-lid"><div class="gift-bow"></div></div></div>
@@ -297,7 +311,6 @@
             <a href="#" class="nav-item" onclick="nav('gift', this)"><i class="fas fa-gift"></i></a>
             <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-envelope-open-text"></i></a>
         </nav>
-
     </div>
 
     <script>
@@ -337,29 +350,18 @@
             el.classList.add('active');
         }
 
-        // === NOVA LÓGICA DO QUIZ ===
         function revelarFormulario() {
             document.getElementById('hiddenQuestions').style.display = 'block';
-            confetti(); // Efeito de festa por clicar no sim
+            confetti();
         }
 
         function enviarRespostasDetalhadas() {
-            // Pega todas as opções marcadas
             let checkboxes = document.querySelectorAll('.check-input:checked');
             let escolhidas = [];
-            checkboxes.forEach((cb) => {
-                escolhidas.push(cb.value);
-            });
-
-            if (escolhidas.length === 0) {
-                alert("Selecione pelo menos uma opção! ❤️");
-                return;
-            }
-
-            // Formata a mensagem
+            checkboxes.forEach((cb) => { escolhidas.push(cb.value); });
+            if (escolhidas.length === 0) { alert("Selecione pelo menos uma opção! ❤️"); return; }
             const listaFormatada = escolhidas.join(', ');
             const msg = `❤️ *RUBENS PROJETOS - DECLARAÇÃO*\n\n👤 Minha Web Filha: *${userData.nome}*\n❤️ Ela disse que sente algo por mim!\n\n📝 *Detalhes do que ela sente e acha de mim:*\n${listaFormatada}`;
-            
             window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -396,6 +398,18 @@
                 isGiftOpen = true;
                 confetti();
             }
+        }
+
+        // FUNÇÃO PARA BAIXAR A CARTA
+        function downloadLetter() {
+            const letterElement = document.getElementById('printableLetter');
+            // Aumenta a escala para melhor qualidade na imagem
+            html2canvas(letterElement, { scale: 2, backgroundColor: null }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Carta_para_${userData.nome || 'Amor'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         }
     </script>
 </body>
