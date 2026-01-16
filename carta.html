@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rubens Projetos 🛡️</title>
+    <title>Rubens Projetos ❤️</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,8 +12,8 @@
 
     <style>
         :root {
-            --primary: #2d3436;
-            --primary-dark: #000000;
+            --primary: #ff3366;
+            --primary-dark: #c40b4a;
             --secondary: #6c5ce7;
             --accent: #ffd700;
             --glass-bg: rgba(255, 255, 255, 0.95);
@@ -25,7 +25,7 @@
         
         body {
             height: 100vh;
-            background: linear-gradient(-45deg, #74b9ff, #a29bfe, #dfe6e9);
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             color: var(--text-color);
@@ -54,9 +54,9 @@
         .login-input:focus { border-color: var(--primary); background: #fff; }
         .label-input { display: block; text-align: left; margin-bottom: 5px; font-size: 0.8rem; color: #666; font-weight: bold; margin-left: 5px; }
         .btn-modern {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #636e72);
+            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #ff6b81);
             color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
         }
         .credits { margin-top: 30px; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -117,11 +117,11 @@
         }
         .check-label:hover { background: #dfe6e9; }
         .check-input:checked + .check-label {
-            background: #a29bfe;
+            background: #ff7675;
             color: white;
-            border-color: #6c5ce7;
+            border-color: #ff3366;
         }
-        .check-input { display: none; } /* Esconde o checkbox real */
+        .check-input { display: none; } 
 
         /* === EDITOR === */
         .editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; background: #eee; padding: 10px; border-radius: 10px; flex-wrap: wrap; align-items: center; }
@@ -163,24 +163,24 @@
 </head>
 <body>
 
-    <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-creative-minds.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
 
     <div id="login-screen">
         <div class="login-box">
             <div style="font-family: 'Playfair Display'; font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2;">
-                <i class="fas fa-shield-alt"></i> Rubens Projetos
+                <i class="fas fa-heart"></i> Rubens Projetos
             </div>
-            <p style="margin-bottom: 20px; color: #555;">Área da Família</p>
+            <p style="margin-bottom: 20px; color: #555;">Área Exclusiva</p>
             
             <label class="label-input">Seu Nome:</label>
-            <input type="text" id="inputName" class="login-input" placeholder="Nome da Filha...">
+            <input type="text" id="inputName" class="login-input" placeholder="Nome...">
             
-            <label class="label-input">Data de Entrada na Família:</label>
+            <label class="label-input">Data do nosso início:</label>
             <input type="date" id="inputDate" class="login-input">
             
             <label class="label-input">Senha de Acesso:</label>
-            <input type="password" id="inputPass" class="login-input" placeholder="Qualquer senha serve 🛡️">
-            <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR PORTAL</button>
+            <input type="password" id="inputPass" class="login-input" placeholder="Qualquer senha serve ❤️">
+            <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR</button>
             <div class="credits">Desenvolvido por<br><strong>Rubens Pereira Fernandes</strong></div>
         </div>
     </div>
@@ -189,16 +189,16 @@
         
         <div class="app-header">
             <span style="font-weight: 700; color: var(--primary-dark);">RUBENS PROJETOS</span>
-            <i class="fas fa-shield-alt" style="color: var(--primary);"></i>
+            <i class="fas fa-heart" style="color: var(--primary);"></i>
         </div>
 
         <section id="home" class="content-section active-section">
             <div class="card">
-                <h2 class="title">Olá, <span class="user-name">Filha</span>!</h2>
-                <div style="background: linear-gradient(135deg, #dfe6e9, #b2bec3); padding: 20px; border-radius: 15px; text-align: center;">
-                    <p style="margin-bottom: 5px; color: #2d3436;">Na família há:</p>
+                <h2 class="title">Olá, <span class="user-name">Minha Linda</span>!</h2>
+                <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 15px; text-align: center;">
+                    <p style="margin-bottom: 5px; color: #2d3436;">Estamos juntos há:</p>
                     <h1 id="timerDisplay" style="color: #000; font-size: 2.5rem; margin: 0;">0</h1>
-                    <p style="color: #2d3436;">Dias de União</p>
+                    <p style="color: #2d3436;">Dias de Felicidade</p>
                 </div>
             </div>
         </section>
@@ -217,22 +217,22 @@
                         
                         <p class="sub-question">O que você sente? (Escolha quantos quiser)</p>
                         <div class="options-grid">
-                            <label><input type="checkbox" class="check-input" value="Amor de Filha"> <span class="check-label">Amor de Filha ❤️</span></label>
-                            <label><input type="checkbox" class="check-input" value="Gratidão"> <span class="check-label">Gratidão 🙏</span></label>
-                            <label><input type="checkbox" class="check-input" value="Admiração"> <span class="check-label">Admiração ⭐</span></label>
-                            <label><input type="checkbox" class="check-input" value="Segurança"> <span class="check-label">Segurança 🛡️</span></label>
-                            <label><input type="checkbox" class="check-input" value="Respeito"> <span class="check-label">Respeito 🤝</span></label>
-                            <label><input type="checkbox" class="check-input" value="Lealdade"> <span class="check-label">Lealdade 🔗</span></label>
+                            <label><input type="checkbox" class="check-input" value="Muito Amor"> <span class="check-label">Muito Amor ❤️</span></label>
+                            <label><input type="checkbox" class="check-input" value="Paixão"> <span class="check-label">Paixão 🔥</span></label>
+                            <label><input type="checkbox" class="check-input" value="Carinho"> <span class="check-label">Carinho 🥰</span></label>
+                            <label><input type="checkbox" class="check-input" value="Desejo"> <span class="check-label">Desejo 😈</span></label>
+                            <label><input type="checkbox" class="check-input" value="Saudade"> <span class="check-label">Saudade 🥺</span></label>
+                            <label><input type="checkbox" class="check-input" value="Tudo isso"> <span class="check-label">Tudo isso ✨</span></label>
                         </div>
 
-                        <p class="sub-question">O que achou de mim?</p>
+                        <p class="sub-question">O que você achou de mim?</p>
                         <div class="options-grid">
-                            <label><input type="checkbox" class="check-input" value="Um Pai Incrível"> <span class="check-label">Pai Incrível 🧔</span></label>
-                            <label><input type="checkbox" class="check-input" value="Protetor"> <span class="check-label">Protetor ⚔️</span></label>
-                            <label><input type="checkbox" class="check-input" value="Exemplo"> <span class="check-label">Exemplo 🏆</span></label>
-                            <label><input type="checkbox" class="check-input" value="Engraçado"> <span class="check-label">Engraçado 😂</span></label>
-                            <label><input type="checkbox" class="check-input" value="Bravo"> <span class="check-label">Bravo às vezes 😠</span></label>
-                            <label><input type="checkbox" class="check-input" value="Acolhedor"> <span class="check-label">Acolhedor 🤗</span></label>
+                            <label><input type="checkbox" class="check-input" value="O Homem da Minha Vida"> <span class="check-label">Homem da Vida 💍</span></label>
+                            <label><input type="checkbox" class="check-input" value="Gostoso"> <span class="check-label">Gostoso 😏</span></label>
+                            <label><input type="checkbox" class="check-input" value="Carinhoso"> <span class="check-label">Carinhoso 🤗</span></label>
+                            <label><input type="checkbox" class="check-input" value="Maravilhoso"> <span class="check-label">Maravilhoso ✨</span></label>
+                            <label><input type="checkbox" class="check-input" value="Irresistível"> <span class="check-label">Irresistível 🤤</span></label>
+                            <label><input type="checkbox" class="check-input" value="Protetor"> <span class="check-label">Protetor ⚓</span></label>
                         </div>
 
                         <button class="btn-modern" style="background: #00b894; margin-top: 15px;" onclick="enviarRespostasDetalhadas()">ENVIAR RESPOSTAS ✅</button>
@@ -247,20 +247,20 @@
                 
                 <div class="gift-letter" onclick="event.stopPropagation()">
                     <div class="close-letter" onclick="toggleGift()">×</div>
-                    <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 15px; padding-bottom: 10px;">Para minha menina, <span class="user-name">...</span> ❤️</h3>
+                    <h3 style="text-align: center; border-bottom: 1px solid #d4af37; margin-bottom: 15px; padding-bottom: 10px;">Para minha web filha, <span class="user-name">...</span> ❤️</h3>
                     
-                    <div style="font-size: 1.1rem; line-height: 1.6; text-align: justify;">
-                        <p style="margin-bottom: 15px;">Hoje não é nenhuma data especial, mas mesmo assim queria agradecer.</p>
+                    <div style="font-size: 1.0rem; line-height: 1.5; text-align: justify;">
+                        <p style="margin-bottom: 10px;">Meu amor, hoje não é nenhuma data especial, mas mesmo assim queria agradecer.</p>
                         
-                        <p style="margin-bottom: 15px;">Você é uma pessoa maravilhosa que coloca cor nos meus dias. Obrigado por confiar em mim e por estar sempre ao meu lado .</p>
+                        <p style="margin-bottom: 10px;">Você é a pessoa mais maravilhosa da minha vida, é quem coloca cor nos meus dias, é quem faz meu coração bater mais forte.</p>
                         
-                        <p style="margin-bottom: 15px;">Queria te agradecer por ter gostado de mim do jeito que sou, por ter me aceitado e por saber também elogiar minhas virtudes.</p>
+                        <p style="margin-bottom: 10px;">Eu já não sei mais quem eu seria sem você, então, por favor, não vá embora, não. Muito obrigado por estar sempre ao meu lado, fazendo o possível e impossível para sempre me ver sorrindo.</p>
                         
-                        <p style="margin-bottom: 15px;">Obrigado por compartilhar juntos alegrias e tristezas, por me fazer rir e por estar ao meu lado. Saiba que sempre poderá contar comigo para te proteger.</p>
+                        <p style="margin-bottom: 10px;">O amor que sinto por você é o sentimento mais real que já senti. Queria te agradecer por você ter gostado de mim do jeito que sou... Por ter me aceitado com meus defeitos e por saber também elogiar minhas virtudes.</p>
                         
-                        <p style="margin-bottom: 15px;">Obrigado por você existir em minha vida.</p>
+                        <p style="margin-bottom: 10px;">Obrigado pelos carinhos, pelas palavras doces e pelo respeito que tem por mim. Obrigado por compartilhar juntos alegrias e tristezas.</p>
                         
-                        <p style="text-align: right; font-weight: bold; margin-top: 25px;">Com carinho,<br>Seu Pai, Rubens.</p>
+                        <p style="text-align: right; font-weight: bold; margin-top: 20px;">Obrigado por você existir em minha vida.<br>Eu te amo.</p>
                     </div>
                 </div>
 
@@ -270,7 +270,7 @@
 
         <section id="chat" class="content-section">
             <div class="card">
-                <h2 class="title">Correio da Família 💌</h2>
+                <h2 class="title">Correio do Amor 💌</h2>
                 <div class="paper-options">
                     <div class="paper-color" style="background:#fffdf0;" onclick="changePaper('#fffdf0', this)"></div>
                     <div class="paper-color" style="background:#ffebee;" onclick="changePaper('#ffebee', this)"></div>
@@ -283,7 +283,7 @@
                 </div>
                 <div class="emoji-grid" id="emojiGrid">
                     <div class="emoji-item" onclick="addEmoji('❤️')">❤️</div>
-                    <div class="emoji-item" onclick="addEmoji('🛡️')">🛡️</div>
+                    <div class="emoji-item" onclick="addEmoji('😈')">😈</div>
                     <div class="emoji-item" onclick="addEmoji('🔥')">🔥</div>
                 </div>
                 <div id="richEditor" class="rich-editor" contenteditable="true">Escreva aqui...</div>
@@ -358,7 +358,7 @@
 
             // Formata a mensagem
             const listaFormatada = escolhidas.join(', ');
-            const msg = `🛡️ *RUBENS PROJETOS - RELATÓRIO*\n\n👤 Filha: *${userData.nome}*\n❤️ Ela disse que sente algo por mim!\n\n📝 *Detalhes do que ela sente e acha de mim:*\n${listaFormatada}`;
+            const msg = `❤️ *RUBENS PROJETOS - DECLARAÇÃO*\n\n👤 Minha Web Filha: *${userData.nome}*\n❤️ Ela disse que sente algo por mim!\n\n📝 *Detalhes do que ela sente e acha de mim:*\n${listaFormatada}`;
             
             window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -381,7 +381,7 @@
         
         function sendWhatsapp() {
             const text = document.getElementById('richEditor').innerText;
-            const msg = `💌 *Carta da Filha:*\n\n${text}\n\nAss: ${userData.nome}`;
+            const msg = `💌 *Carta dela:*\n\n${text}\n\nAss: ${userData.nome}`;
             window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
