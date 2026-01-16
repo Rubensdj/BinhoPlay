@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rubens Projetos ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Courier+Prime&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -13,336 +13,341 @@
 
     <style>
         :root {
-            --primary: #ff3366;
-            --primary-dark: #c40b4a;
-            --secondary: #6c5ce7;
-            --accent: #ffd700;
-            --gold: #d4af37;
-            --paper-bg: #fffdf0;
-            --text-color: #2d3436;
-            --nav-bg: rgba(255, 255, 255, 0.98);
+            --primary: #c0392b; /* Vermelho mais elegante */
+            --secondary: #ecf0f1;
+            --accent: #d4af37; /* Dourado */
+            --paper-bg: #fffbf0;
+            --text-color: #2c3e50;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         body {
             height: 100vh;
-            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--text-color);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
+            color: var(--text-color);
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* === BOTÃO DE MÚSICA === */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 6000;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
+        .music-control:hover { transform: scale(1.1); background: #fff; }
 
         /* === LOGIN === */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 20px; transition: transform 0.8s ease-in-out; overflow-y: auto;
+            padding: 20px; transition: transform 0.6s ease-in-out;
         }
         .login-box { width: 100%; max-width: 320px; text-align: center; }
         .login-input {
-            width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 12px;
-            font-size: 1rem; text-align: center; background: #f9f9f9; outline: none;
+            width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; text-align: center; background: #f8f9fa; outline: none;
         }
-        .login-input:focus { border-color: var(--primary); background: #fff; }
-        .label-input { display: block; text-align: left; margin-bottom: 5px; font-size: 0.8rem; color: #666; font-weight: bold; margin-left: 5px; }
         .btn-modern {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, var(--primary), #ff6b81);
-            color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
-            transition: 0.3s;
+            width: 100%; padding: 12px; background: var(--primary);
+            color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(192, 57, 43, 0.3);
+            transition: 0.2s;
         }
         .btn-modern:active { transform: scale(0.98); }
-        .credits { margin-top: 30px; font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* === APP === */
-        #app-container { 
-            display: none; width: 100%; height: 100vh; overflow-y: auto; padding-bottom: 100px;
-            -webkit-overflow-scrolling: touch;
-        }
+        /* === APP E NAVEGAÇÃO === */
+        #app-container { display: none; width: 100%; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
+        
         .app-header {
-            display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); position: sticky; top: 0; z-index: 100;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .content-section { display: none; padding: 20px; animation: slideUp 0.5s ease forwards; }
+
+        .content-section { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
         .content-section.active-section { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+
+        /* === QUIZ ATUALIZADO === */
+        .quiz-container { text-align: center; }
+        .question-title { font-size: 1.3rem; margin-bottom: 20px; color: var(--primary); font-weight: 700; }
         
-        .card { background: var(--glass-bg); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
-
-        /* === QUIZ === */
-        .quiz-container { text-align: center; padding: 20px 0; border-bottom: none; margin-bottom: 20px; }
-        .question-text { font-size: 1.3rem; font-weight: bold; margin-bottom: 20px; color: #333; }
-        .btn-group { display: flex; justify-content: center; gap: 20px; position: relative; height: 60px; margin-bottom: 20px; }
-        .btn-yes { background: #00b894; color: white; border: none; padding: 10px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; z-index: 10; font-size: 1rem; }
-        .btn-no { background: #d63031; color: white; border: none; padding: 10px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; position: relative; transition: 0.2s; font-size: 1rem; }
-
-        #hiddenQuestions {
-            display: none; text-align: left; margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; animation: slideUp 0.5s ease forwards;
-        }
-        .sub-question { margin-bottom: 15px; font-weight: 600; color: #2d3436; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .check-label { background: #f1f2f6; padding: 10px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s; border: 1px solid transparent; }
-        .check-input:checked + .check-label { background: #ff7675; color: white; border-color: #ff3366; }
-        .check-input { display: none; } 
-
-        /* === EDITOR === */
-        .editor-toolbar { display: flex; gap: 5px; margin-bottom: 10px; background: #eee; padding: 10px; border-radius: 10px; flex-wrap: wrap; align-items: center; }
-        .tool-btn { background: white; border: 1px solid #ccc; border-radius: 5px; width: 35px; height: 35px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .paper-options { display: flex; gap: 10px; margin-bottom: 10px; justify-content: center; }
-        .paper-color { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; }
-        .rich-editor { width: 100%; min-height: 150px; padding: 15px; border-radius: 10px; border: 1px solid #d4af37; background: #fffdf0; font-family: 'Poppins', sans-serif; outline: none; overflow-y: auto; margin-bottom: 15px; }
-        .emoji-grid { display: none; grid-template-columns: repeat(6, 1fr); gap: 5px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #ddd; }
-        .emoji-item { font-size: 1.5rem; cursor: pointer; text-align: center; }
-
-        /* === PRESENTE E CARTA 3D === */
-        .gift-container { display: flex; justify-content: center; align-items: flex-end; height: 300px; perspective: 1000px; margin-top: 50px; position: relative; }
-        .gift-box { position: relative; width: 150px; height: 120px; background: var(--primary); border-radius: 0 0 10px 10px; cursor: pointer; z-index: 10; transition: transform 0.5s;}
-        .gift-box::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
-        .gift-lid { position: absolute; width: 170px; height: 40px; background: var(--primary-dark); top: -40px; left: -10px; border-radius: 10px 10px 0 0; transform-origin: bottom; transition: transform 0.6s cubic-bezier(0.4, 2.5, 0.6, 1); z-index: 20; }
-        .gift-lid::before { content: ''; position: absolute; width: 30px; height: 100%; background: var(--accent); left: 50%; transform: translateX(-50%); }
-        .gift-bow { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 60px; height: 30px; }
-        .gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 30px; height: 30px; border: 5px solid var(--accent); border-radius: 50% 50% 0 50%; transform: rotate(45deg); top: 0; left: 0; }
-        .gift-bow::after { left: auto; right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
-        
-        /* ESTILO NOVO DA CARTA 3D */
-        .gift-letter-popup { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
-            width: 90%; max-width: 420px; height: auto; max-height: 85vh; 
-            z-index: 2000; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); opacity: 0; 
-            perspective: 1000px;
-        }
-
-        /* O papel da carta em si */
-        .paper-content {
-            background: var(--paper-bg);
-            /* Textura de papel antigo sutil */
-            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            padding: 30px 25px; 
-            border-radius: 5px;
-            /* Sombra 3D profunda e borda interna dourada */
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 0 8px #f0e6c9 inset, 0 0 0 9px var(--gold) inset;
-            font-family: 'Dancing Script', cursive; 
-            overflow-y: auto; 
-            max-height: 85vh;
-            position: relative;
-            /* Efeito de borda queimada sutil */
-            border: 1px solid #d3c6a3;
-        }
-        
-        .box-open .gift-lid { transform: rotateX(-110deg); }
-        .box-open .gift-letter-popup { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-
-        /* Ornamentos */
-        .letter-header-icon { text-align: center; font-size: 2rem; color: var(--gold); margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
-        .letter-divider { text-align: center; margin: 15px 0; color: var(--gold); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .letter-divider::before, .letter-divider::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
-        
-        .close-letter { position: absolute; top: 15px; right: 20px; font-size: 1.8rem; color: var(--text-color); cursor: pointer; z-index: 10; transition: 0.3s; }
-        .close-letter:hover { color: var(--primary); transform: scale(1.1); }
-
-        /* Botão de Download */
-        .download-btn {
+        .radio-option {
             display: block;
-            width: 100%;
-            margin-top: 25px;
-            padding: 12px;
-            background: linear-gradient(45deg, var(--gold), #b88a00);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
+            margin-bottom: 12px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-            text-align: center;
-            text-decoration: none;
-            font-size: 0.9rem;
+            position: relative;
+        }
+        .radio-option input { display: none; }
+        .radio-box {
+            display: block;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+            color: #555;
+        }
+        .radio-option input:checked + .radio-box {
+            border-color: var(--primary);
+            background: #fff0f3;
+            color: var(--primary);
+            transform: scale(1.02);
+        }
+        #customInputArea { display: none; margin-top: 15px; }
+        .custom-input {
+            width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 8px;
+            font-family: 'Poppins', sans-serif; resize: vertical; min-height: 80px;
         }
 
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 70px; background: var(--nav-bg); border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
-        .nav-item { color: #b2bec3; font-size: 1.3rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; text-decoration: none;}
-        .nav-item.active { color: white; background: var(--primary); transform: translateY(-15px); box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4); }
+        /* === CARTA DESIGNER PRO === */
+        .gift-container { height: 250px; display: flex; align-items: flex-end; justify-content: center; margin-top: 40px; }
+        .gift-box { width: 140px; height: 110px; background: var(--primary); position: relative; cursor: pointer; border-radius: 0 0 10px 10px; }
+        .gift-lid { width: 160px; height: 35px; background: #a93226; position: absolute; top: -35px; left: -10px; border-radius: 5px 5px 0 0; transition: 0.5s; transform-origin: top; }
+        
+        /* Modal da Carta */
+        .letter-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 2000;
+            display: none; align-items: center; justify-content: center;
+            padding: 15px;
+        }
+        .letter-modal.show { display: flex; animation: zoomIn 0.4s ease; }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* O PAPEL DA CARTA (IMPORTANTE PARA O DOWNLOAD) */
+        .paper-final {
+            background: var(--paper-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            /* Borda dupla elegante */
+            border: 5px double var(--accent); 
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        .letter-header { text-align: center; border-bottom: 2px solid var(--accent); padding-bottom: 15px; margin-bottom: 20px; }
+        .letter-title { font-family: 'Cinzel', serif; color: var(--primary); font-size: 1.5rem; letter-spacing: 2px; }
+        .letter-to { font-family: 'Dancing Script', cursive; font-size: 1.8rem; color: #555; margin-top: 5px; }
+        
+        .letter-body {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #333;
+            text-align: justify;
+        }
+
+        .letter-footer {
+            margin-top: 30px;
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        /* Botões de Ação da Carta */
+        .letter-actions {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 2001; width: 90%; max-width: 400px;
+        }
+        .action-btn { flex: 1; padding: 12px; border-radius: 30px; border: none; font-weight: bold; cursor: pointer; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .btn-download { background: #27ae60; }
+        .btn-close { background: #c0392b; }
+
+        /* === NAV === */
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 65px; background: white; border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-item { color: #bdc3c7; font-size: 1.4rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .nav-item.active { color: white; background: var(--primary); transform: translateY(-10px); box-shadow: 0 5px 15px rgba(192, 57, 43, 0.4); }
+
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop><source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg"></audio>
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-control" onclick="toggleMusic()">
+        <i class="fas fa-play" id="musicIcon"></i>
+    </button>
 
     <div id="login-screen">
         <div class="login-box">
-            <div style="font-family: 'Playfair Display'; font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; line-height: 1.2;">
-                <i class="fas fa-heart"></i> Rubens Projetos
-            </div>
-            <p style="margin-bottom: 20px; color: #555;">Área Exclusiva</p>
-            <label class="label-input">Seu Nome:</label>
-            <input type="text" id="inputName" class="login-input" placeholder="Nome...">
-            <label class="label-input">Data do nosso início:</label>
+            <h1 style="color: var(--primary); font-family: 'Cinzel', serif; margin-bottom: 5px;">Rubens Projetos</h1>
+            <p style="color: #777; margin-bottom: 25px;">Área Exclusiva</p>
+            <input type="text" id="inputName" class="login-input" placeholder="Seu Nome">
             <input type="date" id="inputDate" class="login-input">
-            <label class="label-input">Senha de Acesso:</label>
-            <input type="password" id="inputPass" class="login-input" placeholder="Qualquer senha serve ❤️">
-            <button class="btn-modern" onclick="entrarNoSistema()">ACESSAR</button>
-            <div class="credits">Desenvolvido por<br><strong>Rubens Pereira Fernandes</strong></div>
+            <input type="password" id="inputPass" class="login-input" placeholder="Senha">
+            <button class="btn-modern" onclick="entrar()">ENTRAR</button>
         </div>
     </div>
 
     <div id="app-container">
+        
         <div class="app-header">
-            <span style="font-weight: 700; color: var(--primary-dark);">RUBENS PROJETOS</span>
+            <span style="font-weight: 700; color: #333;">RUBENS PROJETOS</span>
             <i class="fas fa-heart" style="color: var(--primary);"></i>
         </div>
 
         <section id="home" class="content-section active-section">
             <div class="card">
-                <h2 class="title">Olá, <span class="user-name">Minha Linda</span>!</h2>
-                <div style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 15px; text-align: center;">
-                    <p style="margin-bottom: 5px; color: #2d3436;">Estamos juntos há:</p>
-                    <h1 id="timerDisplay" style="color: #000; font-size: 2.5rem; margin: 0;">0</h1>
-                    <p style="color: #2d3436;">Dias de Felicidade</p>
+                <h2 style="text-align: center; color: var(--primary); font-family: 'Dancing Script', cursive; font-size: 2rem;">Bem-vinda, <span class="user-name">...</span></h2>
+                <div style="background: #fdf2f2; padding: 20px; border-radius: 10px; text-align: center; margin-top: 15px; border: 1px solid #fad4d4;">
+                    <p style="color: #555;">Contando cada segundo:</p>
+                    <h1 id="timerDisplay" style="color: var(--primary); font-size: 2.5rem; margin: 5px 0;">0</h1>
+                    <p style="color: #555;">Dias Especiais</p>
                 </div>
             </div>
         </section>
 
         <section id="quiz" class="content-section">
             <div class="card">
-                <h2 class="title">Confirmação ❤️</h2>
-                <div class="quiz-container">
-                    <div class="question-text">Você sente algo por mim?</div>
-                    <div class="btn-group">
-                        <button class="btn-yes" onclick="revelarFormulario()">SIM 😍</button>
-                        <button class="btn-no" onmouseover="fugirBotao(this)">NÃO</button>
-                    </div>
-                    <div id="hiddenQuestions">
-                        <p class="sub-question">O que você sente? (Escolha quantos quiser)</p>
-                        <div class="options-grid">
-                            <label><input type="checkbox" class="check-input" value="Muito Amor"> <span class="check-label">Muito Amor ❤️</span></label>
-                            <label><input type="checkbox" class="check-input" value="Paixão"> <span class="check-label">Paixão 🔥</span></label>
-                            <label><input type="checkbox" class="check-input" value="Carinho"> <span class="check-label">Carinho 🥰</span></label>
-                            <label><input type="checkbox" class="check-input" value="Desejo"> <span class="check-label">Desejo 😈</span></label>
-                            <label><input type="checkbox" class="check-input" value="Saudade"> <span class="check-label">Saudade 🥺</span></label>
-                            <label><input type="checkbox" class="check-input" value="Tudo isso"> <span class="check-label">Tudo isso ✨</span></label>
-                        </div>
-                        <p class="sub-question">O que você achou de mim?</p>
-                        <div class="options-grid">
-                            <label><input type="checkbox" class="check-input" value="O Homem da Minha Vida"> <span class="check-label">Homem da Vida 💍</span></label>
-                            <label><input type="checkbox" class="check-input" value="Gostoso"> <span class="check-label">Gostoso 😏</span></label>
-                            <label><input type="checkbox" class="check-input" value="Carinhoso"> <span class="check-label">Carinhoso 🤗</span></label>
-                            <label><input type="checkbox" class="check-input" value="Maravilhoso"> <span class="check-label">Maravilhoso ✨</span></label>
-                            <label><input type="checkbox" class="check-input" value="Irresistível"> <span class="check-label">Irresistível 🤤</span></label>
-                            <label><input type="checkbox" class="check-input" value="Protetor"> <span class="check-label">Protetor ⚓</span></label>
-                        </div>
-                        <button class="btn-modern" style="background: #00b894; margin-top: 15px;" onclick="enviarRespostasDetalhadas()">ENVIAR RESPOSTAS ✅</button>
-                    </div>
+                <h2 class="question-title">O que eu sou pra você?</h2>
+                <p style="color: #666; margin-bottom: 20px; font-size: 0.9rem;">Selecione a opção que melhor descreve seu sentimento real:</p>
+
+                <div style="text-align: left;">
+                    <label class="radio-option">
+                        <input type="radio" name="role" value="Amigo" onclick="checkRole(this)">
+                        <span class="radio-box">💙 Como um Amigo</span>
+                    </label>
+                    
+                    <label class="radio-option">
+                        <input type="radio" name="role" value="Irmão" onclick="checkRole(this)">
+                        <span class="radio-box">🤝 Como um Irmão</span>
+                    </label>
+
+                    <label class="radio-option">
+                        <input type="radio" name="role" value="Pai" onclick="checkRole(this)">
+                        <span class="radio-box">🛡️ Como um Pai</span>
+                    </label>
+
+                    <label class="radio-option">
+                        <input type="radio" name="role" value="Outros" onclick="checkRole(this)">
+                        <span class="radio-box">✨ Outros (Descreva...)</span>
+                    </label>
                 </div>
+
+                <div id="customInputArea">
+                    <textarea id="customText" class="custom-input" placeholder="Escreva aqui o que eu significo pra você..."></textarea>
+                </div>
+
+                <button class="btn-modern" style="margin-top: 20px;" onclick="enviarQuiz()">ENVIAR RESPOSTA</button>
             </div>
         </section>
 
         <section id="gift" class="content-section">
-            <h2 class="title">Surpresa!</h2>
-            <div class="gift-container" id="giftContainer" onclick="toggleGift()">
+            <div class="card" style="text-align: center;">
+                <h2 style="font-family: 'Dancing Script'; font-size: 2rem; color: var(--primary);">Uma Carta para Você</h2>
+                <p style="color: #777;">Toque na caixa para abrir</p>
                 
-                <div class="gift-letter-popup" onclick="event.stopPropagation()">
-                    <div class="close-letter" onclick="toggleGift()">×</div>
-                    
-                    <div class="paper-content" id="printableLetter">
-                        <div class="letter-header-icon"><i class="fab fa-envira"></i></div>
-                        
-                        <h3 style="text-align: center; font-family: 'Cinzel Decorative', cursive; color: var(--text-color); margin-bottom: 5px;">Para minha web filha,</h3>
-                        <h2 style="text-align: center; font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary); margin-top: 0;"><span class="user-name">...</span> ❤️</h2>
-                        
-                        <div class="letter-divider"><i class="fas fa-heart"></i></div>
-
-                        <div style="font-size: 1.15rem; line-height: 1.6; text-align: justify; color: #4a4a4a;">
-                            <p style="margin-bottom: 15px;">Meu amor, hoje não é nenhuma data especial, mas mesmo assim queria agradecer.</p>
-                            <p style="margin-bottom: 15px;">Você é a pessoa mais maravilhosa da minha vida, é quem coloca cor nos meus dias, é quem faz meu coração bater mais forte.</p>
-                            <p style="margin-bottom: 15px;">Eu já não sei mais quem eu seria sem você, então, por favor, não vá embora, não. Muito obrigado por estar sempre ao meu lado, fazendo o possível e impossível para sempre me ver sorrindo.</p>
-                            <p style="margin-bottom: 15px;">O amor que sinto por você é o sentimento mais real que já senti. Queria te agradecer por você ter gostado de mim do jeito que sou... Por ter me aceitado com meus defeitos e por saber também elogiar minhas virtudes.</p>
-                            <p style="margin-bottom: 15px;">Obrigado pelos carinhos, pelas palavras doces e pelo respeito que tem por mim. Obrigado por compartilhar juntos alegrias e tristezas.</p>
-                            
-                            <div class="letter-divider"><i class="fas fa-feather-alt"></i></div>
-
-                            <p style="text-align: center; font-weight: bold; margin-top: 20px; font-size: 1.3rem;">Obrigado por você existir em minha vida.<br>Eu te amo. ❤️</p>
-                        </div>
+                <div class="gift-container">
+                    <div class="gift-box" onclick="abrirCarta()">
+                        <div class="gift-lid"></div>
+                        <div class="gift-bow"></div>
                     </div>
-
-                    <button class="download-btn" onclick="downloadLetter()"><i class="fas fa-download"></i> BAIXAR CARTA COMO IMAGEM</button>
                 </div>
-
-                <div class="gift-box"><div class="gift-lid"><div class="gift-bow"></div></div></div>
-            </div>
-        </section>
-
-        <section id="chat" class="content-section">
-            <div class="card">
-                <h2 class="title">Correio do Amor 💌</h2>
-                <div class="paper-options">
-                    <div class="paper-color" style="background:#fffdf0;" onclick="changePaper('#fffdf0', this)"></div>
-                    <div class="paper-color" style="background:#ffebee;" onclick="changePaper('#ffebee', this)"></div>
-                    <div class="paper-color" style="background:#e3f2fd;" onclick="changePaper('#e3f2fd', this)"></div>
-                </div>
-                <div class="editor-toolbar">
-                    <button class="tool-btn" onclick="formatDoc('bold')"><i class="fas fa-bold"></i></button>
-                    <button class="tool-btn" onclick="formatDoc('italic')"><i class="fas fa-italic"></i></button>
-                    <button class="tool-btn" onclick="toggleEmojis()">😀</button>
-                </div>
-                <div class="emoji-grid" id="emojiGrid">
-                    <div class="emoji-item" onclick="addEmoji('❤️')">❤️</div>
-                    <div class="emoji-item" onclick="addEmoji('😈')">😈</div>
-                    <div class="emoji-item" onclick="addEmoji('🔥')">🔥</div>
-                </div>
-                <div id="richEditor" class="rich-editor" contenteditable="true">Escreva aqui...</div>
-                <button class="btn-modern" onclick="sendWhatsapp()">ENVIAR MENSAGEM</button>
             </div>
         </section>
 
         <nav class="bottom-nav">
             <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
             <a href="#" class="nav-item" onclick="nav('quiz', this)"><i class="fas fa-question-circle"></i></a>
-            <a href="#" class="nav-item" onclick="nav('gift', this)"><i class="fas fa-gift"></i></a>
-            <a href="#" class="nav-item" onclick="nav('chat', this)"><i class="fas fa-envelope-open-text"></i></a>
+            <a href="#" class="nav-item" onclick="nav('gift', this)"><i class="fas fa-envelope"></i></a>
         </nav>
+
+    </div>
+
+    <div id="letterModal" class="letter-modal">
+        <div class="paper-final" id="printableArea">
+            <div class="letter-header">
+                <div class="letter-title">Carta Especial</div>
+                <div class="letter-to">Para: <span class="user-name">...</span></div>
+            </div>
+
+            <div class="letter-body">
+                <p>Meu amor, hoje não é nenhuma data especial, mas mesmo assim queria agradecer, porque você é a pessoa mais maravilhosa da minha vida, é quem coloca cor nos meus dias, é quem faz meu coração bater mais forte.</p>
+                <br>
+                <p>Eu já não sei mais quem eu seria sem você, então, por favor, não vá embora, não. Muito obrigado por estar sempre ao meu lado, fazendo o possível e impossível para sempre me ver sorrindo.</p>
+                <br>
+                <p>O amor que sinto por você é o sentimento mais real que já senti, talvez só não seja maior do que a gratidão que sinto por ter você por perto.</p>
+                <br>
+                <p>Queria te agradecer por você ter gostado de mim do jeito que sou... Por ter me aceitado com meus defeitos e por saber também elogiar minhas virtudes.</p>
+            </div>
+
+            <div class="letter-footer">
+                <p>Com amor,<br>Rubens.</p>
+            </div>
+        </div>
+
+        <div class="letter-actions">
+            <button class="action-btn btn-close" onclick="fecharCarta()">FECHAR</button>
+            <button class="action-btn btn-download" onclick="baixarCarta()">BAIXAR</button>
+        </div>
     </div>
 
     <script>
-        let userData = { nome: "", dataInicio: null };
+        let userData = { nome: "" };
         const TEL_RUBENS = "5581989501999"; 
+        const audio = document.getElementById('bgMusic');
 
-        function entrarNoSistema() {
-            const nomeInput = document.getElementById('inputName').value;
-            const dataInput = document.getElementById('inputDate').value;
-            const senhaInput = document.getElementById('inputPass').value;
+        // MÚSICA
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (audio.paused) {
+                audio.play();
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        }
 
-            if(!nomeInput || !dataInput || !senhaInput) return alert("Preencha todos os campos!");
+        // LOGIN
+        function entrar() {
+            const nome = document.getElementById('inputName').value;
+            if(!nome) return alert("Por favor, digite seu nome.");
             
-            userData.nome = nomeInput;
-            userData.dataInicio = new Date(dataInput + "T00:00:00");
-            atualizarInterface();
+            userData.nome = nome;
+            document.querySelectorAll('.user-name').forEach(el => el.innerText = nome);
+            
             document.getElementById('login-screen').style.transform = "translateY(-100%)";
             setTimeout(() => {
-                document.getElementById('login-screen').style.display = "none";
-                document.getElementById('app-container').style.display = "block";
-                document.getElementById('bgMusic').play().catch(()=>{});
-            }, 500);
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                // Tenta iniciar musica (pode ser bloqueado pelo navegador até interação)
+                audio.play().catch(()=>{});
+                document.getElementById('musicIcon').classList.remove('fa-play');
+                document.getElementById('musicIcon').classList.add('fa-pause');
+            }, 600);
         }
 
-        function atualizarInterface() {
-            document.querySelectorAll('.user-name').forEach(el => el.innerText = userData.nome);
-            setInterval(() => {
-                const dias = Math.floor((new Date() - userData.dataInicio) / (1000 * 60 * 60 * 24));
-                document.getElementById('timerDisplay').innerText = dias;
-            }, 1000);
-        }
-
+        // NAVEGAÇÃO
         function nav(id, el) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -350,67 +355,68 @@
             el.classList.add('active');
         }
 
-        function revelarFormulario() {
-            document.getElementById('hiddenQuestions').style.display = 'block';
+        // QUIZ LÓGICA
+        function checkRole(radio) {
+            const area = document.getElementById('customInputArea');
+            if(radio.value === 'Outros') {
+                area.style.display = 'block';
+            } else {
+                area.style.display = 'none';
+            }
+        }
+
+        function enviarQuiz() {
+            const selected = document.querySelector('input[name="role"]:checked');
+            if(!selected) return alert("Selecione uma opção!");
+
+            let resposta = selected.value;
+            let detalhe = "";
+
+            if(resposta === "Outros") {
+                detalhe = document.getElementById('customText').value;
+                if(!detalhe) return alert("Por favor, escreva o que eu sou para você.");
+                resposta = `Outros: ${detalhe}`;
+            }
+
+            const msg = `🛡️ *RUBENS PROJETOS - SENTIMENTOS*\n\n👤 Ela: *${userData.nome}*\n❓ O que eu sou pra você?\n🗣️ Resposta: *${resposta}*`;
+            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // CARTA LÓGICA
+        function abrirCarta() {
+            document.getElementById('letterModal').classList.add('show');
             confetti();
         }
 
-        function enviarRespostasDetalhadas() {
-            let checkboxes = document.querySelectorAll('.check-input:checked');
-            let escolhidas = [];
-            checkboxes.forEach((cb) => { escolhidas.push(cb.value); });
-            if (escolhidas.length === 0) { alert("Selecione pelo menos uma opção! ❤️"); return; }
-            const listaFormatada = escolhidas.join(', ');
-            const msg = `❤️ *RUBENS PROJETOS - DECLARAÇÃO*\n\n👤 Minha Web Filha: *${userData.nome}*\n❤️ Ela disse que sente algo por mim!\n\n📝 *Detalhes do que ela sente e acha de mim:*\n${listaFormatada}`;
-            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        function fecharCarta() {
+            document.getElementById('letterModal').classList.remove('show');
         }
 
-        function fugirBotao(btn) {
-            if(window.innerWidth > 0) { 
-                const x = Math.random() * (window.innerWidth - 100);
-                const y = Math.random() * (window.innerHeight - 100);
-                btn.style.position = 'fixed';
-                btn.style.left = x + 'px';
-                btn.style.top = y + 'px';
-                btn.style.zIndex = '1000';
-            }
-        }
-
-        function formatDoc(cmd, value = null) { document.execCommand(cmd, false, value); }
-        function toggleEmojis() { const grid = document.getElementById('emojiGrid'); grid.style.display = grid.style.display === 'grid' ? 'none' : 'grid'; }
-        function addEmoji(emoji) { document.getElementById('richEditor').focus(); document.execCommand('insertText', false, emoji); }
-        function changePaper(color, el) { document.getElementById('richEditor').style.background = color; }
-        
-        function sendWhatsapp() {
-            const text = document.getElementById('richEditor').innerText;
-            const msg = `💌 *Carta dela:*\n\n${text}\n\nAss: ${userData.nome}`;
-            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        let isGiftOpen = false;
-        function toggleGift() {
-            const c = document.getElementById('giftContainer');
-            if(c.classList.contains('box-open')) {
-                c.classList.remove('box-open');
-                isGiftOpen = false;
-            } else {
-                c.classList.add('box-open');
-                isGiftOpen = true;
-                confetti();
-            }
-        }
-
-        // FUNÇÃO PARA BAIXAR A CARTA
-        function downloadLetter() {
-            const letterElement = document.getElementById('printableLetter');
-            // Aumenta a escala para melhor qualidade na imagem
-            html2canvas(letterElement, { scale: 2, backgroundColor: null }).then(canvas => {
+        function baixarCarta() {
+            const element = document.getElementById('printableArea');
+            
+            // html2canvas configuração para alta qualidade
+            html2canvas(element, {
+                scale: 3, // Melhora a resolução
+                backgroundColor: null,
+                useCORS: true
+            }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `Carta_para_${userData.nome || 'Amor'}.png`;
+                link.download = `Carta_para_${userData.nome}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
         }
+
+        // Timer simples (dias)
+        setInterval(() => {
+            const start = document.getElementById('inputDate').value;
+            if(start) {
+                const diff = new Date() - new Date(start);
+                document.getElementById('timerDisplay').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            }
+        }, 1000);
+
     </script>
 </body>
 </html>
