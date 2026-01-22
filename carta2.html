@@ -3,357 +3,527 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currículo Jovem Aprendiz - Editor</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <title>Currículo Color Picker</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <style>
-        /* --- ESTILOS GERAIS (Igual ao anterior, mantendo a identidade visual) --- */
-        .resume-container {
+        :root {
+            /* Cores Padrão Iniciais */
+            --primary-color: #0f172a; /* Lateral Escura */
+            --accent-color: #3b82f6;  /* Destaques em Azul */
+            --sidebar-text: #f8fafc;  /* Texto da lateral (quase branco) */
+        }
+
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+
+        /* Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+        /* A4 PAGE */
+        .a4-page {
             width: 210mm;
             min-height: 297mm;
             background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            display: flex;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             margin: 0 auto;
             position: relative;
             overflow: hidden;
         }
-        
-        .resume-layout { display: flex; min-height: 297mm; height: 100%; }
-        
-        /* Coluna Esquerda */
-        .left-column {
-            width: 35%;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px 25px;
-            position: relative;
-        }
-        .left-column::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: inherit; z-index: -1; min-height: 100%; }
-        
-        /* Coluna Direita */
-        .right-column { width: 65%; padding: 30px; background: white; }
-        
-        /* Tipografia */
-        .section-title {
-            font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #ecf0f1;
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 5px;
-        }
-        
-        .section-title-right {
-            font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #2c3e50;
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #3498db; padding-bottom: 10px;
-        }
-        
-        .skill-bar { margin-bottom: 15px; }
-        .skill-name { font-size: 14px; margin-bottom: 5px; font-weight: 500; }
-        .skill-progress { width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
-        .skill-fill { height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); border-radius: 4px; }
-        
-        .contact-item { display: flex; align-items: center; margin-bottom: 12px; font-size: 13px; word-break: break-word;}
-        .contact-item i { width: 25px; margin-right: 8px; color: #3498db; text-align: center;}
-        
-        .name-title { font-size: 32px; font-weight: bold; color: white; margin-bottom: 8px; line-height: 1.2; }
-        .job-title { font-size: 16px; color: #3498db; margin-bottom: 25px; font-weight: 500; }
-        
-        .experience-item { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #ecf0f1; }
-        .experience-item:last-child { border-bottom: none; }
-        .experience-title { font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
-        .experience-company { font-size: 14px; color: #3498db; font-weight: 500; margin-bottom: 5px; }
-        .experience-period { font-size: 12px; color: #7f8c8d; margin-bottom: 10px; font-style: italic; }
-        .experience-description { font-size: 13px; line-height: 1.6; color: #555; white-space: pre-line; }
-        
-        .education-item { margin-bottom: 15px; }
-        .education-title { font-size: 14px; font-weight: 500; color: #ecf0f1; margin-bottom: 3px; }
-        .education-school { font-size: 13px; color: #bdc3c7; margin-bottom: 2px; }
-        .education-year { font-size: 12px; color: #95a5a6; }
 
-        @media print {
-            body { background: white !important; margin: 0; padding: 0; }
-            .editor-section, .no-print { display: none !important; }
-            .resume-container { box-shadow: none; margin: 0; width: 100%; height: auto; page-break-inside: avoid; }
-            .left-column { -webkit-print-color-adjust: exact; print-color-adjust: exact; height: 100%; }
+        /* --- LATERAL --- */
+        .sidebar {
+            width: 32%;
+            background-color: var(--primary-color);
+            color: var(--sidebar-text);
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: background-color 0.3s ease;
         }
+
+        /* --- PRINCIPAL --- */
+        .main-content {
+            width: 68%;
+            padding: 45px 40px;
+            background-color: #ffffff;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* FOTO */
+        .profile-photo-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+        /* TIPOGRAFIA */
+        h1.name {
+            font-size: 26pt; font-weight: 800; color: var(--primary-color);
+            line-height: 1.1; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 5px;
+        }
+
+        .role {
+            font-size: 13pt; color: var(--accent-color); font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px;
+        }
+
+        /* TÍTULOS */
+        .section-title-side {
+            width: 100%; text-align: left; font-size: 10pt; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.2px; border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 8px; margin-bottom: 15px; margin-top: 25px; color: rgba(255,255,255,0.8);
+        }
+
+        .section-title-main {
+            font-size: 13pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;
+            margin-bottom: 20px; margin-top: 10px; display: flex; align-items: center; gap: 10px;
+        }
+        .section-title-main i { color: var(--accent-color); }
+
+        /* ITENS */
+        .contact-row { display: flex; align-items: center; width: 100%; margin-bottom: 12px; font-size: 9.5pt; text-align: left; color: inherit; }
+        .contact-row i { width: 24px; text-align: center; margin-right: 8px; color: rgba(255,255,255,0.7); font-size: 10pt; }
+
+        .edu-item { width: 100%; text-align: left; margin-bottom: 18px; }
+        .edu-school { font-weight: 600; font-size: 10.5pt; color: inherit; }
+        .edu-detail { font-size: 9pt; opacity: 0.8; margin-top: 2px; }
+
+        /* PROJETOS */
+        .project-block { margin-bottom: 25px; page-break-inside: avoid; }
+        .project-name { font-weight: 700; font-size: 11.5pt; color: #1e293b; margin-bottom: 4px; }
+        .project-desc { font-size: 10pt; line-height: 1.6; color: #475569; text-align: justify; white-space: pre-wrap; }
+
+        /* UTIL */
+        .hidden-force { display: none !important; }
+        
+        /* INPUT DE COR CUSTOMIZADO */
+        .color-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 4px;
+            overflow: hidden;
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: none; }
     </style>
 </head>
-<body class="bg-gray-100 p-4">
-    <div class="max-w-7xl mx-auto">
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-6 no-print">
-            <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">
-                <i class="fas fa-graduation-cap mr-3 text-blue-500"></i>
-                Editor: Primeiro Emprego
-            </h1>
-            <div class="flex justify-center space-x-4">
-                <button onclick="generatePDF()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center shadow transition">
-                    <i class="fas fa-file-pdf mr-2"></i> BAIXAR PDF
-                </button>
-            </div>
-        </div>
+<body class="flex flex-col lg:flex-row h-screen overflow-hidden">
+
+    <div class="w-full lg:w-[450px] bg-white h-full shadow-2xl z-20 overflow-y-auto border-r border-gray-200 flex flex-col">
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="editor-section bg-white rounded-lg shadow-lg p-6 h-screen overflow-y-auto">
-                <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
-                    <i class="fas fa-edit mr-2 text-blue-500"></i> Preencher Dados
-                </h2>
-                
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">👤 Aluno(a)</h3>
-                    <div class="grid grid-cols-1 gap-4">
-                        <input type="text" id="nome" placeholder="Nome Completo" value="Ana Clara Silva" class="w-full p-3 border rounded font-bold">
-                        <input type="text" id="cargo" placeholder="Objetivo (ex: Jovem Aprendiz)" value="Jovem Aprendiz / Estágio" class="w-full p-3 border rounded text-blue-600">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="telefone" value="(81) 98888-0000" class="w-full p-3 border rounded">
-                            <input type="text" id="nascimento" value="15/04/2007" class="w-full p-3 border rounded">
-                        </div>
-                        <input type="email" id="email" value="ana.silva@email.com" class="w-full p-3 border rounded">
-                        <input type="text" id="endereco" value="Recife, Pernambuco" class="w-full p-3 border rounded">
+        <div class="p-6 border-b border-gray-100 bg-gray-50 sticky top-0 z-30">
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <i class="fas fa-palette text-blue-600"></i> Personalizar Cores
+            </h2>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="color-wrapper">
+                    <input type="color" id="pickerPrimary" value="#0f172a" oninput="updateColors()">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-gray-600">Fundo Lateral</span>
+                        <span class="text-[10px] text-gray-400">Cor principal</span>
                     </div>
                 </div>
-                
-                <div class="mb-8">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">🎯 Objetivo Profissional</h3>
-                    <textarea id="objetivo" rows="4" class="w-full p-3 border rounded">Estudante do Ensino Médio em busca da primeira oportunidade profissional como Jovem Aprendiz. Desejo aplicar minha dedicação e vontade de aprender para contribuir com a empresa, desenvolvendo novas habilidades e crescendo profissionalmente.</textarea>
+                <div class="color-wrapper">
+                    <input type="color" id="pickerAccent" value="#3b82f6" oninput="updateColors()">
+                    <div class="flex flex-col">
+                        <span class="text-xs font-bold text-gray-600">Destaques</span>
+                        <span class="text-[10px] text-gray-400">Ícones e Títulos</span>
+                    </div>
                 </div>
+            </div>
 
-                 <div class="mb-8">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">🎓 Escolaridade</h3>
-                    <div class="grid grid-cols-1 gap-3">
-                        <label class="text-sm text-gray-500">Situação Atual</label>
-                        <input type="text" id="formacao" value="Ensino Médio - Cursando 2º Ano" class="w-full p-3 border rounded">
-                        <label class="text-sm text-gray-500">Nome da Escola</label>
-                        <input type="text" id="instituicao" value="Escola Estadual de Referência - EREM" class="w-full p-3 border rounded">
-                        <label class="text-sm text-gray-500">Previsão de Conclusão / Turno</label>
-                        <input type="text" id="ano_formacao" value="Previsão: Dez/2026 (Manhã)" class="w-full p-3 border rounded">
-                    </div>
-                </div>
-                
-                <div class="mb-8">
-                    <div class="flex justify-between items-center mb-4 bg-gray-100 p-2 rounded">
-                        <h3 class="text-lg font-semibold text-gray-700">⭐ Qualificações / Projetos</h3>
-                        <button onclick="addExperience()" class="text-sm bg-blue-500 text-white px-3 py-1 rounded">+ Item</button>
-                    </div>
-                    
-                    <div class="mb-2">
-                        <label class="text-xs text-gray-500">Título da Seção (ex: Qualificações, Projetos, Voluntariado)</label>
-                        <input type="text" id="titulo-experiencia" value="Resumo de Qualificações" class="w-full p-2 border border-blue-300 rounded bg-blue-50 font-semibold text-blue-800">
-                    </div>
-
-                    <div id="experiencias-container">
-                        <div class="experiencia-item-input mb-4 p-4 border border-gray-200 rounded-lg relative bg-gray-50">
-                            <button onclick="removeElement(this)" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                            <input type="text" placeholder="Título (ex: Perfil Pessoal)" value="Perfil Pessoal e Habilidades" class="w-full p-2 border rounded mb-2 exp-cargo font-bold">
-                            <input type="text" placeholder="Subtítulo (Opcional)" value="" class="w-full p-2 border rounded mb-2 exp-empresa text-sm">
-                            <input type="text" placeholder="Data (Opcional)" value="" class="w-full p-2 border rounded mb-2 exp-periodo text-xs">
-                            <textarea placeholder="Descrição..." rows="4" class="w-full p-2 border rounded exp-atividades">• Facilidade de aprendizado e adaptação
-• Ótimo relacionamento interpessoal e trabalho em equipe
-• Pontualidade e comprometimento com horários
-• Conhecimento básico em rotinas administrativas</textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <div class="flex justify-between items-center mb-4 bg-gray-100 p-2 rounded">
-                        <h3 class="text-lg font-semibold text-gray-700">🧠 Conhecimentos</h3>
-                        <button onclick="addSkill()" class="text-sm bg-blue-500 text-white px-3 py-1 rounded">+ Adicionar</button>
-                    </div>
-                    <div id="habilidades-container">
-                        <div class="skill-item-input mb-2 flex items-center space-x-2">
-                            <input type="text" value="Pacote Office (Word/Excel)" class="flex-1 p-2 border rounded skill-name-input">
-                            <select class="p-2 border rounded skill-level w-32"><option value="60">Básico</option><option value="80" selected>Intermed.</option></select>
-                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <div class="skill-item-input mb-2 flex items-center space-x-2">
-                            <input type="text" value="Informática / Internet" class="flex-1 p-2 border rounded skill-name-input">
-                            <select class="p-2 border rounded skill-level w-32"><option value="90">Avançado</option></select>
-                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </div>
-                        <div class="skill-item-input mb-2 flex items-center space-x-2">
-                            <input type="text" value="Comunicação" class="flex-1 p-2 border rounded skill-name-input">
-                            <select class="p-2 border rounded skill-level w-32"><option value="100">Excelente</option></select>
-                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">📜 Cursos / Atividades Extras</h3>
-                    <textarea id="cursos_extras" rows="5" class="w-full p-3 border rounded">Curso de Informática Básica - Escola XYZ (2024)
-Participação em Feira de Ciências - Projeto de Reciclagem (2023)
-Workshop de Orientação Profissional (2025)
-Inglês Básico - Em andamento</textarea>
-                </div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Ou escolha um tema pronto:</p>
+            <div class="flex gap-2">
+                <button onclick="applyTheme('#0f172a', '#3b82f6')" class="w-6 h-6 rounded-full bg-[#0f172a] border-2 border-transparent hover:scale-110 transition" title="Navy"></button>
+                <button onclick="applyTheme('#111827', '#6b7280')" class="w-6 h-6 rounded-full bg-[#111827] border-2 border-transparent hover:scale-110 transition" title="Preto"></button>
+                <button onclick="applyTheme('#064e3b', '#10b981')" class="w-6 h-6 rounded-full bg-[#064e3b] border-2 border-transparent hover:scale-110 transition" title="Verde"></button>
+                <button onclick="applyTheme('#4c1d95', '#a78bfa')" class="w-6 h-6 rounded-full bg-[#4c1d95] border-2 border-transparent hover:scale-110 transition" title="Roxo"></button>
+                <button onclick="applyTheme('#881337', '#f43f5e')" class="w-6 h-6 rounded-full bg-[#881337] border-2 border-transparent hover:scale-110 transition" title="Vinho"></button>
             </div>
             
-            <div class="preview-section bg-gray-500 p-4 rounded-lg shadow-inner overflow-auto flex justify-center">
-                <div id="resume-preview" class="resume-container">
-                    <div class="resume-layout">
-                        <div class="left-column">
-                            <div class="mb-10">
-                                <div class="name-title" id="preview-nome"></div>
-                                <div class="job-title" id="preview-cargo"></div>
-                            </div>
-                            
-                            <div class="mb-10">
-                                <div class="section-title">Contato</div>
-                                <div class="contact-item"><i class="fas fa-phone"></i><span id="preview-telefone"></span></div>
-                                <div class="contact-item"><i class="fas fa-envelope"></i><span id="preview-email"></span></div>
-                                <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span id="preview-endereco"></span></div>
-                                <div class="contact-item"><i class="fas fa-calendar"></i><span id="preview-nascimento"></span></div>
-                            </div>
-                            
-                            <div class="mb-10">
-                                <div class="section-title">Habilidades</div>
-                                <div id="preview-habilidades"></div>
-                            </div>
-                            
-                            <div>
-                                <div class="section-title">Escolaridade</div>
-                                <div class="education-item">
-                                    <div class="education-title" id="preview-formacao"></div>
-                                    <div class="education-school" id="preview-instituicao"></div>
-                                    <div class="education-year" id="preview-ano"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="right-column">
-                            <div class="mb-8">
-                                <div class="section-title-right">Objetivo</div>
-                                <div id="preview-objetivo" class="experience-description text-justify"></div>
-                            </div>
-
-                            <div class="mb-8">
-                                <div class="section-title-right" id="preview-titulo-experiencia">Resumo de Qualificações</div>
-                                <div id="preview-experiencias"></div>
-                            </div>
-                            
-                            <div>
-                                <div class="section-title-right">Atividades Complementares</div>
-                                <div id="preview-cursos" class="experience-description"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex gap-2 mt-4 pt-2 border-t">
+                 <button onclick="clearData()" class="text-xs text-red-500 underline hover:text-red-700">Reiniciar</button>
+                 <span class="text-xs text-green-600 ml-auto opacity-50 transition" id="saveStatus"><i class="fas fa-check"></i> Salvo</span>
             </div>
+        </div>
+
+        <div class="p-6 space-y-6">
+            
+            <div class="p-4 bg-white border rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="font-bold text-slate-700 text-sm">Foto</span>
+                    <input type="checkbox" id="togglePhoto" checked onchange="updateLayout()" class="accent-blue-600 w-5 h-5">
+                </div>
+                <input type="file" id="photoInput" accept="image/*" onchange="previewImage(event)" class="text-xs w-full text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-gray-400 uppercase">Perfil</h3>
+                <input type="text" id="inName" placeholder="Nome Completo" class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()">
+                <input type="text" id="inRole" placeholder="Cargo / Objetivo" class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()">
+                <textarea id="inSummary" rows="4" placeholder="Resumo Profissional..." class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()"></textarea>
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-gray-400 uppercase">Contato</h3>
+                <input type="text" id="inPhone" placeholder="Telefone" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
+                <input type="text" id="inEmail" placeholder="E-mail" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
+                <input type="text" id="inLocation" placeholder="Cidade - Estado" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
+                <input type="text" id="inLinkedin" placeholder="LinkedIn / GitHub" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
+            </div>
+
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-gray-400 uppercase">Escolaridade</h3>
+                <input type="text" id="inSchool" placeholder="Nome da Escola" class="w-full p-2 border rounded text-sm font-bold" oninput="updateLayout()">
+                <input type="text" id="inSchoolDetail" placeholder="Ano / Curso" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase">Projetos</h3>
+                    <button onclick="addProjectInput()" class="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">+ Adicionar</button>
+                </div>
+                <div id="projectsEditorContainer" class="space-y-3"></div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase">Habilidades</h3>
+                    <button onclick="addSkillInput()" class="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">+ Adicionar</button>
+                </div>
+                <div id="skillsEditorContainer" class="space-y-2"></div>
+            </div>
+
+            <div class="h-10"></div>
         </div>
     </div>
-    
+
+    <div class="flex-1 bg-gray-200 h-full relative flex flex-col items-center justify-center p-4">
+        
+        <button onclick="generatePDF()" class="absolute top-6 right-6 z-30 bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg font-bold flex items-center gap-2 transition hover:scale-105">
+            <i class="fas fa-file-pdf"></i> Baixar PDF
+        </button>
+
+        <div class="w-full h-full overflow-auto flex justify-center items-start pt-8 pb-20 custom-scrollbar">
+            
+            <div id="resumePreview" class="a4-page">
+                
+                <div class="sidebar">
+                    <div id="previewPhotoContainer" class="profile-photo-frame">
+                        <img id="previewImage" src="https://via.placeholder.com/200" class="profile-img" alt="Foto">
+                    </div>
+
+                    <div id="contactSection" class="w-full">
+                        <div class="section-title-side">Contato</div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <div class="contact-row" id="viewPhoneBox"><i class="fas fa-phone"></i><span id="viewPhone"></span></div>
+                            <div class="contact-row" id="viewEmailBox"><i class="fas fa-envelope"></i><span id="viewEmail"></span></div>
+                            <div class="contact-row" id="viewLocationBox"><i class="fas fa-map-marker-alt"></i><span id="viewLocation"></span></div>
+                            <div class="contact-row" id="viewLinkedinBox"><i class="fas fa-link"></i><span id="viewLinkedin"></span></div>
+                        </div>
+                    </div>
+
+                    <div id="eduSection" class="w-full mt-6">
+                        <div class="section-title-side">Educação</div>
+                        <div class="edu-item">
+                            <div class="edu-school" id="viewSchool"></div>
+                            <div class="edu-detail" id="viewSchoolDetail"></div>
+                        </div>
+                    </div>
+
+                    <div id="skillSection" class="w-full mt-6">
+                        <div class="section-title-side">Competências</div>
+                        <div id="viewSkillsList" class="w-full text-left space-y-2 text-sm text-slate-200"></div>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div class="mb-10 border-b border-gray-100 pb-6">
+                        <h1 class="name" id="viewName">Seu Nome</h1>
+                        <div class="role" id="viewRole">Seu Cargo</div>
+                    </div>
+
+                    <div id="summarySection" class="mb-8">
+                        <div class="section-title-main"><i class="fas fa-user"></i> Sobre Mim</div>
+                        <p id="viewSummary" class="text-slate-600 text-justify leading-relaxed"></p>
+                    </div>
+
+                    <div id="projectsSection">
+                        <div class="section-title-main"><i class="fas fa-briefcase"></i> Projetos & Experiência</div>
+                        <div id="viewProjectsList"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+
     <script>
-        function updatePreview() {
-            // Campos Simples
-            const simpleIds = ['nome', 'cargo', 'telefone', 'email', 'endereco', 'nascimento', 'objetivo', 'formacao', 'instituicao', 'ano_formacao', 'titulo-experiencia'];
+        // --- SISTEMA DE CORES ---
+        function updateColors() {
+            const primary = document.getElementById('pickerPrimary').value;
+            const accent = document.getElementById('pickerAccent').value;
             
-            simpleIds.forEach(id => {
-                const input = document.getElementById(id);
-                // Mapeia titulo-experiencia para preview-titulo-experiencia, os outros direto
-                const previewId = id === 'titulo-experiencia' ? 'preview-titulo-experiencia' : 'preview-' + id;
-                const prevEl = document.getElementById(previewId);
-                if(prevEl && input) prevEl.textContent = input.value;
-            });
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--accent-color', accent);
             
-            // Cursos
-            const cursos = document.getElementById('cursos_extras').value;
-            document.getElementById('preview-cursos').innerHTML = cursos.replace(/\n/g, '<br>');
+            saveData();
+        }
+
+        function applyTheme(primary, accent) {
+            document.getElementById('pickerPrimary').value = primary;
+            document.getElementById('pickerAccent').value = accent;
+            updateColors();
+        }
+
+        // --- AUTO-SAVE ---
+        const STORAGE_KEY = 'resume_colors_data';
+
+        function saveData() {
+            const data = {
+                name: document.getElementById('inName').value,
+                role: document.getElementById('inRole').value,
+                summary: document.getElementById('inSummary').value,
+                phone: document.getElementById('inPhone').value,
+                email: document.getElementById('inEmail').value,
+                location: document.getElementById('inLocation').value,
+                linkedin: document.getElementById('inLinkedin').value,
+                school: document.getElementById('inSchool').value,
+                schoolDetail: document.getElementById('inSchoolDetail').value,
+                projects: Array.from(document.querySelectorAll('.proj-title-in')).map((el, i) => ({
+                    title: el.value,
+                    desc: document.querySelectorAll('.proj-desc-in')[i].value
+                })),
+                skills: Array.from(document.querySelectorAll('.skill-in')).map(el => el.value),
+                // Salvar Cores
+                themePrimary: document.getElementById('pickerPrimary').value,
+                themeAccent: document.getElementById('pickerAccent').value
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
             
-            // Habilidades
-            const skillsContainer = document.getElementById('preview-habilidades');
-            const skillInputs = document.querySelectorAll('.skill-item-input');
-            skillsContainer.innerHTML = '';
-            skillInputs.forEach(item => {
-                const name = item.querySelector('.skill-name-input').value;
-                const level = item.querySelector('.skill-level').value;
-                if (name.trim()) {
-                    skillsContainer.innerHTML += `
-                        <div class="skill-bar">
-                            <div class="skill-name">${name}</div>
-                            <div class="skill-progress"><div class="skill-fill" style="width: ${level}%;"></div></div>
+            const status = document.getElementById('saveStatus');
+            status.style.opacity = '1';
+            setTimeout(() => status.style.opacity = '0.5', 1000);
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) {
+                // Dados padrão iniciais
+                addProjectInput("Projeto Exemplo", "Descreva suas atividades...");
+                addSkillInput("Habilidade 1");
+                updateLayout();
+                return;
+            }
+
+            const data = JSON.parse(saved);
+            document.getElementById('inName').value = data.name || "";
+            document.getElementById('inRole').value = data.role || "";
+            document.getElementById('inSummary').value = data.summary || "";
+            document.getElementById('inPhone').value = data.phone || "";
+            document.getElementById('inEmail').value = data.email || "";
+            document.getElementById('inLocation').value = data.location || "";
+            document.getElementById('inLinkedin').value = data.linkedin || "";
+            document.getElementById('inSchool').value = data.school || "";
+            document.getElementById('inSchoolDetail').value = data.schoolDetail || "";
+
+            // Restaurar Cores
+            if(data.themePrimary) {
+                document.getElementById('pickerPrimary').value = data.themePrimary;
+                document.getElementById('pickerAccent').value = data.themeAccent || '#3b82f6';
+                updateColors();
+            }
+
+            // Restaurar Listas
+            document.getElementById('projectsEditorContainer').innerHTML = "";
+            if (data.projects && data.projects.length > 0) data.projects.forEach(p => addProjectInput(p.title, p.desc));
+            else addProjectInput();
+
+            document.getElementById('skillsEditorContainer').innerHTML = "";
+            if (data.skills && data.skills.length > 0) data.skills.forEach(s => addSkillInput(s));
+            else addSkillInput();
+            
+            updateLayout();
+        }
+
+        function clearData() {
+            if(confirm("Deseja apagar todos os dados e cores?")){
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // --- LÓGICA DO LAYOUT ---
+        window.onload = loadData;
+
+        function updateLayout() {
+            // Textos
+            sync('inName', 'viewName');
+            sync('inRole', 'viewRole');
+            sync('inSummary', 'viewSummary', 'summarySection');
+            sync('inSchool', 'viewSchool');
+            sync('inSchoolDetail', 'viewSchoolDetail');
+
+            // Ícones e Contato
+            syncIcon('inPhone', 'viewPhone', 'viewPhoneBox');
+            syncIcon('inEmail', 'viewEmail', 'viewEmailBox');
+            syncIcon('inLocation', 'viewLocation', 'viewLocationBox');
+            syncIcon('inLinkedin', 'viewLinkedin', 'viewLinkedinBox');
+
+            // Seções Vazias
+            toggleSec('eduSection', ['inSchool', 'inSchoolDetail']);
+            toggleSec('contactSection', ['inPhone', 'inEmail', 'inLocation', 'inLinkedin']);
+
+            // Foto
+            const show = document.getElementById('togglePhoto').checked;
+            const pic = document.getElementById('previewPhotoContainer');
+            if(show) pic.classList.remove('hidden-force');
+            else pic.classList.add('hidden-force');
+
+            // Listas
+            renderProjects();
+            renderSkills();
+            
+            saveData();
+        }
+
+        function sync(src, dest, sec) {
+            const val = document.getElementById(src).value;
+            document.getElementById(dest).innerText = val;
+            if(sec) {
+                const s = document.getElementById(sec);
+                if(!val.trim()) s.classList.add('hidden-force');
+                else s.classList.remove('hidden-force');
+            }
+        }
+
+        function syncIcon(src, dest, box) {
+            const val = document.getElementById(src).value;
+            const b = document.getElementById(box);
+            if(!val.trim()) b.classList.add('hidden-force');
+            else {
+                b.classList.remove('hidden-force');
+                document.getElementById(dest).innerText = val;
+            }
+        }
+
+        function toggleSec(id, inputs) {
+            const hasContent = inputs.some(i => document.getElementById(i).value.trim() !== "");
+            const el = document.getElementById(id);
+            if(!hasContent) el.classList.add('hidden-force');
+            else el.classList.remove('hidden-force');
+        }
+
+        // --- GERENCIAMENTO DE LISTAS ---
+        function addProjectInput(t="", d="") {
+            const div = document.createElement('div');
+            div.className = "bg-white p-3 border rounded shadow-sm relative group";
+            div.innerHTML = `
+                <input type="text" placeholder="Título" class="w-full font-bold text-sm mb-2 border-b p-1 proj-title-in" value="${t}" oninput="updateLayout()">
+                <textarea placeholder="Descrição" rows="2" class="w-full text-sm text-gray-600 p-1 resize-none proj-desc-in" oninput="updateLayout()">${d}</textarea>
+                <button onclick="this.parentElement.remove(); updateLayout()" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100"><i class="fas fa-trash"></i></button>
+            `;
+            document.getElementById('projectsEditorContainer').appendChild(div);
+        }
+
+        function renderProjects() {
+            const target = document.getElementById('viewProjectsList');
+            target.innerHTML = "";
+            const ts = document.querySelectorAll('.proj-title-in');
+            const ds = document.querySelectorAll('.proj-desc-in');
+            let has = false;
+            ts.forEach((t, i) => {
+                if(t.value.trim() || ds[i].value.trim()){
+                    has = true;
+                    target.innerHTML += `
+                        <div class="project-block">
+                            <div class="project-name">${t.value}</div>
+                            <div class="project-desc">${ds[i].value}</div>
                         </div>`;
                 }
             });
-            
-            // Experiência / Qualificações
-            const expContainer = document.getElementById('preview-experiencias');
-            const expInputs = document.querySelectorAll('.experiencia-item-input');
-            expContainer.innerHTML = '';
-            
-            expInputs.forEach(item => {
-                const cargo = item.querySelector('.exp-cargo').value;
-                const empresa = item.querySelector('.exp-empresa').value;
-                const periodo = item.querySelector('.exp-periodo').value;
-                const atividades = item.querySelector('.exp-atividades').value;
-                
-                if (cargo.trim() || atividades.trim()) {
-                    const atividadesFormatadas = atividades.split('\n').map(line => line.trim() ? `• ${line}` : '').join('<br>');
-                    
-                    // Lógica para esconder campos vazios (se não tiver empresa, não mostra linha vazia)
-                    let html = `<div class="experience-item"><div class="experience-title">${cargo}</div>`;
-                    if(empresa) html += `<div class="experience-company">${empresa}</div>`;
-                    if(periodo) html += `<div class="experience-period">${periodo}</div>`;
-                    html += `<div class="experience-description mt-2">${atividadesFormatadas}</div></div>`;
-                    
-                    expContainer.innerHTML += html;
+            const sec = document.getElementById('projectsSection');
+            if(!has) sec.classList.add('hidden-force');
+            else sec.classList.remove('hidden-force');
+        }
+
+        function addSkillInput(v="") {
+            const div = document.createElement('div');
+            div.className = "flex items-center gap-2 group";
+            div.innerHTML = `
+                <input type="text" value="${v}" class="flex-1 p-2 border rounded text-sm skill-in" oninput="updateLayout()">
+                <button onclick="this.parentElement.remove(); updateLayout()" class="text-red-400 opacity-0 group-hover:opacity-100"><i class="fas fa-times"></i></button>
+            `;
+            document.getElementById('skillsEditorContainer').appendChild(div);
+        }
+
+        function renderSkills() {
+            const target = document.getElementById('viewSkillsList');
+            target.innerHTML = "";
+            const inps = document.querySelectorAll('.skill-in');
+            let has = false;
+            inps.forEach(i => {
+                if(i.value.trim()){
+                    has = true;
+                    target.innerHTML += `<div class="flex items-center gap-2"><i class="fas fa-check text-[10px] opacity-70"></i><span>${i.value}</span></div>`;
                 }
             });
+            const sec = document.getElementById('skillSection');
+            if(!has) sec.classList.add('hidden-force');
+            else sec.classList.remove('hidden-force');
         }
 
-        // Adicionar / Remover
-        function addExperience() {
-            const container = document.getElementById('experiencias-container');
-            const newDiv = document.createElement('div');
-            newDiv.className = 'experiencia-item-input mb-4 p-4 border border-gray-200 rounded-lg relative bg-gray-50';
-            newDiv.innerHTML = `
-                <button onclick="removeElement(this)" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                <input type="text" placeholder="Título (ex: Projeto Escolar)" class="w-full p-2 border rounded mb-2 exp-cargo font-bold">
-                <input type="text" placeholder="Local / Escola (Opcional)" class="w-full p-2 border rounded mb-2 exp-empresa text-sm">
-                <input type="text" placeholder="Data (Opcional)" class="w-full p-2 border rounded mb-2 exp-periodo text-xs">
-                <textarea placeholder="O que você fez?" rows="3" class="w-full p-2 border rounded exp-atividades"></textarea>
-            `;
-            container.appendChild(newDiv);
-            attachListeners();
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){ document.getElementById('previewImage').src = reader.result; }
+            if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
         }
 
-        function addSkill() {
-            const container = document.getElementById('habilidades-container');
-            const newDiv = document.createElement('div');
-            newDiv.className = 'skill-item-input mb-2 flex items-center space-x-2';
-            newDiv.innerHTML = `
-                <input type="text" placeholder="Habilidade" class="flex-1 p-2 border rounded skill-name-input">
-                <select class="p-2 border rounded skill-level w-32"><option value="80">Bom</option><option value="60">Básico</option></select>
-                <button onclick="removeElement(this, true)" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
-            `;
-            container.appendChild(newDiv);
-            attachListeners();
-        }
-
-        function removeElement(btn) {
-            btn.parentElement.remove();
-            updatePreview();
-        }
-
-        function attachListeners() {
-            document.querySelectorAll('input, textarea, select').forEach(el => {
-                el.removeEventListener('input', updatePreview);
-                el.addEventListener('input', updatePreview);
-            });
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            attachListeners();
-            updatePreview();
-        });
-        
         async function generatePDF() {
             window.scrollTo(0,0);
-            const { jsPDF } = window.jspdf;
-            const element = document.getElementById('resume-preview');
-            html2canvas(element, { scale: 2, scrollY: 0, backgroundColor: "#ffffff" }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-                pdf.save(document.getElementById('nome').value + '_Curriculo.pdf');
-            });
+            const element = document.getElementById('resumePreview');
+            const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+            let name = document.getElementById('inName').value || "Curriculo";
+            pdf.save(`${name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
         }
     </script>
 </body>
