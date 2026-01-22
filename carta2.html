@@ -3,267 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currículo Maria Marleide - PDF Perfeito</title>
-    
+    <title>Currículo IA - Seu Mentor de Carreira</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- CONFIGURAÇÕES GERAIS --- */
-        :root {
-            --primary: #0f172a;
-            --accent: #3b82f6;
-            --text-side: #f8fafc;
-        }
-
-        body { font-family: 'Inter', sans-serif; background: #e2e8f0; margin: 0; }
-
-        /* --- FOLHA A4 (VISUALIZAÇÃO) --- */
-        .page {
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            display: flex;
-            margin: 20px auto;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        /* --- COLUNA LATERAL --- */
-        .sidebar {
-            width: 32%;
-            background-color: var(--primary);
-            color: var(--text-side);
-            padding: 40px 20px;
-            text-align: center;
-            -webkit-print-color-adjust: exact; /* Garante cor na impressão */
-            print-color-adjust: exact;
-        }
-
-        /* --- COLUNA PRINCIPAL --- */
-        .main {
-            width: 68%;
-            padding: 40px;
-            color: #334155;
-        }
-
-        /* --- ELEMENTOS --- */
-        .photo-box {
-            width: 140px; height: 140px; 
-            border-radius: 50%; border: 4px solid white;
-            overflow: hidden; margin: 0 auto 30px;
-            background: #ffffff20;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-        .hidden { display: none !important; }
-
-        h1 { font-size: 24pt; font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--primary); margin-bottom: 5px; }
-        .role { font-size: 14pt; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 30px; }
-
-        /* Títulos */
-        .side-title { 
-            font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #ffffff40; 
-            padding-bottom: 5px; margin: 30px 0 15px; text-align: left; color: #ffffff90;
-        }
-        .main-title {
-            font-size: 14pt; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #cbd5e1;
-            padding-bottom: 5px; margin: 30px 0 15px; color: var(--primary); display: flex; align-items: center; gap: 10px;
-        }
-        .main-title i { color: var(--accent); }
-
-        /* Listas */
-        .contact-item { display: flex; align-items: center; margin-bottom: 10px; font-size: 10pt; text-align: left; }
-        .contact-item i { width: 25px; color: #60a5fa; }
+        /* --- LAYOUT DO SISTEMA --- */
+        body { font-family: 'Inter', sans-serif; background: #f0fdf4; overflow-x: hidden; }
         
-        .exp-item { margin-bottom: 20px; }
-        .exp-title { font-weight: 700; font-size: 11pt; color: #1e293b; }
-        .exp-desc { font-size: 10pt; color: #475569; margin-top: 2px; text-align: justify; }
+        .main-container { display: flex; height: 100vh; }
 
-        /* --- MODO DE IMPRESSÃO (O SEGREDO PARA NÃO DEFORMAR) --- */
+        /* LADO ESQUERDO: WIZARD (Passo a Passo) */
+        .wizard-area { width: 60%; padding: 40px; overflow-y: auto; background: white; border-right: 1px solid #ddd; }
+        
+        /* LADO DIREITO: IA MENTOR */
+        .ai-panel { 
+            width: 40%; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+            color: white; padding: 30px; display: flex; flex-direction: column;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Animações */
+        .step { display: none; animation: slideIn 0.4s ease; }
+        .step.active { display: block; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .ai-bubble {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px; border-radius: 12px; margin-bottom: 15px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* Estilos de Inputs */
+        label { font-size: 14px; font-weight: 600; color: #374151; display: block; margin-bottom: 5px; margin-top: 15px; }
+        input, textarea, select {
+            width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;
+            font-size: 15px; transition: all 0.3s;
+        }
+        input:focus, textarea:focus { border-color: #22c55e; outline: none; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2); }
+
+        /* Botões */
+        .btn-nav {
+            padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer; border: none; margin-top: 20px;
+        }
+        .btn-next { background: #16a34a; color: white; float: right; }
+        .btn-next:hover { background: #15803d; }
+        .btn-back { background: #f3f4f6; color: #4b5563; float: left; }
+
+        /* --- ESTILOS DE IMPRESSÃO (A4 BLINDADO) --- */
+        #resume-output { display: none; }
+
         @media print {
-            @page { margin: 0; size: A4; }
             body { background: white; }
-            .no-print { display: none !important; }
-            .page { margin: 0; box-shadow: none; width: 100%; height: 100%; }
-            /* Forçar cores de fundo */
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        }
+            .main-container { display: none; } /* Esconde o sistema */
+            #resume-output { display: flex !important; } /* Mostra o currículo */
 
-        /* --- ESTILO DO EDITOR (TELA) --- */
-        .editor-panel {
-            position: fixed; left: 0; top: 0; bottom: 0; width: 350px;
-            background: white; z-index: 50; padding: 20px; overflow-y: auto;
-            border-right: 1px solid #ddd;
-        }
-        .preview-area { margin-left: 350px; padding: 20px; display: flex; justify-content: center; }
-        
-        @media (max-width: 1024px) {
-            .editor-panel { position: relative; width: 100%; height: auto; border-right: none; }
-            .preview-area { margin-left: 0; }
-            .page { transform: scale(0.6); transform-origin: top center; margin-bottom: -400px; }
-        }
+            @page { margin: 0; size: A4; }
+            
+            /* Layout A4 Fixo */
+            #resume-output {
+                width: 210mm; height: 297mm;
+                background: white; margin: 0; padding: 0;
+                position: absolute; left: 0; top: 0;
+            }
 
-        input, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; font-size: 13px; }
-        label { font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
-        .btn-download {
-            background: #16a34a; color: white; width: 100%; padding: 15px; 
-            font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center;
-            margin-bottom: 20px; font-size: 16px; border: none;
+            .sidebar { width: 75mm; background-color: var(--theme-color, #0f172a); color: white; padding: 10mm 5mm; text-align: center; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .main { flex: 1; padding: 10mm; color: #334155; }
+            
+            .photo-box { width: 35mm; height: 35mm; border-radius: 50%; border: 3px solid white; margin: 0 auto 5mm; overflow: hidden; background: #ffffff20; }
+            .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+            
+            h1 { font-size: 22pt; font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--theme-color, #0f172a); margin: 0 0 2mm 0; }
+            .role { font-size: 12pt; color: #16a34a; font-weight: 600; text-transform: uppercase; margin-bottom: 8mm; }
+            
+            .side-title { font-size: 10pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #ffffff40; margin: 8mm 0 4mm; text-align: left; color: #cbd5e1; }
+            .main-title { font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #cbd5e1; margin: 6mm 0 4mm; color: var(--theme-color, #0f172a); }
+            
+            p { font-size: 10pt; text-align: justify; line-height: 1.5; margin: 0; }
+            .contact-item { font-size: 9pt; display: flex; align-items: center; margin-bottom: 3mm; text-align: left; }
+            .contact-item i { width: 6mm; text-align: center; margin-right: 2mm; color: #86efac; }
+            
+            .exp-item { margin-bottom: 5mm; }
+            .exp-title { font-weight: 700; font-size: 11pt; }
+            .hidden { display: none !important; }
         }
-        .btn-download:hover { background: #15803d; }
     </style>
 </head>
 <body>
 
-    <div class="editor-panel no-print">
-        <h2 class="text-xl font-bold mb-4 text-slate-800">Editor Currículo</h2>
+    <div class="main-container">
         
-        <button onclick="window.print()" class="btn-download">
-            <i class="fas fa-print"></i> BAIXAR PDF / IMPRIMIR
-        </button>
-        <p class="text-xs text-center text-red-500 mb-6 font-bold">⚠️ Ao salvar, marque a opção "Gráficos de Plano de Fundo" para a cor aparecer.</p>
+        <div class="wizard-area">
+            
+            <div class="step active" id="step1">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Olá! Eu sou seu Mentor.</h2>
+                <p class="text-gray-600 mb-6">Vamos criar um currículo profissional juntos.</p>
+                
+                <label>Primeiro, você quer usar foto?</label>
+                <select id="hasPhoto" onchange="iaCheckPhoto()">
+                    <option value="yes">Sim, quero foto</option>
+                    <option value="no">Não, prefiro sem foto</option>
+                </select>
 
-        <label>Cor do Currículo</label>
-        <div class="flex gap-2 mb-6">
-            <div onclick="setColor('#0f172a', '#3b82f6')" class="w-8 h-8 rounded-full bg-[#0f172a] cursor-pointer border-2 border-white shadow-md"></div>
-            <div onclick="setColor('#7f1d1d', '#f87171')" class="w-8 h-8 rounded-full bg-[#7f1d1d] cursor-pointer border-2 border-white shadow-md"></div>
-            <div onclick="setColor('#14532d', '#4ade80')" class="w-8 h-8 rounded-full bg-[#14532d] cursor-pointer border-2 border-white shadow-md"></div>
-            <div onclick="setColor('#4c1d95', '#a78bfa')" class="w-8 h-8 rounded-full bg-[#4c1d95] cursor-pointer border-2 border-white shadow-md"></div>
-        </div>
-
-        <label>Foto</label>
-        <div class="flex items-center mb-4">
-            <input type="checkbox" id="checkPhoto" onchange="togglePhoto()" style="width: 20px; margin: 0 10px 0 0;">
-            <span class="text-sm">Mostrar Foto</span>
-        </div>
-        <input type="file" onchange="loadPhoto(event)" accept="image/*" class="mb-4">
-
-        <label>Dados Pessoais</label>
-        <input type="text" id="inName" value="Maria Marleide Ramalho" oninput="update()">
-        <input type="text" id="inRole" value="Jovem Aprendiz / Vendas" oninput="update()">
-        <textarea id="inSummary" rows="4" oninput="update()">Busco a primeira oportunidade de emprego, visando desenvolver habilidades profissionais e contribuir com dedicação para o crescimento da empresa. Sou organizada, pontual e tenho facilidade em trabalhar em equipe.</textarea>
-
-        <label>Contato</label>
-        <input type="text" id="inPhone" value="(88) 8831-4122" oninput="update()">
-        <input type="text" id="inEmail" value="ccontato138@gmail.com" oninput="update()">
-        <input type="text" id="inLoc" value="Cidade Brasileira - CE" oninput="update()">
-
-        <label>Escolaridade</label>
-        <input type="text" id="inSchool" value="Ensino Médio" oninput="update()">
-        <input type="text" id="inSchoolDet" value="Cursando 3º Ano (2026)" oninput="update()">
-
-        <label>Experiência 1</label>
-        <input type="text" id="inExp1Title" value="Vendedora - Dorinha Confecções" oninput="update()">
-        <textarea id="inExp1Desc" rows="3" oninput="update()">Atendimento ao cliente, organização da loja e auxílio nas vendas. Desenvolvimento de boa comunicação e persuasão.</textarea>
-
-        <label>Experiência 2</label>
-        <input type="text" id="inExp2Title" value="Autônoma / Serviços Gerais" oninput="update()">
-        <textarea id="inExp2Desc" rows="3" oninput="update()">Experiência como comerciante independente, empregada doméstica e cuidadora de crianças. Responsável pela gestão de horários e organização.</textarea>
-
-        <label>Habilidades (Separe por vírgula)</label>
-        <textarea id="inSkills" rows="3" oninput="update()">Comunicação, Trabalho em Equipe, Pontualidade, Organização, Digitalização de Documentos, Inglês Básico, Espanhol Básico</textarea>
-    
-        <div style="height: 50px;"></div>
-    </div>
-
-    <div class="preview-area">
-        <div class="page">
-            <div class="sidebar">
-                <div id="photoContainer" class="photo-box hidden">
-                    <img id="imgPreview" src="">
+                <div id="photoUploadDiv" class="mt-4">
+                    <label>Carregue sua foto:</label>
+                    <input type="file" id="photoInput" accept="image/*" class="text-sm">
                 </div>
 
-                <div class="side-title">Contato</div>
-                <div class="contact-item"><i class="fas fa-phone"></i><span id="outPhone"></span></div>
-                <div class="contact-item"><i class="fas fa-envelope"></i><span id="outEmail"></span></div>
-                <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span id="outLoc"></span></div>
-
-                <div class="side-title">Educação</div>
-                <div style="text-align: left;">
-                    <div style="font-weight: bold; color: white;" id="outSchool"></div>
-                    <div style="font-size: 0.9em; opacity: 0.8;" id="outSchoolDet"></div>
+                <label>Escolha a Cor do Currículo:</label>
+                <div class="flex gap-3 mt-2">
+                    <div onclick="setTheme('#0f172a')" class="w-8 h-8 rounded-full bg-slate-900 cursor-pointer border-2 hover:border-green-500"></div>
+                    <div onclick="setTheme('#1e3a8a')" class="w-8 h-8 rounded-full bg-blue-900 cursor-pointer border-2 hover:border-green-500"></div>
+                    <div onclick="setTheme('#7f1d1d')" class="w-8 h-8 rounded-full bg-red-900 cursor-pointer border-2 hover:border-green-500"></div>
+                    <div onclick="setTheme('#14532d')" class="w-8 h-8 rounded-full bg-green-900 cursor-pointer border-2 hover:border-green-500"></div>
                 </div>
 
-                <div class="side-title">Habilidades</div>
-                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
+                <button class="btn-nav btn-next" onclick="nextStep(2)">Começar <i class="fas fa-arrow-right ml-2"></i></button>
             </div>
 
-            <div class="main">
-                <h1 id="outName"></h1>
-                <div class="role" id="outRole"></div>
-
-                <div class="main-title"><i class="fas fa-user"></i> Sobre Mim</div>
-                <p id="outSummary" style="text-align: justify;"></p>
-
-                <div class="main-title"><i class="fas fa-briefcase"></i> Experiência</div>
+            <div class="step" id="step2">
+                <h2 class="text-xl font-bold text-gray-800">Seus Dados</h2>
                 
-                <div class="exp-item">
-                    <div class="exp-title" id="outExp1Title"></div>
-                    <div class="exp-desc" id="outExp1Desc"></div>
+                <label>Nome Completo</label>
+                <input type="text" id="inName" placeholder="Seu nome" onblur="iaAnalyzeName()">
+                
+                <label>Cargo Desejado / Objetivo</label>
+                <input type="text" id="inRole" placeholder="Ex: Vendedora, Jovem Aprendiz..." onkeyup="iaAnalyzeRole(this.value)">
+
+                <label>Telefone</label>
+                <input type="text" id="inPhone" placeholder="(00) 00000-0000">
+                <label>E-mail</label>
+                <input type="text" id="inEmail">
+                <label>Cidade/Estado</label>
+                <input type="text" id="inLoc">
+
+                <div class="mt-4">
+                    <button class="btn-nav btn-back" onclick="prevStep(1)">Voltar</button>
+                    <button class="btn-nav btn-next" onclick="nextStep(3)">Próximo</button>
+                </div>
+            </div>
+
+            <div class="step" id="step3">
+                <h2 class="text-xl font-bold text-gray-800">Sobre Você</h2>
+                <label>Resumo Profissional</label>
+                <textarea id="inSummary" rows="6" placeholder="Escreva um pouco sobre você..." onkeyup="iaAnalyzeSummary(this.value)"></textarea>
+
+                <div class="mt-4">
+                    <button class="btn-nav btn-back" onclick="prevStep(2)">Voltar</button>
+                    <button class="btn-nav btn-next" onclick="nextStep(4)">Próximo</button>
+                </div>
+            </div>
+
+            <div class="step" id="step4">
+                <h2 class="text-xl font-bold text-gray-800">Experiência</h2>
+                
+                <label>Experiência 1 (Cargo e Empresa)</label>
+                <input type="text" id="inExp1Title" placeholder="Ex: Vendedora - Loja X">
+                <label>O que você fazia?</label>
+                <textarea id="inExp1Desc" rows="3" placeholder="Descreva suas tarefas..."></textarea>
+                
+                <label>Experiência 2 (Opcional)</label>
+                <input type="text" id="inExp2Title">
+                <textarea id="inExp2Desc" rows="3"></textarea>
+
+                <div class="mt-4">
+                    <button class="btn-nav btn-back" onclick="prevStep(3)">Voltar</button>
+                    <button class="btn-nav btn-next" onclick="nextStep(5)">Próximo</button>
+                </div>
+            </div>
+
+            <div class="step" id="step5">
+                <h2 class="text-xl font-bold text-gray-800">Formação e Habilidades</h2>
+                
+                <label>Escolaridade</label>
+                <input type="text" id="inSchool" value="Ensino Médio">
+                <input type="text" id="inSchoolDet" value="Cursando 3º Ano">
+
+                <label>Suas Habilidades (Liste uma por linha)</label>
+                <textarea id="inSkills" rows="5" onkeyup="iaAnalyzeSkills(this.value)"></textarea>
+
+                <div class="mt-4">
+                    <button class="btn-nav btn-back" onclick="prevStep(4)">Voltar</button>
+                    <button class="btn-nav btn-next" onclick="renderResume(); generateRecommendations(); nextStep(6)">Finalizar</button>
+                </div>
+            </div>
+
+            <div class="step" id="step6">
+                <div class="text-center">
+                    <i class="fas fa-check-circle text-5xl text-green-500 mb-4"></i>
+                    <h2 class="text-2xl font-bold text-gray-800">Currículo Pronto!</h2>
+                    <p class="text-gray-600 mb-6">A IA analisou seu perfil e gerou recomendações abaixo.</p>
                 </div>
 
-                <div class="exp-item">
-                    <div class="exp-title" id="outExp2Title"></div>
-                    <div class="exp-desc" id="outExp2Desc"></div>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-6">
+                    <h3 class="font-bold text-blue-900 flex items-center gap-2">
+                        <i class="fas fa-graduation-cap"></i> Recomendações de Especialização
+                    </h3>
+                    <p class="text-sm text-blue-700 mb-3">Baseado no seu perfil, aqui estão cursos que aumentariam suas chances:</p>
+                    <ul id="courseList" class="text-sm space-y-2 text-gray-700 list-disc pl-5">
+                        </ul>
                 </div>
+
+                <button onclick="window.print()" class="w-full bg-green-600 text-white font-bold py-4 rounded-lg shadow-lg hover:bg-green-700 transition">
+                    <i class="fas fa-print mr-2"></i> BAIXAR PDF A4
+                </button>
+                <button class="w-full mt-3 text-gray-500 underline" onclick="prevStep(5)">Voltar e Editar</button>
+            </div>
+
+        </div>
+
+        <div class="ai-panel">
+            <div class="flex items-center gap-3 mb-6 border-b border-gray-600 pb-4">
+                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center">
+                    <i class="fas fa-robot text-white"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg">Mentor IA</h3>
+                    <p class="text-xs text-green-300">Analisando em tempo real...</p>
+                </div>
+            </div>
+
+            <div id="aiFeed">
+                <div class="ai-bubble">
+                    <p class="text-sm">👋 Olá! Sou sua Inteligência Artificial auxiliar. Vou te dar dicas enquanto você preenche o currículo. Vamos começar?</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="resume-output">
+        <div class="sidebar" id="sidebar">
+            <div class="photo-box" id="outPhotoBox"><img id="outImg" src=""></div>
+            <div class="side-title">Contato</div>
+            <div class="contact-item"><i class="fas fa-phone"></i><span id="outPhone"></span></div>
+            <div class="contact-item"><i class="fas fa-envelope"></i><span id="outEmail"></span></div>
+            <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span id="outLoc"></span></div>
+            <div class="side-title">Educação</div>
+            <div style="text-align: left; margin-bottom: 10px;">
+                <div style="font-weight: bold;" id="outSchool"></div>
+                <div style="font-size: 0.9em; opacity: 0.8;" id="outSchoolDet"></div>
+            </div>
+            <div class="side-title">Habilidades</div>
+            <div id="outSkillsList" style="text-align: left; font-size: 0.9em;"></div>
+        </div>
+        <div class="main">
+            <h1 id="outName"></h1>
+            <div class="role" id="outRole"></div>
+            <div class="main-title"><i class="fas fa-user"></i> Sobre Mim</div>
+            <p id="outSummary"></p>
+            <div class="main-title"><i class="fas fa-briefcase"></i> Experiência</div>
+            <div class="exp-item">
+                <div class="exp-title" id="outExp1Title"></div>
+                <p style="font-size: 10pt;" id="outExp1Desc"></p>
+            </div>
+            <div class="exp-item" id="exp2Area">
+                <div class="exp-title" id="outExp2Title"></div>
+                <p style="font-size: 10pt;" id="outExp2Desc"></p>
             </div>
         </div>
     </div>
 
     <script>
-        // Atualiza tudo em tempo real
-        function update() {
-            // Textos Simples
+        // --- MOTOR DA IA (Lógica de Especialista) ---
+        
+        function iaMessage(msg, type='info') {
+            const feed = document.getElementById('aiFeed');
+            const icon = type === 'success' ? '✨' : (type === 'warn' ? '💡' : '🤖');
+            
+            const html = `
+                <div class="ai-bubble border-l-4 ${type === 'warn' ? 'border-yellow-400' : 'border-green-400'}">
+                    <p class="text-sm"><span class="text-lg mr-2">${icon}</span> ${msg}</p>
+                </div>
+            `;
+            feed.innerHTML = html + feed.innerHTML; // Adiciona no topo
+        }
+
+        // 1. Análise de Foto
+        function iaCheckPhoto() {
+            const val = document.getElementById('hasPhoto').value;
+            if(val === 'yes') {
+                iaMessage("Ótima escolha! Uma foto profissional aumenta em 20% as chances em vagas de atendimento e vendas.", "success");
+                document.getElementById('photoUploadDiv').style.display = 'block';
+            } else {
+                iaMessage("Sem problemas! Currículos sem foto são padrão para áreas técnicas ou administrativas.", "info");
+                document.getElementById('photoUploadDiv').style.display = 'none';
+            }
+        }
+
+        // 2. Análise de Cargo (Sugestões de Keywords)
+        function iaAnalyzeRole(text) {
+            text = text.toLowerCase();
+            if(text.includes('vend') || text.includes('loja') || text.includes('comerc')) {
+                iaMessage("Detectei área de Vendas! Palavras-chave fortes para usar: <b>Negociação, Metas, Atendimento, Persuasão</b>.", "warn");
+            } else if (text.includes('admin') || text.includes('auxiliar')) {
+                iaMessage("Para Administrativo, foque em: <b>Organização, Pacote Office, Arquivo, Gestão de Tempo</b>.", "warn");
+            } else if (text.includes('estudante') || text.includes('aprendiz')) {
+                iaMessage("Como Jovem Aprendiz, destaque: <b>Vontade de Aprender, Pontualidade, Trabalho em Equipe</b>.", "success");
+            }
+        }
+
+        // 3. Análise de Resumo
+        function iaAnalyzeSummary(text) {
+            if(text.length > 10 && text.length < 50) {
+                iaMessage("Seu resumo está um pouco curto. Tente adicionar o que você busca na empresa.", "info");
+            } else if (text.length > 200) {
+                iaMessage("Texto muito longo! Recrutadores leem em 6 segundos. Tente ser mais direto.", "warn");
+            }
+        }
+
+        // 4. Recomendador de Cursos (O "Dom" da pessoa)
+        function generateRecommendations() {
+            const role = document.getElementById('inRole').value.toLowerCase();
+            const skills = document.getElementById('inSkills').value.toLowerCase();
+            const list = document.getElementById('courseList');
+            let courses = [];
+
+            // Lógica de Recomendação
+            if(role.includes('vend') || skills.includes('comunicação')) {
+                courses.push("<b>Técnicas de Negociação e Vendas</b> (Fundamental para o comércio)");
+                courses.push("<b>Marketing Digital Básico</b> (Para vender online)");
+                courses.push("<b>Oratória e Comunicação</b> (Para falar melhor com clientes)");
+            }
+            
+            if(role.includes('admin') || skills.includes('organização') || skills.includes('computador')) {
+                courses.push("<b>Excel Intermediário/Avançado</b> (Essencial em qualquer escritório)");
+                courses.push("<b>Power BI Básico</b> (Diferencial enorme hoje em dia)");
+                courses.push("<b>Gestão de Tempo e Produtividade</b>");
+            }
+
+            if(skills.includes('crianca') || role.includes('cuidador') || role.includes('educa')) {
+                courses.push("<b>Primeiros Socorros</b> (Muito valorizado)");
+                courses.push("<b>Psicologia Infantil Básica</b>");
+                courses.push("<b>Pedagogia e Recreação</b>");
+            }
+
+            // Padrão se não achar nada específico
+            if(courses.length === 0) {
+                courses.push("<b>Informática Básica / Pacote Office</b> (Indispensável)");
+                courses.push("<b>Inglês Básico</b> (Abre muitas portas)");
+                courses.push("<b>Inteligência Emocional no Trabalho</b>");
+            }
+
+            list.innerHTML = courses.map(c => `<li>${c}</li>`).join('');
+        }
+
+        // --- NAVEGAÇÃO WIZARD ---
+        let currentTheme = '#0f172a';
+
+        function showStep(id) {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step'+id).classList.add('active');
+        }
+        function nextStep(id) { showStep(id); }
+        function prevStep(id) { showStep(id); }
+
+        function setTheme(color) {
+            currentTheme = color;
+            document.documentElement.style.setProperty('--theme-color', color);
+            iaMessage("Cor aplicada! O currículo ficará com este tom profissional.", "success");
+        }
+
+        // --- RENDERIZAR PDF ---
+        function renderResume() {
+            // Transfere dados dos inputs para os outputs ocultos
             document.getElementById('outName').innerText = document.getElementById('inName').value;
             document.getElementById('outRole').innerText = document.getElementById('inRole').value;
-            document.getElementById('outSummary').innerText = document.getElementById('inSummary').value;
-            
             document.getElementById('outPhone').innerText = document.getElementById('inPhone').value;
             document.getElementById('outEmail').innerText = document.getElementById('inEmail').value;
             document.getElementById('outLoc').innerText = document.getElementById('inLoc').value;
-
+            document.getElementById('outSummary').innerText = document.getElementById('inSummary').value;
+            
             document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
             document.getElementById('outSchoolDet').innerText = document.getElementById('inSchoolDet').value;
 
             document.getElementById('outExp1Title').innerText = document.getElementById('inExp1Title').value;
             document.getElementById('outExp1Desc').innerText = document.getElementById('inExp1Desc').value;
-            document.getElementById('outExp2Title').innerText = document.getElementById('inExp2Title').value;
-            document.getElementById('outExp2Desc').innerText = document.getElementById('inExp2Desc').value;
 
-            // Habilidades (Lista com bolinhas)
-            const skills = document.getElementById('inSkills').value.split(',');
-            let skillsHtml = "";
-            skills.forEach(s => {
-                if(s.trim()) skillsHtml += `<div>• ${s.trim()}</div>`;
-            });
-            document.getElementById('outSkills').innerHTML = skillsHtml;
-        }
-
-        // Foto
-        function togglePhoto() {
-            const show = document.getElementById('checkPhoto').checked;
-            if(show) document.getElementById('photoContainer').classList.remove('hidden');
-            else document.getElementById('photoContainer').classList.add('hidden');
-        }
-
-        function loadPhoto(event) {
-            const reader = new FileReader();
-            reader.onload = function(){
-                document.getElementById('imgPreview').src = reader.result;
+            const exp2 = document.getElementById('inExp2Title').value;
+            if(exp2) {
+                document.getElementById('exp2Area').classList.remove('hidden');
+                document.getElementById('outExp2Title').innerText = exp2;
+                document.getElementById('outExp2Desc').innerText = document.getElementById('inExp2Desc').value;
+            } else {
+                document.getElementById('exp2Area').classList.add('hidden');
             }
-            if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
+
+            // Skills
+            const skillText = document.getElementById('inSkills').value;
+            document.getElementById('outSkillsList').innerHTML = skillText.split('\n').map(s => s.trim() ? `<div>• ${s}</div>` : '').join('');
+
+            // Foto
+            const hasPhoto = document.getElementById('hasPhoto').value;
+            const photoBox = document.getElementById('outPhotoBox');
+            if(hasPhoto === 'yes') {
+                photoBox.classList.remove('hidden');
+                const file = document.getElementById('photoInput').files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = e => document.getElementById('outImg').src = e.target.result;
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                photoBox.classList.add('hidden');
+            }
         }
 
-        // Cores
-        function setColor(primary, accent) {
-            document.documentElement.style.setProperty('--primary', primary);
-            document.documentElement.style.setProperty('--accent', accent);
-        }
-
-        // Iniciar
-        window.onload = update;
+        // Inicialização
+        showStep(1);
     </script>
 </body>
 </html>
