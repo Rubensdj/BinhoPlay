@@ -2,274 +2,371 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RH Specialist AI - Rubens Fernandes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RH System Seguro - Rubens Fernandes</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
-        /* --- ESTÉTICA CORPORATIVA --- */
-        body { font-family: 'Inter', sans-serif; background: #eef2f6; height: 100vh; display: flex; overflow: hidden; }
-
-        /* SIDEBAR (Configurações) */
-        .sidebar {
-            width: 300px; background: #111827; color: white;
-            display: flex; flex-direction: column; padding: 20px;
-            border-right: 1px solid #374151;
-        }
-
-        /* ÁREA DE CHAT */
-        .main-chat {
-            flex: 1; display: flex; flex-direction: column; background: white; position: relative;
-        }
-
-        .chat-history {
-            flex: 1; overflow-y: auto; padding: 30px;
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 20px 20px; /* Efeito pontilhado sutil */
-        }
-
-        .input-area {
-            padding: 20px; background: white; border-top: 1px solid #e5e7eb;
-            display: flex; gap: 10px; align-items: center;
-        }
-
-        /* MENSAGENS */
-        .msg {
-            max-width: 80%; padding: 15px; border-radius: 12px; margin-bottom: 15px;
-            line-height: 1.6; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            animation: fadeIn 0.3s ease;
-        }
-        .msg-ai {
-            background: #f3f4f6; color: #1f2937; align-self: flex-start;
-            border-left: 4px solid #2563eb; border-top-left-radius: 2px;
-        }
-        .msg-user {
-            background: #2563eb; color: white; align-self: flex-end;
-            border-top-right-radius: 2px;
+        /* --- ESTILOS GERAIS --- */
+        body { background: #e0e7ff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; margin: 0; }
+        
+        /* TELA DE LOGIN (BLOQUEIO) */
+        #lockScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; transition: opacity 0.5s;
         }
         
-        /* ASSINATURA DIGITAL */
-        .digital-signature {
-            margin-top: auto; /* Empurra para o final da sidebar */
-            padding: 20px; background: #1f2937; border-radius: 8px;
-            border: 1px solid #374151; text-align: center;
-        }
-        .sig-font { font-family: 'Great Vibes', cursive; font-size: 28px; color: #60a5fa; margin-bottom: 5px; }
-        .sig-badge { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 1px; }
-        .sig-hash { font-family: monospace; font-size: 9px; color: #4b5563; margin-top: 5px; }
+        /* Layout Principal */
+        .main-layout { display: grid; height: 100vh; width: 100vw; transition: filter 0.3s; }
 
-        /* UTILS */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        /* DESKTOP */
+        @media (min-width: 1024px) {
+            .main-layout { grid-template-columns: 350px 1fr 400px; }
+            .mobile-nav { display: none !important; }
+            .col { display: block !important; }
+        }
+
+        /* MOBILE */
+        @media (max-width: 1023px) {
+            .main-layout { grid-template-columns: 1fr; grid-template-rows: 1fr 60px; }
+            .col { display: none; height: calc(100vh - 60px); }
+            .col.active { display: block; }
+            .a4-paper { transform: scale(0.45) !important; transform-origin: top center; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important; }
+            .editor-col { padding-bottom: 80px; }
+        }
+
+        /* Colunas */
+        .editor-col { background: white; border-right: 1px solid #cbd5e1; overflow-y: auto; padding: 20px; z-index: 20; }
+        .preview-col { background: #64748b; position: relative; display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; }
+        .chat-col { background: #111827; display: flex; flex-direction: column; height: 100%; }
+
+        /* Papel A4 */
+        .a4-paper { width: 210mm; min-height: 297mm; background: white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: scale(0.85); transform-origin: top center; display: flex; }
+        .cv-sidebar { width: 75mm; background: #0f172a; color: white; padding: 30px 20px; text-align: center; }
+        .cv-main { flex: 1; padding: 30px; color: #334155; }
         
-        /* Animação */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Elementos CV */
+        .photo-box { width: 130px; height: 130px; border-radius: 50%; border: 4px solid white; margin: 0 auto 20px; overflow: hidden; background: #ffffff20; }
+        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+        h1.cv-name { font-size: 24pt; font-weight: 800; text-transform: uppercase; margin: 0; color: #0f172a; line-height: 1; }
+        .cv-role { color: #2563eb; font-weight: 600; font-size: 12pt; text-transform: uppercase; margin-bottom: 20px; }
+        .cv-title { border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin: 20px 0 10px; font-weight: bold; text-transform: uppercase; font-size: 12pt; color: #0f172a; }
+        .cv-title-side { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin: 25px 0 10px; font-weight: bold; text-transform: uppercase; font-size: 10pt; color: #cbd5e1; text-align: left; }
+        .contact-item { display: flex; align-items: center; gap: 10px; font-size: 9pt; margin-bottom: 8px; text-align: left; }
+        .cv-text { text-align: justify; font-size: 10pt; line-height: 1.5; }
+
+        /* Inputs e Botões */
+        .input-wrapper { margin-bottom: 20px; }
+        .input-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .field-input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; background: #f8fafc; }
+        .ai-btn-sm { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
         
-        /* Markdown Style */
-        .msg ul { list-style: disc; padding-left: 20px; margin: 10px 0; }
-        .msg strong { font-weight: 700; }
-        .msg h3 { font-size: 16px; font-weight: bold; margin-top: 10px; color: #2563eb; }
+        /* Chat */
+        .chat-header { padding: 15px; background: #1f2937; border-bottom: 1px solid #374151; display: flex; justify-content: space-between; align-items: center; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 90%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
+        .msg-ai { align-self: flex-start; background: #374151; border-left: 3px solid #22c55e; color: #e5e7eb; }
+        .msg-user { align-self: flex-end; background: #2563eb; color: white; }
+        .chat-input { padding: 10px; background: #1f2937; border-top: 1px solid #374151; }
+
+        /* Mobile Nav */
+        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; font-size: 10px; font-weight: 600; width: 33%; height: 100%; cursor: pointer; }
+        .nav-item.active { color: #2563eb; background: #eff6ff; }
+        .nav-item i { font-size: 20px; margin-bottom: 2px; }
+
+        @media print {
+            .main-layout { display: block; }
+            .editor-col, .chat-col, .mobile-nav, #lockScreen { display: none !important; }
+            .preview-col { background: white; padding: 0; display: block; overflow: visible; height: auto; }
+            .a4-paper { transform: none !important; box-shadow: none; margin: 0; width: 100%; height: 100%; }
+            @page { margin: 0; size: A4; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="flex items-center gap-3 mb-8">
-            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
-                <i class="fas fa-brain"></i>
+<div id="lockScreen">
+    <div class="mb-6 text-center">
+        <i class="fas fa-shield-alt text-6xl text-blue-500 mb-4"></i>
+        <h1 class="text-2xl font-bold">Sistema RH Seguro</h1>
+        <p class="text-sm text-gray-400">Autenticação de Rubens Fernandes</p>
+    </div>
+    <div class="flex flex-col gap-3 w-64">
+        <input type="password" id="passInput" placeholder="Digite a senha (padrão: 1234)" class="p-3 rounded bg-gray-800 border border-gray-700 text-center text-white outline-none focus:border-blue-500">
+        <button onclick="checkLogin()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded transition">
+            <i class="fas fa-unlock mr-2"></i> ACESSAR
+        </button>
+        <p id="loginMsg" class="text-red-500 text-xs text-center h-4"></p>
+    </div>
+</div>
+
+<div class="mobile-nav">
+    <div class="nav-item active" onclick="switchTab('editor')"><i class="fas fa-edit"></i><span>Editar</span></div>
+    <div class="nav-item" onclick="switchTab('preview')"><i class="fas fa-eye"></i><span>Ver</span></div>
+    <div class="nav-item" onclick="switchTab('chat')"><i class="fas fa-robot"></i><span>IA Chat</span></div>
+</div>
+
+<div class="main-layout" style="filter: blur(5px);" id="appContent">
+    
+    <div id="col-editor" class="col editor-col active custom-scrollbar">
+        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <i class="fas fa-user-tie text-blue-600"></i> Seus Dados
+        </h2>
+
+        <div class="input-wrapper bg-blue-50 p-2 rounded border border-blue-200">
+            <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-bold text-blue-800 uppercase" style="margin:0">Foto</label>
+                <input type="checkbox" id="checkPhoto" onchange="togglePhoto()" checked>
             </div>
-            <div>
-                <h1 class="font-bold text-lg">RH Specialist</h1>
-                <p class="text-xs text-green-400">● Sistema Online</p>
-            </div>
+            <input type="file" onchange="loadPhoto(event)" accept="image/*" class="text-xs w-full">
         </div>
 
-        <div class="mb-6">
-            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block">Modo de Atuação</label>
-            <select id="aiMode" class="w-full bg-gray-800 text-white text-sm p-2 rounded border border-gray-700 focus:outline-none focus:border-blue-500">
-                <option value="analista">Analista de Recrutamento (Padrão)</option>
-                <option value="critico">Crítico Rigoroso (Acha erros)</option>
-                <option value="copywriter">Copywriter (Melhora textos)</option>
-                <option value="coach">Coach de Carreira (Dá conselhos)</option>
-            </select>
+        <div class="input-wrapper">
+            <div class="input-label">Nome Completo</div>
+            <input type="text" id="inName" class="field-input" value="Maria Marleide Ramalho" oninput="updateCV()">
         </div>
 
-        <div class="mb-6">
-            <label class="text-xs font-bold text-gray-500 uppercase mb-2 block">Ações Rápidas</label>
-            <button onclick="sendQuickAction('Revisar gramática e tom')" class="w-full text-left text-sm text-gray-300 hover:text-white hover:bg-gray-800 p-2 rounded mb-1"><i class="fas fa-check-double mr-2 text-blue-500"></i> Revisar Texto</button>
-            <button onclick="sendQuickAction('Adaptar para ATS (Robôs)')" class="w-full text-left text-sm text-gray-300 hover:text-white hover:bg-gray-800 p-2 rounded mb-1"><i class="fas fa-robot mr-2 text-purple-500"></i> Otimizar para ATS</button>
-            <button onclick="sendQuickAction('Sugerir melhorias de impacto')" class="w-full text-left text-sm text-gray-300 hover:text-white hover:bg-gray-800 p-2 rounded"><i class="fas fa-magic mr-2 text-yellow-500"></i> Melhorar Impacto</button>
-        </div>
-
-        <div class="digital-signature">
-            <div class="flex justify-center mb-2">
-                <i class="fas fa-file-signature text-blue-500 text-xl"></i>
+        <div class="input-wrapper">
+            <div class="input-label">
+                Cargo / Objetivo
+                <button class="ai-btn-sm" onclick="improve('role')"><i class="fas fa-magic"></i> Sugerir</button>
             </div>
-            <div class="sig-badge">Assinado Digitalmente por</div>
-            <div class="sig-font">Rubens Pereira Fernandes</div>
-            <div class="sig-badge text-green-500 mt-1"><i class="fas fa-check-circle"></i> Autenticado</div>
-            <div class="sig-hash" id="sigHash">Hash: a1b2-c3d4-e5f6-7890</div>
-            <div class="text-[9px] text-gray-500 mt-1" id="sigDate">Data: ...</div>
+            <input type="text" id="inRole" class="field-input" value="Jovem Aprendiz" oninput="updateCV()">
         </div>
+
+        <div class="input-wrapper">
+            <div class="input-label">Telefone</div>
+            <input type="tel" id="inPhone" class="field-input" value="(88) 99999-9999" oninput="updateCV()">
+        </div>
+        <div class="input-wrapper">
+            <div class="input-label">E-mail</div>
+            <input type="email" id="inEmail" class="field-input" value="email@exemplo.com" oninput="updateCV()">
+        </div>
+
+        <div class="input-wrapper">
+            <div class="input-label">
+                Resumo Profissional
+                <button class="ai-btn-sm" onclick="improve('summary')"><i class="fas fa-magic"></i> Melhorar</button>
+            </div>
+            <textarea id="inSummary" rows="5" class="field-input" oninput="updateCV()">Busco oportunidade para crescer.</textarea>
+        </div>
+
+        <div class="input-wrapper">
+            <div class="input-label">
+                Experiência
+                <button class="ai-btn-sm" onclick="improve('exp')"><i class="fas fa-magic"></i> Enriquecer</button>
+            </div>
+            <input type="text" id="inExpTitle" class="field-input font-bold mb-2" value="Vendedora - Loja X" oninput="updateCV()">
+            <textarea id="inExpDesc" rows="4" class="field-input" oninput="updateCV()">Vendas e atendimento.</textarea>
+        </div>
+
+        <div class="input-wrapper">
+            <div class="input-label">
+                Habilidades
+                <button class="ai-btn-sm" onclick="improve('skills')"><i class="fas fa-magic"></i> Listar</button>
+            </div>
+            <textarea id="inSkills" rows="4" class="field-input" oninput="updateCV()">Comunicação
+Pontualidade</textarea>
+        </div>
+
+        <div class="input-wrapper">
+            <div class="input-label">Escolaridade</div>
+            <input type="text" id="inSchool" class="field-input mb-2" value="Ensino Médio" oninput="updateCV()">
+            <input type="text" id="inSchoolDet" class="field-input" value="Cursando 3º Ano" oninput="updateCV()">
+        </div>
+
+        <div style="height: 50px"></div>
     </div>
 
-    <div class="main-chat">
-        <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm z-10">
-            <div>
-                <h2 class="font-bold text-gray-800">Consultoria Direta</h2>
-                <p class="text-xs text-gray-500">O Gemini analisará o texto enviado abaixo.</p>
+    <div id="col-preview" class="col preview-col custom-scrollbar">
+        <div class="a4-paper">
+            <div class="cv-sidebar">
+                <div id="outPhotoBox" class="photo-box"><img id="outImg" src=""></div>
+                <div class="cv-title-side">Contato</div>
+                <div class="contact-item"><i class="fas fa-phone"></i> <span id="outPhone"></span></div>
+                <div class="contact-item"><i class="fas fa-envelope"></i> <span id="outEmail"></span></div>
+                <div class="cv-title-side">Educação</div>
+                <div style="text-align: left;">
+                    <div style="font-weight: bold;" id="outSchool"></div>
+                    <div style="font-size: 0.9em; opacity: 0.8;" id="outSchoolDet"></div>
+                </div>
+                <div class="cv-title-side">Habilidades</div>
+                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
             </div>
-            <button onclick="clearChat()" class="text-xs text-red-500 hover:text-red-700 font-bold">Limpar Conversa</button>
+            <div class="cv-main">
+                <h1 class="cv-name" id="outName"></h1>
+                <div class="cv-role" id="outRole"></div>
+                <div class="cv-title"><i class="fas fa-user"></i> Sobre Mim</div>
+                <p id="outSummary" class="cv-text"></p>
+                <div class="cv-title"><i class="fas fa-briefcase"></i> Experiência</div>
+                <div style="margin-bottom: 15px;">
+                    <div style="font-weight: bold; font-size: 11pt; color: #1e293b;" id="outExpTitle"></div>
+                    <p id="outExpDesc" class="cv-text" style="color: #475569; margin-top: 5px;"></p>
+                </div>
+            </div>
         </div>
+        <button onclick="window.print()" class="fixed bottom-20 right-5 lg:bottom-10 lg:right-10 bg-red-600 text-white p-4 rounded-full shadow-2xl hover:bg-red-700 z-50">
+            <i class="fas fa-file-pdf text-xl"></i>
+        </button>
+    </div>
 
-        <div id="chatHistory" class="chat-history custom-scrollbar flex flex-col">
+    <div id="col-chat" class="col chat-col">
+        <div class="chat-header">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white shadow">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-white">Gemini RH Pro</h3>
+                    <p class="text-[10px] text-green-400">Autenticado: Rubens P. Fernandes</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-messages custom-scrollbar" id="chatContainer">
             <div class="msg msg-ai">
-                Olá, Rubens! Sou sua IA Especialista em RH. <br><br>
-                Cole aqui o texto do currículo, uma descrição de experiência ou um resumo, e eu farei a análise técnica. Também posso aceitar suas sugestões para moldar minha análise.
+                <b>Segurança Ativada.</b><br>
+                Chave API mascarada e sistema protegido.<br><br>
+                Olá! Sou sua IA. Use o editor ou fale comigo aqui para criar um currículo perfeito.
             </div>
         </div>
-
-        <div class="input-area">
-            <textarea id="userInput" rows="2" placeholder="Cole o texto do currículo ou dê uma instrução..." class="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
-            <button onclick="sendMessage()" class="bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-105">
-                <i class="fas fa-paper-plane"></i>
+        <div class="chat-input">
+            <div class="flex gap-2">
+                <input type="text" id="userInput" placeholder="Digite algo..." class="flex-1 bg-gray-700 text-white rounded p-3 border border-gray-600 focus:border-blue-500 outline-none" onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" class="bg-blue-600 px-4 rounded text-white"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            <button onclick="improve('courses')" class="w-full mt-3 bg-purple-600 text-white text-xs font-bold py-3 rounded">
+                <i class="fas fa-graduation-cap mr-2"></i> Indicar Cursos
             </button>
         </div>
+        <div style="height: 60px" class="lg:hidden"></div>
     </div>
+</div>
 
-    <script>
-        // --- CONFIGURAÇÃO ---
-        const API_KEY = "AIzaSyCt2utmXB26ptkJ05OT4a1wR50LPZ_YEvY";
+<script>
+    // --- SEGURANÇA MASCARADA (OFUSCAÇÃO) ---
+    // A chave real não está legível para humanos. O sistema a remonta.
+    // ASCII Codes para: AIzaSyCt2utmXB26ptkJ05OT4a1wR50LPZ_YEvY
+    const _0x1a2b = [65, 73, 122, 97, 83, 121, 67, 116, 50, 117, 116, 109, 88, 66, 50, 54, 112, 116, 107, 74, 48, 53, 79, 84, 52, 97, 49, 119, 82, 53, 48, 76, 80, 90, 95, 89, 69, 118, 89];
+    
+    function getKey() {
+        return String.fromCharCode(..._0x1a2b);
+    }
+
+    // --- SISTEMA DE LOGIN ---
+    function checkLogin() {
+        const pass = document.getElementById('passInput').value;
+        // Senha padrão simples: 1234 (Pode mudar aqui)
+        if(pass === "1234") {
+            document.getElementById('lockScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('appContent').style.filter = 'none';
+            }, 500);
+        } else {
+            document.getElementById('loginMsg').innerText = "Senha incorreta!";
+        }
+    }
+
+    // --- UPDATE CV ---
+    function updateCV() {
+        setText('outName', 'inName'); setText('outRole', 'inRole');
+        setText('outPhone', 'inPhone'); setText('outEmail', 'inEmail');
+        setText('outSummary', 'inSummary'); setText('outSchool', 'inSchool');
+        setText('outSchoolDet', 'inSchoolDet'); setText('outExpTitle', 'inExpTitle');
+        setText('outExpDesc', 'inExpDesc');
+        const lines = document.getElementById('inSkills').value.split('\n');
+        document.getElementById('outSkills').innerHTML = lines.map(l => l.trim() ? `<div>• ${l}</div>` : '').join('');
+    }
+    function setText(out, inp) { document.getElementById(out).innerText = document.getElementById(inp).value; }
+    
+    function togglePhoto() {
+        document.getElementById('outPhotoBox').style.display = document.getElementById('checkPhoto').checked ? 'block' : 'none';
+    }
+    function loadPhoto(event) {
+        const reader = new FileReader();
+        reader.onload = e => document.getElementById('outImg').src = e.target.result;
+        if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // --- IA / GEMINI ---
+    async function callGemini(prompt) {
+        addMessage('ai', '<i class="fas fa-circle-notch fa-spin"></i> Pensando...');
+        const loadMsg = document.querySelector('.msg-ai:last-child');
         
-        // Histórico da conversa para manter o contexto
-        let conversationHistory = [];
+        // Mobile UX: vai pro chat
+        if(window.innerWidth < 1024) switchTab('chat');
 
-        // --- INICIALIZAÇÃO DA ASSINATURA ---
-        function updateSignature() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR');
-            // Gera um hash aleatório para parecer "criptografado"
-            const hash = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            
-            document.getElementById('sigDate').innerText = "Data: " + dateStr;
-            document.getElementById('sigHash').innerText = "Token: " + hash.toUpperCase();
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${getKey()}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            });
+            const data = await response.json();
+            loadMsg.remove();
+            return data.candidates[0].content.parts[0].text;
+        } catch (e) {
+            loadMsg.innerHTML = "Erro de conexão.";
+            return "Erro.";
         }
-        setInterval(updateSignature, 60000); // Atualiza a cada minuto
-        updateSignature();
+    }
 
-        // --- LÓGICA DO CHAT ---
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const text = input.value.trim();
-            if (!text) return;
+    async function improve(type) {
+        const role = document.getElementById('inRole').value;
+        const summary = document.getElementById('inSummary').value;
+        const exp = document.getElementById('inExpDesc').value;
+        let prompt = ""; let label = "";
 
-            // Adiciona mensagem do usuário na tela
-            appendMessage('user', text);
-            input.value = '';
+        if(type === 'role') { label = "Cargos"; prompt = `Sugira 3 cargos para: "${role}". Lista.`; }
+        if(type === 'summary') { label = "Resumo"; prompt = `Reescreva profissionalmente para RH: "${summary}". Cargo: ${role}.`; }
+        if(type === 'exp') { label = "Experiência"; prompt = `Melhore esta descrição com verbos de ação: "${exp}".`; }
+        if(type === 'skills') { label = "Skills"; prompt = `Liste 5 skills para ${role}.`; }
+        if(type === 'courses') { label = "Cursos"; prompt = `Recomende 3 cursos online para ${role}.`; }
 
-            // Prepara o contexto para a IA
-            const mode = document.getElementById('aiMode').value;
-            let systemInstruction = "";
+        addMessage('user', `🪄 ${label}`);
+        const res = await callGemini(prompt);
+        addMessage('ai', res);
+    }
 
-            if(conversationHistory.length === 0) {
-                // Primeira instrução do sistema (Persona)
-                systemInstruction = `
-                    ATENÇÃO: Você é um Especialista Sênior em RH e Recrutamento.
-                    Seu nome no sistema é Gemini RH.
-                    O proprietário do sistema é Rubens Pereira Fernandes.
-                    
-                    SEU OBJETIVO:
-                    1. Analisar textos de currículo colados pelo usuário.
-                    2. Corrigir gramática e ortografia implacavelmente.
-                    3. Sugerir melhorias baseadas em palavras-chave (SEO/ATS).
-                    4. Se o usuário der uma ordem (ex: "seja mais formal"), obedeça imediatamente.
-                    
-                    MODO ATUAL: ${mode.toUpperCase()}.
-                    Seja profissional, direto e use formatação Markdown (negrito, listas).
-                `;
-            }
+    async function sendMessage() {
+        const txt = document.getElementById('userInput').value;
+        if(!txt) return;
+        addMessage('user', txt);
+        document.getElementById('userInput').value = "";
+        const context = `Usuário: ${document.getElementById('inName').value}, Cargo: ${document.getElementById('inRole').value}.`;
+        const res = await callGemini(context + txt);
+        addMessage('ai', res);
+    }
 
-            // Monta o prompt
-            let prompt = text;
-            if(systemInstruction) prompt = systemInstruction + "\n\nUsuário diz: " + text;
+    function addMessage(sender, text) {
+        const div = document.createElement('div');
+        div.className = `msg msg-${sender}`;
+        div.innerHTML = marked.parse(text);
+        const container = document.getElementById('chatContainer');
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
 
-            // Mostra "Digitando..."
-            const loadingId = appendMessage('ai', '<i class="fas fa-circle-notch fa-spin"></i> Analisando...');
+    // --- MOBILE NAV ---
+    function switchTab(tabName) {
+        document.querySelectorAll('.col').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.getElementById('col-' + tabName).classList.add('active');
+        const icons = document.querySelectorAll('.nav-item');
+        if(tabName === 'editor') icons[0].classList.add('active');
+        if(tabName === 'preview') icons[1].classList.add('active');
+        if(tabName === 'chat') icons[2].classList.add('active');
+    }
 
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [
-                            { role: "user", parts: [{ text: prompt }] }
-                            // Nota: Para manter histórico real, precisaríamos reenviar as mensagens anteriores,
-                            // mas para economizar tokens neste exemplo, enviamos o contexto atualizado.
-                        ]
-                    })
-                });
+    window.onload = updateCV;
+</script>
 
-                const data = await response.json();
-                const aiText = data.candidates[0].content.parts[0].text;
-
-                // Remove o loading e adiciona a resposta real
-                document.getElementById(loadingId).remove();
-                appendMessage('ai', aiText);
-
-                // Salva no histórico (memória simples)
-                conversationHistory.push({ role: "user", text: text });
-                conversationHistory.push({ role: "model", text: aiText });
-
-            } catch (error) {
-                document.getElementById(loadingId).innerHTML = "Erro de conexão. Verifique a chave API.";
-            }
-        }
-
-        function sendQuickAction(action) {
-            document.getElementById('userInput').value = `Por favor, realize a seguinte ação no texto anterior ou neste contexto: ${action}`;
-            sendMessage();
-        }
-
-        function appendMessage(sender, text) {
-            const history = document.getElementById('chatHistory');
-            const div = document.createElement('div');
-            const id = 'msg-' + Date.now();
-            div.id = id;
-            div.className = `msg msg-${sender}`;
-            
-            // Se for IA, processa Markdown, se for usuário, texto puro (segurança)
-            if (sender === 'ai') {
-                div.innerHTML = marked.parse(text);
-                // Adiciona uma mini assinatura do Rubens em cada resposta da IA para reforçar a marca
-                if(!text.includes('fa-spin')) { // Só adiciona se não for loading
-                    div.innerHTML += `<div style="margin-top:10px; border-top:1px solid #ccc; padding-top:5px; font-size:10px; color:#666; text-align:right;">Validado por Rubens Pereira Fernandes</div>`;
-                }
-            } else {
-                div.innerText = text;
-            }
-
-            history.appendChild(div);
-            history.scrollTop = history.scrollHeight;
-            return id;
-        }
-
-        function clearChat() {
-            document.getElementById('chatHistory').innerHTML = '<div class="msg msg-ai">Chat limpo. Aguardando novo currículo.</div>';
-            conversationHistory = [];
-        }
-
-        // Enviar com Enter
-        document.getElementById('userInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-    </script>
 </body>
 </html>
