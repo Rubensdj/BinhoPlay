@@ -3,528 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currículo Color Picker</title>
+    <title>Currículo Maria Marleide - PDF Perfeito</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        /* --- CONFIGURAÇÕES GERAIS --- */
         :root {
-            /* Cores Padrão Iniciais */
-            --primary-color: #0f172a; /* Lateral Escura */
-            --accent-color: #3b82f6;  /* Destaques em Azul */
-            --sidebar-text: #f8fafc;  /* Texto da lateral (quase branco) */
+            --primary: #0f172a;
+            --accent: #3b82f6;
+            --text-side: #f8fafc;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; background: #e2e8f0; margin: 0; }
 
-        /* Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-
-        /* A4 PAGE */
-        .a4-page {
+        /* --- FOLHA A4 (VISUALIZAÇÃO) --- */
+        .page {
             width: 210mm;
             min-height: 297mm;
             background: white;
             display: flex;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            margin: 0 auto;
+            margin: 20px auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             position: relative;
-            overflow: hidden;
         }
 
-        /* --- LATERAL --- */
+        /* --- COLUNA LATERAL --- */
         .sidebar {
             width: 32%;
-            background-color: var(--primary-color);
-            color: var(--sidebar-text);
-            padding: 40px 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: var(--primary);
+            color: var(--text-side);
+            padding: 40px 20px;
             text-align: center;
-            transition: background-color 0.3s ease;
+            -webkit-print-color-adjust: exact; /* Garante cor na impressão */
+            print-color-adjust: exact;
         }
 
-        /* --- PRINCIPAL --- */
-        .main-content {
+        /* --- COLUNA PRINCIPAL --- */
+        .main {
             width: 68%;
-            padding: 45px 40px;
-            background-color: #ffffff;
+            padding: 40px;
             color: #334155;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* FOTO */
-        .profile-photo-frame {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid #ffffff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            overflow: hidden;
-            margin-bottom: 30px;
-            flex-shrink: 0;
-            background-color: rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* --- ELEMENTOS --- */
+        .photo-box {
+            width: 140px; height: 140px; 
+            border-radius: 50%; border: 4px solid white;
+            overflow: hidden; margin: 0 auto 30px;
+            background: #ffffff20;
+            display: flex; justify-content: center; align-items: center;
         }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
+        .hidden { display: none !important; }
 
-        /* TIPOGRAFIA */
-        h1.name {
-            font-size: 26pt; font-weight: 800; color: var(--primary-color);
-            line-height: 1.1; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 5px;
+        h1 { font-size: 24pt; font-weight: 800; text-transform: uppercase; line-height: 1; color: var(--primary); margin-bottom: 5px; }
+        .role { font-size: 14pt; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 30px; }
+
+        /* Títulos */
+        .side-title { 
+            font-size: 11pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #ffffff40; 
+            padding-bottom: 5px; margin: 30px 0 15px; text-align: left; color: #ffffff90;
         }
-
-        .role {
-            font-size: 13pt; color: var(--accent-color); font-weight: 600;
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px;
+        .main-title {
+            font-size: 14pt; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 5px; margin: 30px 0 15px; color: var(--primary); display: flex; align-items: center; gap: 10px;
         }
+        .main-title i { color: var(--accent); }
 
-        /* TÍTULOS */
-        .section-title-side {
-            width: 100%; text-align: left; font-size: 10pt; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1.2px; border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 8px; margin-bottom: 15px; margin-top: 25px; color: rgba(255,255,255,0.8);
-        }
-
-        .section-title-main {
-            font-size: 13pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-            color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;
-            margin-bottom: 20px; margin-top: 10px; display: flex; align-items: center; gap: 10px;
-        }
-        .section-title-main i { color: var(--accent-color); }
-
-        /* ITENS */
-        .contact-row { display: flex; align-items: center; width: 100%; margin-bottom: 12px; font-size: 9.5pt; text-align: left; color: inherit; }
-        .contact-row i { width: 24px; text-align: center; margin-right: 8px; color: rgba(255,255,255,0.7); font-size: 10pt; }
-
-        .edu-item { width: 100%; text-align: left; margin-bottom: 18px; }
-        .edu-school { font-weight: 600; font-size: 10.5pt; color: inherit; }
-        .edu-detail { font-size: 9pt; opacity: 0.8; margin-top: 2px; }
-
-        /* PROJETOS */
-        .project-block { margin-bottom: 25px; page-break-inside: avoid; }
-        .project-name { font-weight: 700; font-size: 11.5pt; color: #1e293b; margin-bottom: 4px; }
-        .project-desc { font-size: 10pt; line-height: 1.6; color: #475569; text-align: justify; white-space: pre-wrap; }
-
-        /* UTIL */
-        .hidden-force { display: none !important; }
+        /* Listas */
+        .contact-item { display: flex; align-items: center; margin-bottom: 10px; font-size: 10pt; text-align: left; }
+        .contact-item i { width: 25px; color: #60a5fa; }
         
-        /* INPUT DE COR CUSTOMIZADO */
-        .color-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: white;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
+        .exp-item { margin-bottom: 20px; }
+        .exp-title { font-weight: 700; font-size: 11pt; color: #1e293b; }
+        .exp-desc { font-size: 10pt; color: #475569; margin-top: 2px; text-align: justify; }
+
+        /* --- MODO DE IMPRESSÃO (O SEGREDO PARA NÃO DEFORMAR) --- */
+        @media print {
+            @page { margin: 0; size: A4; }
+            body { background: white; }
+            .no-print { display: none !important; }
+            .page { margin: 0; box-shadow: none; width: 100%; height: 100%; }
+            /* Forçar cores de fundo */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
-        input[type="color"] {
-            -webkit-appearance: none;
-            border: none;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            border-radius: 4px;
-            overflow: hidden;
-            padding: 0;
+
+        /* --- ESTILO DO EDITOR (TELA) --- */
+        .editor-panel {
+            position: fixed; left: 0; top: 0; bottom: 0; width: 350px;
+            background: white; z-index: 50; padding: 20px; overflow-y: auto;
+            border-right: 1px solid #ddd;
         }
-        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-        input[type="color"]::-webkit-color-swatch { border: none; }
+        .preview-area { margin-left: 350px; padding: 20px; display: flex; justify-content: center; }
+        
+        @media (max-width: 1024px) {
+            .editor-panel { position: relative; width: 100%; height: auto; border-right: none; }
+            .preview-area { margin-left: 0; }
+            .page { transform: scale(0.6); transform-origin: top center; margin-bottom: -400px; }
+        }
+
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; font-size: 13px; }
+        label { font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; }
+        .btn-download {
+            background: #16a34a; color: white; width: 100%; padding: 15px; 
+            font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center;
+            margin-bottom: 20px; font-size: 16px; border: none;
+        }
+        .btn-download:hover { background: #15803d; }
     </style>
 </head>
-<body class="flex flex-col lg:flex-row h-screen overflow-hidden">
+<body>
 
-    <div class="w-full lg:w-[450px] bg-white h-full shadow-2xl z-20 overflow-y-auto border-r border-gray-200 flex flex-col">
+    <div class="editor-panel no-print">
+        <h2 class="text-xl font-bold mb-4 text-slate-800">Editor Currículo</h2>
         
-        <div class="p-6 border-b border-gray-100 bg-gray-50 sticky top-0 z-30">
-            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2 mb-4">
-                <i class="fas fa-palette text-blue-600"></i> Personalizar Cores
-            </h2>
-            
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div class="color-wrapper">
-                    <input type="color" id="pickerPrimary" value="#0f172a" oninput="updateColors()">
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-gray-600">Fundo Lateral</span>
-                        <span class="text-[10px] text-gray-400">Cor principal</span>
-                    </div>
-                </div>
-                <div class="color-wrapper">
-                    <input type="color" id="pickerAccent" value="#3b82f6" oninput="updateColors()">
-                    <div class="flex flex-col">
-                        <span class="text-xs font-bold text-gray-600">Destaques</span>
-                        <span class="text-[10px] text-gray-400">Ícones e Títulos</span>
-                    </div>
-                </div>
-            </div>
+        <button onclick="window.print()" class="btn-download">
+            <i class="fas fa-print"></i> BAIXAR PDF / IMPRIMIR
+        </button>
+        <p class="text-xs text-center text-red-500 mb-6 font-bold">⚠️ Ao salvar, marque a opção "Gráficos de Plano de Fundo" para a cor aparecer.</p>
 
-            <p class="text-[10px] font-bold text-gray-400 uppercase mb-2">Ou escolha um tema pronto:</p>
-            <div class="flex gap-2">
-                <button onclick="applyTheme('#0f172a', '#3b82f6')" class="w-6 h-6 rounded-full bg-[#0f172a] border-2 border-transparent hover:scale-110 transition" title="Navy"></button>
-                <button onclick="applyTheme('#111827', '#6b7280')" class="w-6 h-6 rounded-full bg-[#111827] border-2 border-transparent hover:scale-110 transition" title="Preto"></button>
-                <button onclick="applyTheme('#064e3b', '#10b981')" class="w-6 h-6 rounded-full bg-[#064e3b] border-2 border-transparent hover:scale-110 transition" title="Verde"></button>
-                <button onclick="applyTheme('#4c1d95', '#a78bfa')" class="w-6 h-6 rounded-full bg-[#4c1d95] border-2 border-transparent hover:scale-110 transition" title="Roxo"></button>
-                <button onclick="applyTheme('#881337', '#f43f5e')" class="w-6 h-6 rounded-full bg-[#881337] border-2 border-transparent hover:scale-110 transition" title="Vinho"></button>
-            </div>
-            
-            <div class="flex gap-2 mt-4 pt-2 border-t">
-                 <button onclick="clearData()" class="text-xs text-red-500 underline hover:text-red-700">Reiniciar</button>
-                 <span class="text-xs text-green-600 ml-auto opacity-50 transition" id="saveStatus"><i class="fas fa-check"></i> Salvo</span>
-            </div>
+        <label>Cor do Currículo</label>
+        <div class="flex gap-2 mb-6">
+            <div onclick="setColor('#0f172a', '#3b82f6')" class="w-8 h-8 rounded-full bg-[#0f172a] cursor-pointer border-2 border-white shadow-md"></div>
+            <div onclick="setColor('#7f1d1d', '#f87171')" class="w-8 h-8 rounded-full bg-[#7f1d1d] cursor-pointer border-2 border-white shadow-md"></div>
+            <div onclick="setColor('#14532d', '#4ade80')" class="w-8 h-8 rounded-full bg-[#14532d] cursor-pointer border-2 border-white shadow-md"></div>
+            <div onclick="setColor('#4c1d95', '#a78bfa')" class="w-8 h-8 rounded-full bg-[#4c1d95] cursor-pointer border-2 border-white shadow-md"></div>
         </div>
 
-        <div class="p-6 space-y-6">
-            
-            <div class="p-4 bg-white border rounded-lg shadow-sm">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="font-bold text-slate-700 text-sm">Foto</span>
-                    <input type="checkbox" id="togglePhoto" checked onchange="updateLayout()" class="accent-blue-600 w-5 h-5">
-                </div>
-                <input type="file" id="photoInput" accept="image/*" onchange="previewImage(event)" class="text-xs w-full text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-            </div>
-
-            <div class="space-y-3">
-                <h3 class="text-xs font-bold text-gray-400 uppercase">Perfil</h3>
-                <input type="text" id="inName" placeholder="Nome Completo" class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()">
-                <input type="text" id="inRole" placeholder="Cargo / Objetivo" class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()">
-                <textarea id="inSummary" rows="4" placeholder="Resumo Profissional..." class="w-full p-3 border rounded text-sm focus:border-blue-500 outline-none" oninput="updateLayout()"></textarea>
-            </div>
-
-            <div class="space-y-3">
-                <h3 class="text-xs font-bold text-gray-400 uppercase">Contato</h3>
-                <input type="text" id="inPhone" placeholder="Telefone" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
-                <input type="text" id="inEmail" placeholder="E-mail" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
-                <input type="text" id="inLocation" placeholder="Cidade - Estado" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
-                <input type="text" id="inLinkedin" placeholder="LinkedIn / GitHub" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
-            </div>
-
-            <div class="space-y-3">
-                <h3 class="text-xs font-bold text-gray-400 uppercase">Escolaridade</h3>
-                <input type="text" id="inSchool" placeholder="Nome da Escola" class="w-full p-2 border rounded text-sm font-bold" oninput="updateLayout()">
-                <input type="text" id="inSchoolDetail" placeholder="Ano / Curso" class="w-full p-2 border rounded text-sm" oninput="updateLayout()">
-            </div>
-
-            <div>
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-xs font-bold text-gray-400 uppercase">Projetos</h3>
-                    <button onclick="addProjectInput()" class="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">+ Adicionar</button>
-                </div>
-                <div id="projectsEditorContainer" class="space-y-3"></div>
-            </div>
-
-            <div>
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="text-xs font-bold text-gray-400 uppercase">Habilidades</h3>
-                    <button onclick="addSkillInput()" class="text-xs bg-gray-100 px-2 py-1 rounded hover:bg-gray-200">+ Adicionar</button>
-                </div>
-                <div id="skillsEditorContainer" class="space-y-2"></div>
-            </div>
-
-            <div class="h-10"></div>
+        <label>Foto</label>
+        <div class="flex items-center mb-4">
+            <input type="checkbox" id="checkPhoto" onchange="togglePhoto()" style="width: 20px; margin: 0 10px 0 0;">
+            <span class="text-sm">Mostrar Foto</span>
         </div>
+        <input type="file" onchange="loadPhoto(event)" accept="image/*" class="mb-4">
+
+        <label>Dados Pessoais</label>
+        <input type="text" id="inName" value="Maria Marleide Ramalho" oninput="update()">
+        <input type="text" id="inRole" value="Jovem Aprendiz / Vendas" oninput="update()">
+        <textarea id="inSummary" rows="4" oninput="update()">Busco a primeira oportunidade de emprego, visando desenvolver habilidades profissionais e contribuir com dedicação para o crescimento da empresa. Sou organizada, pontual e tenho facilidade em trabalhar em equipe.</textarea>
+
+        <label>Contato</label>
+        <input type="text" id="inPhone" value="(88) 8831-4122" oninput="update()">
+        <input type="text" id="inEmail" value="ccontato138@gmail.com" oninput="update()">
+        <input type="text" id="inLoc" value="Cidade Brasileira - CE" oninput="update()">
+
+        <label>Escolaridade</label>
+        <input type="text" id="inSchool" value="Ensino Médio" oninput="update()">
+        <input type="text" id="inSchoolDet" value="Cursando 3º Ano (2026)" oninput="update()">
+
+        <label>Experiência 1</label>
+        <input type="text" id="inExp1Title" value="Vendedora - Dorinha Confecções" oninput="update()">
+        <textarea id="inExp1Desc" rows="3" oninput="update()">Atendimento ao cliente, organização da loja e auxílio nas vendas. Desenvolvimento de boa comunicação e persuasão.</textarea>
+
+        <label>Experiência 2</label>
+        <input type="text" id="inExp2Title" value="Autônoma / Serviços Gerais" oninput="update()">
+        <textarea id="inExp2Desc" rows="3" oninput="update()">Experiência como comerciante independente, empregada doméstica e cuidadora de crianças. Responsável pela gestão de horários e organização.</textarea>
+
+        <label>Habilidades (Separe por vírgula)</label>
+        <textarea id="inSkills" rows="3" oninput="update()">Comunicação, Trabalho em Equipe, Pontualidade, Organização, Digitalização de Documentos, Inglês Básico, Espanhol Básico</textarea>
+    
+        <div style="height: 50px;"></div>
     </div>
 
-    <div class="flex-1 bg-gray-200 h-full relative flex flex-col items-center justify-center p-4">
-        
-        <button onclick="generatePDF()" class="absolute top-6 right-6 z-30 bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg font-bold flex items-center gap-2 transition hover:scale-105">
-            <i class="fas fa-file-pdf"></i> Baixar PDF
-        </button>
+    <div class="preview-area">
+        <div class="page">
+            <div class="sidebar">
+                <div id="photoContainer" class="photo-box hidden">
+                    <img id="imgPreview" src="">
+                </div>
 
-        <div class="w-full h-full overflow-auto flex justify-center items-start pt-8 pb-20 custom-scrollbar">
-            
-            <div id="resumePreview" class="a4-page">
+                <div class="side-title">Contato</div>
+                <div class="contact-item"><i class="fas fa-phone"></i><span id="outPhone"></span></div>
+                <div class="contact-item"><i class="fas fa-envelope"></i><span id="outEmail"></span></div>
+                <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span id="outLoc"></span></div>
+
+                <div class="side-title">Educação</div>
+                <div style="text-align: left;">
+                    <div style="font-weight: bold; color: white;" id="outSchool"></div>
+                    <div style="font-size: 0.9em; opacity: 0.8;" id="outSchoolDet"></div>
+                </div>
+
+                <div class="side-title">Habilidades</div>
+                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
+            </div>
+
+            <div class="main">
+                <h1 id="outName"></h1>
+                <div class="role" id="outRole"></div>
+
+                <div class="main-title"><i class="fas fa-user"></i> Sobre Mim</div>
+                <p id="outSummary" style="text-align: justify;"></p>
+
+                <div class="main-title"><i class="fas fa-briefcase"></i> Experiência</div>
                 
-                <div class="sidebar">
-                    <div id="previewPhotoContainer" class="profile-photo-frame">
-                        <img id="previewImage" src="https://via.placeholder.com/200" class="profile-img" alt="Foto">
-                    </div>
-
-                    <div id="contactSection" class="w-full">
-                        <div class="section-title-side">Contato</div>
-                        <div class="flex flex-col gap-1 w-full">
-                            <div class="contact-row" id="viewPhoneBox"><i class="fas fa-phone"></i><span id="viewPhone"></span></div>
-                            <div class="contact-row" id="viewEmailBox"><i class="fas fa-envelope"></i><span id="viewEmail"></span></div>
-                            <div class="contact-row" id="viewLocationBox"><i class="fas fa-map-marker-alt"></i><span id="viewLocation"></span></div>
-                            <div class="contact-row" id="viewLinkedinBox"><i class="fas fa-link"></i><span id="viewLinkedin"></span></div>
-                        </div>
-                    </div>
-
-                    <div id="eduSection" class="w-full mt-6">
-                        <div class="section-title-side">Educação</div>
-                        <div class="edu-item">
-                            <div class="edu-school" id="viewSchool"></div>
-                            <div class="edu-detail" id="viewSchoolDetail"></div>
-                        </div>
-                    </div>
-
-                    <div id="skillSection" class="w-full mt-6">
-                        <div class="section-title-side">Competências</div>
-                        <div id="viewSkillsList" class="w-full text-left space-y-2 text-sm text-slate-200"></div>
-                    </div>
+                <div class="exp-item">
+                    <div class="exp-title" id="outExp1Title"></div>
+                    <div class="exp-desc" id="outExp1Desc"></div>
                 </div>
 
-                <div class="main-content">
-                    <div class="mb-10 border-b border-gray-100 pb-6">
-                        <h1 class="name" id="viewName">Seu Nome</h1>
-                        <div class="role" id="viewRole">Seu Cargo</div>
-                    </div>
-
-                    <div id="summarySection" class="mb-8">
-                        <div class="section-title-main"><i class="fas fa-user"></i> Sobre Mim</div>
-                        <p id="viewSummary" class="text-slate-600 text-justify leading-relaxed"></p>
-                    </div>
-
-                    <div id="projectsSection">
-                        <div class="section-title-main"><i class="fas fa-briefcase"></i> Projetos & Experiência</div>
-                        <div id="viewProjectsList"></div>
-                    </div>
+                <div class="exp-item">
+                    <div class="exp-title" id="outExp2Title"></div>
+                    <div class="exp-desc" id="outExp2Desc"></div>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 
     <script>
-        // --- SISTEMA DE CORES ---
-        function updateColors() {
-            const primary = document.getElementById('pickerPrimary').value;
-            const accent = document.getElementById('pickerAccent').value;
+        // Atualiza tudo em tempo real
+        function update() {
+            // Textos Simples
+            document.getElementById('outName').innerText = document.getElementById('inName').value;
+            document.getElementById('outRole').innerText = document.getElementById('inRole').value;
+            document.getElementById('outSummary').innerText = document.getElementById('inSummary').value;
             
-            document.documentElement.style.setProperty('--primary-color', primary);
-            document.documentElement.style.setProperty('--accent-color', accent);
-            
-            saveData();
-        }
+            document.getElementById('outPhone').innerText = document.getElementById('inPhone').value;
+            document.getElementById('outEmail').innerText = document.getElementById('inEmail').value;
+            document.getElementById('outLoc').innerText = document.getElementById('inLoc').value;
 
-        function applyTheme(primary, accent) {
-            document.getElementById('pickerPrimary').value = primary;
-            document.getElementById('pickerAccent').value = accent;
-            updateColors();
-        }
+            document.getElementById('outSchool').innerText = document.getElementById('inSchool').value;
+            document.getElementById('outSchoolDet').innerText = document.getElementById('inSchoolDet').value;
 
-        // --- AUTO-SAVE ---
-        const STORAGE_KEY = 'resume_colors_data';
+            document.getElementById('outExp1Title').innerText = document.getElementById('inExp1Title').value;
+            document.getElementById('outExp1Desc').innerText = document.getElementById('inExp1Desc').value;
+            document.getElementById('outExp2Title').innerText = document.getElementById('inExp2Title').value;
+            document.getElementById('outExp2Desc').innerText = document.getElementById('inExp2Desc').value;
 
-        function saveData() {
-            const data = {
-                name: document.getElementById('inName').value,
-                role: document.getElementById('inRole').value,
-                summary: document.getElementById('inSummary').value,
-                phone: document.getElementById('inPhone').value,
-                email: document.getElementById('inEmail').value,
-                location: document.getElementById('inLocation').value,
-                linkedin: document.getElementById('inLinkedin').value,
-                school: document.getElementById('inSchool').value,
-                schoolDetail: document.getElementById('inSchoolDetail').value,
-                projects: Array.from(document.querySelectorAll('.proj-title-in')).map((el, i) => ({
-                    title: el.value,
-                    desc: document.querySelectorAll('.proj-desc-in')[i].value
-                })),
-                skills: Array.from(document.querySelectorAll('.skill-in')).map(el => el.value),
-                // Salvar Cores
-                themePrimary: document.getElementById('pickerPrimary').value,
-                themeAccent: document.getElementById('pickerAccent').value
-            };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            
-            const status = document.getElementById('saveStatus');
-            status.style.opacity = '1';
-            setTimeout(() => status.style.opacity = '0.5', 1000);
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (!saved) {
-                // Dados padrão iniciais
-                addProjectInput("Projeto Exemplo", "Descreva suas atividades...");
-                addSkillInput("Habilidade 1");
-                updateLayout();
-                return;
-            }
-
-            const data = JSON.parse(saved);
-            document.getElementById('inName').value = data.name || "";
-            document.getElementById('inRole').value = data.role || "";
-            document.getElementById('inSummary').value = data.summary || "";
-            document.getElementById('inPhone').value = data.phone || "";
-            document.getElementById('inEmail').value = data.email || "";
-            document.getElementById('inLocation').value = data.location || "";
-            document.getElementById('inLinkedin').value = data.linkedin || "";
-            document.getElementById('inSchool').value = data.school || "";
-            document.getElementById('inSchoolDetail').value = data.schoolDetail || "";
-
-            // Restaurar Cores
-            if(data.themePrimary) {
-                document.getElementById('pickerPrimary').value = data.themePrimary;
-                document.getElementById('pickerAccent').value = data.themeAccent || '#3b82f6';
-                updateColors();
-            }
-
-            // Restaurar Listas
-            document.getElementById('projectsEditorContainer').innerHTML = "";
-            if (data.projects && data.projects.length > 0) data.projects.forEach(p => addProjectInput(p.title, p.desc));
-            else addProjectInput();
-
-            document.getElementById('skillsEditorContainer').innerHTML = "";
-            if (data.skills && data.skills.length > 0) data.skills.forEach(s => addSkillInput(s));
-            else addSkillInput();
-            
-            updateLayout();
-        }
-
-        function clearData() {
-            if(confirm("Deseja apagar todos os dados e cores?")){
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
-        }
-
-        // --- LÓGICA DO LAYOUT ---
-        window.onload = loadData;
-
-        function updateLayout() {
-            // Textos
-            sync('inName', 'viewName');
-            sync('inRole', 'viewRole');
-            sync('inSummary', 'viewSummary', 'summarySection');
-            sync('inSchool', 'viewSchool');
-            sync('inSchoolDetail', 'viewSchoolDetail');
-
-            // Ícones e Contato
-            syncIcon('inPhone', 'viewPhone', 'viewPhoneBox');
-            syncIcon('inEmail', 'viewEmail', 'viewEmailBox');
-            syncIcon('inLocation', 'viewLocation', 'viewLocationBox');
-            syncIcon('inLinkedin', 'viewLinkedin', 'viewLinkedinBox');
-
-            // Seções Vazias
-            toggleSec('eduSection', ['inSchool', 'inSchoolDetail']);
-            toggleSec('contactSection', ['inPhone', 'inEmail', 'inLocation', 'inLinkedin']);
-
-            // Foto
-            const show = document.getElementById('togglePhoto').checked;
-            const pic = document.getElementById('previewPhotoContainer');
-            if(show) pic.classList.remove('hidden-force');
-            else pic.classList.add('hidden-force');
-
-            // Listas
-            renderProjects();
-            renderSkills();
-            
-            saveData();
-        }
-
-        function sync(src, dest, sec) {
-            const val = document.getElementById(src).value;
-            document.getElementById(dest).innerText = val;
-            if(sec) {
-                const s = document.getElementById(sec);
-                if(!val.trim()) s.classList.add('hidden-force');
-                else s.classList.remove('hidden-force');
-            }
-        }
-
-        function syncIcon(src, dest, box) {
-            const val = document.getElementById(src).value;
-            const b = document.getElementById(box);
-            if(!val.trim()) b.classList.add('hidden-force');
-            else {
-                b.classList.remove('hidden-force');
-                document.getElementById(dest).innerText = val;
-            }
-        }
-
-        function toggleSec(id, inputs) {
-            const hasContent = inputs.some(i => document.getElementById(i).value.trim() !== "");
-            const el = document.getElementById(id);
-            if(!hasContent) el.classList.add('hidden-force');
-            else el.classList.remove('hidden-force');
-        }
-
-        // --- GERENCIAMENTO DE LISTAS ---
-        function addProjectInput(t="", d="") {
-            const div = document.createElement('div');
-            div.className = "bg-white p-3 border rounded shadow-sm relative group";
-            div.innerHTML = `
-                <input type="text" placeholder="Título" class="w-full font-bold text-sm mb-2 border-b p-1 proj-title-in" value="${t}" oninput="updateLayout()">
-                <textarea placeholder="Descrição" rows="2" class="w-full text-sm text-gray-600 p-1 resize-none proj-desc-in" oninput="updateLayout()">${d}</textarea>
-                <button onclick="this.parentElement.remove(); updateLayout()" class="absolute top-2 right-2 text-red-400 opacity-0 group-hover:opacity-100"><i class="fas fa-trash"></i></button>
-            `;
-            document.getElementById('projectsEditorContainer').appendChild(div);
-        }
-
-        function renderProjects() {
-            const target = document.getElementById('viewProjectsList');
-            target.innerHTML = "";
-            const ts = document.querySelectorAll('.proj-title-in');
-            const ds = document.querySelectorAll('.proj-desc-in');
-            let has = false;
-            ts.forEach((t, i) => {
-                if(t.value.trim() || ds[i].value.trim()){
-                    has = true;
-                    target.innerHTML += `
-                        <div class="project-block">
-                            <div class="project-name">${t.value}</div>
-                            <div class="project-desc">${ds[i].value}</div>
-                        </div>`;
-                }
+            // Habilidades (Lista com bolinhas)
+            const skills = document.getElementById('inSkills').value.split(',');
+            let skillsHtml = "";
+            skills.forEach(s => {
+                if(s.trim()) skillsHtml += `<div>• ${s.trim()}</div>`;
             });
-            const sec = document.getElementById('projectsSection');
-            if(!has) sec.classList.add('hidden-force');
-            else sec.classList.remove('hidden-force');
+            document.getElementById('outSkills').innerHTML = skillsHtml;
         }
 
-        function addSkillInput(v="") {
-            const div = document.createElement('div');
-            div.className = "flex items-center gap-2 group";
-            div.innerHTML = `
-                <input type="text" value="${v}" class="flex-1 p-2 border rounded text-sm skill-in" oninput="updateLayout()">
-                <button onclick="this.parentElement.remove(); updateLayout()" class="text-red-400 opacity-0 group-hover:opacity-100"><i class="fas fa-times"></i></button>
-            `;
-            document.getElementById('skillsEditorContainer').appendChild(div);
+        // Foto
+        function togglePhoto() {
+            const show = document.getElementById('checkPhoto').checked;
+            if(show) document.getElementById('photoContainer').classList.remove('hidden');
+            else document.getElementById('photoContainer').classList.add('hidden');
         }
 
-        function renderSkills() {
-            const target = document.getElementById('viewSkillsList');
-            target.innerHTML = "";
-            const inps = document.querySelectorAll('.skill-in');
-            let has = false;
-            inps.forEach(i => {
-                if(i.value.trim()){
-                    has = true;
-                    target.innerHTML += `<div class="flex items-center gap-2"><i class="fas fa-check text-[10px] opacity-70"></i><span>${i.value}</span></div>`;
-                }
-            });
-            const sec = document.getElementById('skillSection');
-            if(!has) sec.classList.add('hidden-force');
-            else sec.classList.remove('hidden-force');
-        }
-
-        function previewImage(event) {
+        function loadPhoto(event) {
             const reader = new FileReader();
-            reader.onload = function(){ document.getElementById('previewImage').src = reader.result; }
+            reader.onload = function(){
+                document.getElementById('imgPreview').src = reader.result;
+            }
             if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
         }
 
-        async function generatePDF() {
-            window.scrollTo(0,0);
-            const element = document.getElementById('resumePreview');
-            const canvas = await html2canvas(element, { scale: 3, useCORS: true, backgroundColor: '#ffffff' });
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
-            let name = document.getElementById('inName').value || "Curriculo";
-            pdf.save(`${name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
+        // Cores
+        function setColor(primary, accent) {
+            document.documentElement.style.setProperty('--primary', primary);
+            document.documentElement.style.setProperty('--accent', accent);
         }
+
+        // Iniciar
+        window.onload = update;
     </script>
 </body>
 </html>
