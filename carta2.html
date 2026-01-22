@@ -3,450 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currículo Budapest Premium</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+    <title>Currículo Jovem Aprendiz - Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root {
-            /* Cores do Tema Budapest */
-            --sidebar-bg: #373d48; /* Cinza Escuro/Azulado */
-            --sidebar-txt: #ffffff;
-            --main-bg: #ffffff;
-            --text-primary: #2c3e50;
-            --accent-color: #c0392b; /* Vermelho Clássico Budapest */
-            
-            /* Cores da Interface de Edição */
-            --ui-bg: #f0f2f5;
-            --ui-panel: #ffffff;
-            --ui-primary: #2980b9;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--ui-bg); font-family: 'Roboto Condensed', sans-serif; padding-bottom: 50px; }
-
-        /* --- UI: FORMULÁRIO (NÃO SAI NO PDF) --- */
-        .editor-container {
-            max-width: 900px; margin: 30px auto; background: var(--ui-panel);
-            padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        
-        .editor-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 20px; }
-        .editor-header h1 { color: var(--text-primary); font-family: 'Montserrat', sans-serif; }
-        
-        .form-section { margin-bottom: 25px; background: #f9f9f9; padding: 20px; border-radius: 8px; border-left: 4px solid var(--ui-primary); }
-        .form-section h3 { margin-bottom: 15px; color: var(--ui-primary); display: flex; align-items: center; gap: 10px; }
-        
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
-        .full { grid-column: span 2; }
-        
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; color: #555; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; }
-        input:focus, textarea:focus { border-color: var(--ui-primary); outline: none; box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1); }
-        textarea { resize: vertical; min-height: 80px; }
-
-        /* Botões */
-        .btn-group { display: flex; gap: 15px; margin-top: 30px; justify-content: center; }
-        .btn { padding: 15px 30px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .btn-gen { background: #27ae60; color: white; }
-        .btn-gen:hover { background: #219150; transform: translateY(-2px); }
-        .btn-ai { background: linear-gradient(45deg, #8e44ad, #9b59b6); color: white; padding: 5px 15px; font-size: 12px; border-radius: 4px; margin-top: 5px; cursor: pointer; border: none;}
-
-        /* Toggle Switch */
-        .toggle-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: #eee; padding: 10px; border-radius: 5px; width: fit-content; }
-        .switch { position: relative; display: inline-block; width: 40px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--ui-primary); }
-        input:checked + .slider:before { transform: translateX(16px); }
-
-        /* --- TELA 2: VISUALIZAÇÃO (PAPEL A4 REAL) --- */
-        #preview-screen { display: none; flex-direction: column; align-items: center; padding-top: 20px; }
-        
-        .toolbar { position: sticky; top: 20px; background: #333; color: white; padding: 10px 25px; border-radius: 30px; display: flex; gap: 20px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); margin-bottom: 30px; }
-        .toolbar button { background: none; border: none; color: white; cursor: pointer; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .toolbar button:hover { color: #ccc; }
-
-        /* O CURRÍCULO BUDAPEST (A4) */
-        .cv-page {
+        /* --- ESTILOS GERAIS (Igual ao anterior, mantendo a identidade visual) --- */
+        .resume-container {
             width: 210mm;
             min-height: 297mm;
             background: white;
-            box-shadow: 0 0 25px rgba(0,0,0,0.15);
-            display: flex;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin: 0 auto;
             position: relative;
-            overflow: hidden; /* Corta o que passar da folha */
-        }
-
-        /* Coluna Esquerda (Sidebar) */
-        .cv-sidebar {
-            width: 35%; /* Proporção clássica */
-            background-color: var(--sidebar-bg);
-            color: var(--sidebar-txt);
-            padding: 40px 25px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .cv-sidebar.no-photo { justify-content: flex-start; text-align: left; padding-top: 60px; }
-        .cv-sidebar.no-photo .photo-box { display: none; }
-
-        .photo-box {
-            width: 160px; height: 160px;
-            border-radius: 50%;
-            border: 5px solid rgba(255,255,255,0.15);
             overflow: hidden;
-            margin-bottom: 40px;
-            background: #555;
         }
-        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        .side-block { width: 100%; margin-bottom: 40px; text-align: left; }
-        .side-title {
-            text-transform: uppercase;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 2px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            color: #eee;
+        
+        .resume-layout { display: flex; min-height: 297mm; height: 100%; }
+        
+        /* Coluna Esquerda */
+        .left-column {
+            width: 35%;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 25px;
+            position: relative;
         }
-
-        .contact-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; font-size: 14px; font-weight: 300; }
-        .contact-row i { width: 20px; text-align: center; color: var(--accent-color); }
-        .contact-row span { word-break: break-all; }
-
-        .skill-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 4px;
-            margin: 0 5px 8px 0;
-            font-size: 13px;
+        .left-column::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: inherit; z-index: -1; min-height: 100%; }
+        
+        /* Coluna Direita */
+        .right-column { width: 65%; padding: 30px; background: white; }
+        
+        /* Tipografia */
+        .section-title {
+            font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #ecf0f1;
+            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 5px;
         }
-
-        /* Coluna Direita (Conteúdo) */
-        .cv-main {
-            width: 65%;
-            padding: 50px 40px;
-            color: var(--text-primary);
+        
+        .section-title-right {
+            font-size: 20px; font-weight: bold; margin-bottom: 20px; color: #2c3e50;
+            text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #3498db; padding-bottom: 10px;
         }
+        
+        .skill-bar { margin-bottom: 15px; }
+        .skill-name { font-size: 14px; margin-bottom: 5px; font-weight: 500; }
+        .skill-progress { width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
+        .skill-fill { height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); border-radius: 4px; }
+        
+        .contact-item { display: flex; align-items: center; margin-bottom: 12px; font-size: 13px; word-break: break-word;}
+        .contact-item i { width: 25px; margin-right: 8px; color: #3498db; text-align: center;}
+        
+        .name-title { font-size: 32px; font-weight: bold; color: white; margin-bottom: 8px; line-height: 1.2; }
+        .job-title { font-size: 16px; color: #3498db; margin-bottom: 25px; font-weight: 500; }
+        
+        .experience-item { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #ecf0f1; }
+        .experience-item:last-child { border-bottom: none; }
+        .experience-title { font-size: 16px; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        .experience-company { font-size: 14px; color: #3498db; font-weight: 500; margin-bottom: 5px; }
+        .experience-period { font-size: 12px; color: #7f8c8d; margin-bottom: 10px; font-style: italic; }
+        .experience-description { font-size: 13px; line-height: 1.6; color: #555; white-space: pre-line; }
+        
+        .education-item { margin-bottom: 15px; }
+        .education-title { font-size: 14px; font-weight: 500; color: #ecf0f1; margin-bottom: 3px; }
+        .education-school { font-size: 13px; color: #bdc3c7; margin-bottom: 2px; }
+        .education-year { font-size: 12px; color: #95a5a6; }
 
-        header { margin-bottom: 40px; }
-        .cv-name {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 42px;
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        .cv-role {
-            font-size: 18px;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 600;
-        }
-
-        .main-block { margin-bottom: 35px; }
-        .main-title {
-            display: flex; align-items: center; gap: 15px;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        .main-title i { color: var(--accent-color); font-size: 20px; }
-
-        .summary-text { font-size: 14px; line-height: 1.6; color: #444; text-align: justify; }
-
-        .job-entry { margin-bottom: 25px; page-break-inside: avoid; }
-        .job-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
-        .job-title { font-weight: 700; font-size: 16px; color: #222; }
-        .job-time { font-size: 13px; font-weight: 700; color: var(--accent-color); }
-        .job-company { font-style: italic; color: #666; font-size: 14px; margin-bottom: 8px; font-family: 'Montserrat', sans-serif;}
-        .job-desc { font-size: 14px; line-height: 1.5; color: #444; }
-
-        /* Spinner IA */
-        #ai-loader { display: none; color: var(--ui-primary); font-size: 14px; font-weight: bold; margin-left: 10px; }
-
-        @media screen and (max-width: 768px) {
-            .cv-page { width: 100%; height: auto; flex-direction: column; }
-            .cv-sidebar, .cv-main { width: 100%; }
-            .row { grid-template-columns: 1fr; }
+        @media print {
+            body { background: white !important; margin: 0; padding: 0; }
+            .editor-section, .no-print { display: none !important; }
+            .resume-container { box-shadow: none; margin: 0; width: 100%; height: auto; page-break-inside: avoid; }
+            .left-column { -webkit-print-color-adjust: exact; print-color-adjust: exact; height: 100%; }
         }
     </style>
 </head>
-<body>
-
-    <div class="editor-container" id="editor-screen">
-        <div class="editor-header">
-            <h1>Gerador Budapest Profissional</h1>
-            <p>Preencha os dados para gerar o modelo clássico.</p>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-7xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6 no-print">
+            <h1 class="text-3xl font-bold text-center mb-4 text-gray-800">
+                <i class="fas fa-graduation-cap mr-3 text-blue-500"></i>
+                Editor: Primeiro Emprego
+            </h1>
+            <div class="flex justify-center space-x-4">
+                <button onclick="generatePDF()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center shadow transition">
+                    <i class="fas fa-file-pdf mr-2"></i> BAIXAR PDF
+                </button>
+            </div>
         </div>
-
-        <form id="form-cv" onsubmit="event.preventDefault(); generate();">
-            
-            <div class="toggle-wrapper">
-                <span style="font-size: 14px; font-weight: bold;">Foto de Perfil</span>
-                <label class="switch">
-                    <input type="checkbox" id="has-photo" checked onchange="togglePhotoInput()">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            
-            <div id="photo-input-area" class="form-section">
-                <h3><i class="fas fa-camera"></i> Foto</h3>
-                <input type="file" id="inp-photo" accept="image/*">
-            </div>
-
-            <div class="form-section">
-                <h3><i class="fas fa-user"></i> Informações Pessoais</h3>
-                <div class="row">
-                    <div><label>Nome Completo</label><input type="text" id="inp-name" placeholder="Ex: Roberto Almeida" required></div>
-                    <div><label>Cargo Desejado</label><input type="text" id="inp-role" placeholder="Ex: Engenheiro Civil" required></div>
-                </div>
-                <div class="row">
-                    <div><label>E-mail</label><input type="email" id="inp-email"></div>
-                    <div><label>Telefone</label><input type="text" id="inp-phone"></div>
-                </div>
-                <div class="row">
-                    <div class="full"><label>Endereço / Localização</label><input type="text" id="inp-addr" placeholder="São Paulo, SP"></div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h3><i class="fas fa-align-left"></i> Resumo Profissional</h3>
-                <textarea id="inp-summary" placeholder="Fale sobre sua carreira..."></textarea>
-                <button type="button" class="btn-ai" onclick="runAI('inp-summary')"><i class="fas fa-magic"></i> Melhorar Texto (IA)</button>
-                <span id="ai-loader"><i class="fas fa-spinner fa-spin"></i> Melhorando...</span>
-            </div>
-
-            <div class="form-section">
-                <h3><i class="fas fa-briefcase"></i> Última Experiência</h3>
-                <div class="row">
-                    <div><label>Empresa</label><input type="text" id="inp-exp-comp"></div>
-                    <div><label>Cargo</label><input type="text" id="inp-exp-role"></div>
-                </div>
-                <div class="row">
-                    <div class="full"><label>Período</label><input type="text" id="inp-exp-time" placeholder="2020 - Atual"></div>
-                </div>
-                <div class="full">
-                    <label>Descrição das Atividades</label>
-                    <textarea id="inp-exp-desc"></textarea>
-                    <button type="button" class="btn-ai" onclick="runAI('inp-exp-desc')"><i class="fas fa-magic"></i> Melhorar Texto</button>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h3><i class="fas fa-graduation-cap"></i> Formação</h3>
-                <div class="row">
-                    <div><label>Instituição</label><input type="text" id="inp-edu-school"></div>
-                    <div><label>Curso</label><input type="text" id="inp-edu-course"></div>
-                </div>
-                <div class="row"><div class="full"><label>Ano de Conclusão</label><input type="text" id="inp-edu-year"></div></div>
-            </div>
-
-            <div class="form-section">
-                <h3><i class="fas fa-star"></i> Habilidades (Separe por vírgula)</h3>
-                <input type="text" id="inp-skills" placeholder="Gestão, Inglês, Excel...">
-            </div>
-
-            <div class="btn-group">
-                <button class="btn btn-gen"><i class="fas fa-file-pdf"></i> Gerar Currículo</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="preview-screen">
-        <div class="toolbar" data-html2canvas-ignore="true">
-            <button onclick="editMode()"><i class="fas fa-arrow-left"></i> Voltar / Editar</button>
-            <span style="border-left:1px solid #777; height: 15px;"></span>
-            <button onclick="savePDF()"><i class="fas fa-download"></i> Baixar PDF Final</button>
-        </div>
-
-        <div class="cv-page" id="cv-doc">
-            <aside class="cv-sidebar" id="sidebar">
-                <div class="photo-box">
-                    <img id="out-photo" src="" alt="">
-                </div>
-
-                <div class="side-block">
-                    <div class="side-title">Contato</div>
-                    <div class="contact-row"><i class="fas fa-envelope"></i><span id="out-email"></span></div>
-                    <div class="contact-row"><i class="fas fa-phone"></i><span id="out-phone"></span></div>
-                    <div class="contact-row"><i class="fas fa-map-marker-alt"></i><span id="out-addr"></span></div>
-                </div>
-
-                <div class="side-block">
-                    <div class="side-title">Competências</div>
-                    <div id="out-skills"></div>
-                </div>
-            </aside>
-
-            <main class="cv-main">
-                <header>
-                    <div class="cv-name" id="out-name">Nome Sobrenome</div>
-                    <div class="cv-role" id="out-role">Cargo Profissional</div>
-                </header>
-
-                <section class="main-block">
-                    <div class="main-title"><i class="fas fa-user"></i> Perfil</div>
-                    <p class="summary-text" id="out-summary"></p>
-                </section>
-
-                <section class="main-block">
-                    <div class="main-title"><i class="fas fa-briefcase"></i> Experiência</div>
-                    <div class="job-entry">
-                        <div class="job-top">
-                            <span class="job-title" id="out-exp-role">Cargo</span>
-                            <span class="job-time" id="out-exp-time">Data</span>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="editor-section bg-white rounded-lg shadow-lg p-6 h-screen overflow-y-auto">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
+                    <i class="fas fa-edit mr-2 text-blue-500"></i> Preencher Dados
+                </h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">👤 Aluno(a)</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <input type="text" id="nome" placeholder="Nome Completo" value="Ana Clara Silva" class="w-full p-3 border rounded font-bold">
+                        <input type="text" id="cargo" placeholder="Objetivo (ex: Jovem Aprendiz)" value="Jovem Aprendiz / Estágio" class="w-full p-3 border rounded text-blue-600">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="telefone" value="(81) 98888-0000" class="w-full p-3 border rounded">
+                            <input type="text" id="nascimento" value="15/04/2007" class="w-full p-3 border rounded">
                         </div>
-                        <div class="job-company" id="out-exp-comp">Empresa</div>
-                        <p class="job-desc" id="out-exp-desc"></p>
+                        <input type="email" id="email" value="ana.silva@email.com" class="w-full p-3 border rounded">
+                        <input type="text" id="endereco" value="Recife, Pernambuco" class="w-full p-3 border rounded">
                     </div>
-                </section>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">🎯 Objetivo Profissional</h3>
+                    <textarea id="objetivo" rows="4" class="w-full p-3 border rounded">Estudante do Ensino Médio em busca da primeira oportunidade profissional como Jovem Aprendiz. Desejo aplicar minha dedicação e vontade de aprender para contribuir com a empresa, desenvolvendo novas habilidades e crescendo profissionalmente.</textarea>
+                </div>
 
-                <section class="main-block">
-                    <div class="main-title"><i class="fas fa-graduation-cap"></i> Educação</div>
-                    <div class="job-entry">
-                        <div class="job-top">
-                            <span class="job-title" id="out-edu-course">Curso</span>
-                            <span class="job-time" id="out-edu-year">Ano</span>
-                        </div>
-                        <div class="job-company" id="out-edu-school">Instituição</div>
+                 <div class="mb-8">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">🎓 Escolaridade</h3>
+                    <div class="grid grid-cols-1 gap-3">
+                        <label class="text-sm text-gray-500">Situação Atual</label>
+                        <input type="text" id="formacao" value="Ensino Médio - Cursando 2º Ano" class="w-full p-3 border rounded">
+                        <label class="text-sm text-gray-500">Nome da Escola</label>
+                        <input type="text" id="instituicao" value="Escola Estadual de Referência - EREM" class="w-full p-3 border rounded">
+                        <label class="text-sm text-gray-500">Previsão de Conclusão / Turno</label>
+                        <input type="text" id="ano_formacao" value="Previsão: Dez/2026 (Manhã)" class="w-full p-3 border rounded">
                     </div>
-                </section>
-            </main>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4 bg-gray-100 p-2 rounded">
+                        <h3 class="text-lg font-semibold text-gray-700">⭐ Qualificações / Projetos</h3>
+                        <button onclick="addExperience()" class="text-sm bg-blue-500 text-white px-3 py-1 rounded">+ Item</button>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <label class="text-xs text-gray-500">Título da Seção (ex: Qualificações, Projetos, Voluntariado)</label>
+                        <input type="text" id="titulo-experiencia" value="Resumo de Qualificações" class="w-full p-2 border border-blue-300 rounded bg-blue-50 font-semibold text-blue-800">
+                    </div>
+
+                    <div id="experiencias-container">
+                        <div class="experiencia-item-input mb-4 p-4 border border-gray-200 rounded-lg relative bg-gray-50">
+                            <button onclick="removeElement(this)" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            <input type="text" placeholder="Título (ex: Perfil Pessoal)" value="Perfil Pessoal e Habilidades" class="w-full p-2 border rounded mb-2 exp-cargo font-bold">
+                            <input type="text" placeholder="Subtítulo (Opcional)" value="" class="w-full p-2 border rounded mb-2 exp-empresa text-sm">
+                            <input type="text" placeholder="Data (Opcional)" value="" class="w-full p-2 border rounded mb-2 exp-periodo text-xs">
+                            <textarea placeholder="Descrição..." rows="4" class="w-full p-2 border rounded exp-atividades">• Facilidade de aprendizado e adaptação
+• Ótimo relacionamento interpessoal e trabalho em equipe
+• Pontualidade e comprometimento com horários
+• Conhecimento básico em rotinas administrativas</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4 bg-gray-100 p-2 rounded">
+                        <h3 class="text-lg font-semibold text-gray-700">🧠 Conhecimentos</h3>
+                        <button onclick="addSkill()" class="text-sm bg-blue-500 text-white px-3 py-1 rounded">+ Adicionar</button>
+                    </div>
+                    <div id="habilidades-container">
+                        <div class="skill-item-input mb-2 flex items-center space-x-2">
+                            <input type="text" value="Pacote Office (Word/Excel)" class="flex-1 p-2 border rounded skill-name-input">
+                            <select class="p-2 border rounded skill-level w-32"><option value="60">Básico</option><option value="80" selected>Intermed.</option></select>
+                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="skill-item-input mb-2 flex items-center space-x-2">
+                            <input type="text" value="Informática / Internet" class="flex-1 p-2 border rounded skill-name-input">
+                            <select class="p-2 border rounded skill-level w-32"><option value="90">Avançado</option></select>
+                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="skill-item-input mb-2 flex items-center space-x-2">
+                            <input type="text" value="Comunicação" class="flex-1 p-2 border rounded skill-name-input">
+                            <select class="p-2 border rounded skill-level w-32"><option value="100">Excelente</option></select>
+                            <button onclick="removeElement(this, true)" class="text-red-500"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700 bg-gray-100 p-2 rounded">📜 Cursos / Atividades Extras</h3>
+                    <textarea id="cursos_extras" rows="5" class="w-full p-3 border rounded">Curso de Informática Básica - Escola XYZ (2024)
+Participação em Feira de Ciências - Projeto de Reciclagem (2023)
+Workshop de Orientação Profissional (2025)
+Inglês Básico - Em andamento</textarea>
+                </div>
+            </div>
+            
+            <div class="preview-section bg-gray-500 p-4 rounded-lg shadow-inner overflow-auto flex justify-center">
+                <div id="resume-preview" class="resume-container">
+                    <div class="resume-layout">
+                        <div class="left-column">
+                            <div class="mb-10">
+                                <div class="name-title" id="preview-nome"></div>
+                                <div class="job-title" id="preview-cargo"></div>
+                            </div>
+                            
+                            <div class="mb-10">
+                                <div class="section-title">Contato</div>
+                                <div class="contact-item"><i class="fas fa-phone"></i><span id="preview-telefone"></span></div>
+                                <div class="contact-item"><i class="fas fa-envelope"></i><span id="preview-email"></span></div>
+                                <div class="contact-item"><i class="fas fa-map-marker-alt"></i><span id="preview-endereco"></span></div>
+                                <div class="contact-item"><i class="fas fa-calendar"></i><span id="preview-nascimento"></span></div>
+                            </div>
+                            
+                            <div class="mb-10">
+                                <div class="section-title">Habilidades</div>
+                                <div id="preview-habilidades"></div>
+                            </div>
+                            
+                            <div>
+                                <div class="section-title">Escolaridade</div>
+                                <div class="education-item">
+                                    <div class="education-title" id="preview-formacao"></div>
+                                    <div class="education-school" id="preview-instituicao"></div>
+                                    <div class="education-year" id="preview-ano"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="right-column">
+                            <div class="mb-8">
+                                <div class="section-title-right">Objetivo</div>
+                                <div id="preview-objetivo" class="experience-description text-justify"></div>
+                            </div>
+
+                            <div class="mb-8">
+                                <div class="section-title-right" id="preview-titulo-experiencia">Resumo de Qualificações</div>
+                                <div id="preview-experiencias"></div>
+                            </div>
+                            
+                            <div>
+                                <div class="section-title-right">Atividades Complementares</div>
+                                <div id="preview-cursos" class="experience-description"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
     <script>
-        // --- 1. CONFIGURAÇÕES VISUAIS ---
-        function togglePhotoInput() {
-            const show = document.getElementById('has-photo').checked;
-            document.getElementById('photo-input-area').style.display = show ? 'block' : 'none';
-        }
-
-        // --- 2. IA SIMULADA (MELHORAR TEXTO) ---
-        const aiVocab = {
-            "vendi": "gerenciei vendas e negociações de",
-            "fiz": "desenvolvi e implementei",
-            "ajudei": "colaborei estrategicamente com",
-            "cuidei": "supervisionei a gestão de",
-            "problemas": "soluções para desafios complexos",
-            "coisas": "projetos e demandas",
-            "usei": "utilizei ferramentas como"
-        };
-
-        function runAI(fieldId) {
-            const el = document.getElementById(fieldId);
-            const loader = document.getElementById('ai-loader');
+        function updatePreview() {
+            // Campos Simples
+            const simpleIds = ['nome', 'cargo', 'telefone', 'email', 'endereco', 'nascimento', 'objetivo', 'formacao', 'instituicao', 'ano_formacao', 'titulo-experiencia'];
             
-            if(!el.value) return alert("Escreva algo primeiro!");
+            simpleIds.forEach(id => {
+                const input = document.getElementById(id);
+                // Mapeia titulo-experiencia para preview-titulo-experiencia, os outros direto
+                const previewId = id === 'titulo-experiencia' ? 'preview-titulo-experiencia' : 'preview-' + id;
+                const prevEl = document.getElementById(previewId);
+                if(prevEl && input) prevEl.textContent = input.value;
+            });
             
-            loader.style.display = "inline-block";
-            setTimeout(() => {
-                let txt = el.value.toLowerCase();
-                for (let [simple, fancy] of Object.entries(aiVocab)) {
-                    txt = txt.replace(new RegExp(`\\b${simple}\\b`, 'g'), fancy);
+            // Cursos
+            const cursos = document.getElementById('cursos_extras').value;
+            document.getElementById('preview-cursos').innerHTML = cursos.replace(/\n/g, '<br>');
+            
+            // Habilidades
+            const skillsContainer = document.getElementById('preview-habilidades');
+            const skillInputs = document.querySelectorAll('.skill-item-input');
+            skillsContainer.innerHTML = '';
+            skillInputs.forEach(item => {
+                const name = item.querySelector('.skill-name-input').value;
+                const level = item.querySelector('.skill-level').value;
+                if (name.trim()) {
+                    skillsContainer.innerHTML += `
+                        <div class="skill-bar">
+                            <div class="skill-name">${name}</div>
+                            <div class="skill-progress"><div class="skill-fill" style="width: ${level}%;"></div></div>
+                        </div>`;
                 }
-                el.value = txt.charAt(0).toUpperCase() + txt.slice(1);
-                loader.style.display = "none";
-            }, 1000);
-        }
-
-        // --- 3. GERADOR DO CURRÍCULO ---
-        function generate() {
-            // Mapeamento Campo -> Destino
-            const map = {
-                'inp-name': 'out-name', 'inp-role': 'out-role',
-                'inp-email': 'out-email', 'inp-phone': 'out-phone', 'inp-addr': 'out-addr',
-                'inp-summary': 'out-summary',
-                'inp-exp-role': 'out-exp-role', 'inp-exp-comp': 'out-exp-comp',
-                'inp-exp-time': 'out-exp-time', 'inp-exp-desc': 'out-exp-desc',
-                'inp-edu-course': 'out-edu-course', 'inp-edu-school': 'out-edu-school',
-                'inp-edu-year': 'out-edu-year'
-            };
-
-            for (let id in map) {
-                const val = document.getElementById(id).value;
-                document.getElementById(map[id]).innerText = val;
-            }
-
-            // Skills (Transformar em tags)
-            const skillTxt = document.getElementById('inp-skills').value;
-            const skillBox = document.getElementById('out-skills');
-            skillBox.innerHTML = "";
-            if(skillTxt) {
-                skillTxt.split(',').forEach(s => {
-                    if(s.trim()) {
-                        skillBox.innerHTML += `<span class="skill-tag">${s.trim()}</span>`;
-                    }
-                });
-            }
-
-            // Foto
-            const hasPhoto = document.getElementById('has-photo').checked;
-            const sidebar = document.getElementById('sidebar');
-            if(hasPhoto) {
-                sidebar.classList.remove('no-photo');
-                const file = document.getElementById('inp-photo').files[0];
-                if(file) {
-                    const reader = new FileReader();
-                    reader.onload = e => document.getElementById('out-photo').src = e.target.result;
-                    reader.readAsDataURL(file);
+            });
+            
+            // Experiência / Qualificações
+            const expContainer = document.getElementById('preview-experiencias');
+            const expInputs = document.querySelectorAll('.experiencia-item-input');
+            expContainer.innerHTML = '';
+            
+            expInputs.forEach(item => {
+                const cargo = item.querySelector('.exp-cargo').value;
+                const empresa = item.querySelector('.exp-empresa').value;
+                const periodo = item.querySelector('.exp-periodo').value;
+                const atividades = item.querySelector('.exp-atividades').value;
+                
+                if (cargo.trim() || atividades.trim()) {
+                    const atividadesFormatadas = atividades.split('\n').map(line => line.trim() ? `• ${line}` : '').join('<br>');
+                    
+                    // Lógica para esconder campos vazios (se não tiver empresa, não mostra linha vazia)
+                    let html = `<div class="experience-item"><div class="experience-title">${cargo}</div>`;
+                    if(empresa) html += `<div class="experience-company">${empresa}</div>`;
+                    if(periodo) html += `<div class="experience-period">${periodo}</div>`;
+                    html += `<div class="experience-description mt-2">${atividadesFormatadas}</div></div>`;
+                    
+                    expContainer.innerHTML += html;
                 }
-            } else {
-                sidebar.classList.add('no-photo');
-            }
-
-            // Trocar tela
-            document.getElementById('editor-screen').style.display = 'none';
-            document.getElementById('preview-screen').style.display = 'flex';
-            window.scrollTo(0,0);
+            });
         }
 
-        function editMode() {
-            document.getElementById('preview-screen').style.display = 'none';
-            document.getElementById('editor-screen').style.display = 'block';
-            window.scrollTo(0,0);
+        // Adicionar / Remover
+        function addExperience() {
+            const container = document.getElementById('experiencias-container');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'experiencia-item-input mb-4 p-4 border border-gray-200 rounded-lg relative bg-gray-50';
+            newDiv.innerHTML = `
+                <button onclick="removeElement(this)" class="absolute top-2 right-2 text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                <input type="text" placeholder="Título (ex: Projeto Escolar)" class="w-full p-2 border rounded mb-2 exp-cargo font-bold">
+                <input type="text" placeholder="Local / Escola (Opcional)" class="w-full p-2 border rounded mb-2 exp-empresa text-sm">
+                <input type="text" placeholder="Data (Opcional)" class="w-full p-2 border rounded mb-2 exp-periodo text-xs">
+                <textarea placeholder="O que você fez?" rows="3" class="w-full p-2 border rounded exp-atividades"></textarea>
+            `;
+            container.appendChild(newDiv);
+            attachListeners();
         }
 
-        // --- 4. EXPORTAR PDF (ALTA QUALIDADE) ---
-        function savePDF() {
-            const element = document.getElementById('cv-doc');
-            const opt = {
-                margin: 0,
-                filename: 'Curriculo-Budapest.pdf',
-                image: { type: 'jpeg', quality: 1 }, // Qualidade Máxima
-                html2canvas: { 
-                    scale: 2, // Aumenta resolução
-                    useCORS: true, 
-                    scrollY: 0
-                },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            
-            // Botão carregando
-            const btn = document.querySelector('.toolbar button:last-child');
-            const oldText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
-            
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerHTML = oldText;
+        function addSkill() {
+            const container = document.getElementById('habilidades-container');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'skill-item-input mb-2 flex items-center space-x-2';
+            newDiv.innerHTML = `
+                <input type="text" placeholder="Habilidade" class="flex-1 p-2 border rounded skill-name-input">
+                <select class="p-2 border rounded skill-level w-32"><option value="80">Bom</option><option value="60">Básico</option></select>
+                <button onclick="removeElement(this, true)" class="text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+            `;
+            container.appendChild(newDiv);
+            attachListeners();
+        }
+
+        function removeElement(btn) {
+            btn.parentElement.remove();
+            updatePreview();
+        }
+
+        function attachListeners() {
+            document.querySelectorAll('input, textarea, select').forEach(el => {
+                el.removeEventListener('input', updatePreview);
+                el.addEventListener('input', updatePreview);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            attachListeners();
+            updatePreview();
+        });
+        
+        async function generatePDF() {
+            window.scrollTo(0,0);
+            const { jsPDF } = window.jspdf;
+            const element = document.getElementById('resume-preview');
+            html2canvas(element, { scale: 2, scrollY: 0, backgroundColor: "#ffffff" }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
+                pdf.save(document.getElementById('nome').value + '_Curriculo.pdf');
             });
         }
     </script>
