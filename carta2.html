@@ -3,89 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RH System Seguro - Rubens Fernandes</title>
+    <title>Criador Profissional com IA - Rubens Fernandes</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
-        /* --- ESTILOS GERAIS --- */
-        body { background: #e0e7ff; font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; margin: 0; }
+        /* --- CORE --- */
+        body { background: #cbd5e1; font-family: 'Inter', sans-serif; height: 100vh; margin: 0; overflow: hidden; }
         
-        /* TELA DE LOGIN (BLOQUEIO) */
+        /* TELA DE LOGIN */
         #lockScreen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #0f172a; z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: white; transition: opacity 0.5s;
         }
-        
-        /* Layout Principal */
-        .main-layout { display: grid; height: 100vh; width: 100vw; transition: filter 0.3s; }
 
-        /* DESKTOP */
-        @media (min-width: 1024px) {
-            .main-layout { grid-template-columns: 350px 1fr 400px; }
-            .mobile-nav { display: none !important; }
-            .col { display: block !important; }
+        /* LAYOUT PRINCIPAL (2 COLUNAS) */
+        .app-container { display: flex; height: 100vh; }
+
+        /* LADO ESQUERDO: CONTROLES (Editor + IA) */
+        .control-panel {
+            width: 400px; background: white; border-right: 1px solid #94a3b8;
+            display: flex; flex-direction: column; z-index: 20;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
         }
 
-        /* MOBILE */
-        @media (max-width: 1023px) {
-            .main-layout { grid-template-columns: 1fr; grid-template-rows: 1fr 60px; }
-            .col { display: none; height: calc(100vh - 60px); }
-            .col.active { display: block; }
-            .a4-paper { transform: scale(0.45) !important; transform-origin: top center; margin-top: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important; }
-            .editor-col { padding-bottom: 80px; }
+        /* Abas do Painel */
+        .tabs { display: flex; background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
+        .tab-btn {
+            flex: 1; padding: 15px; text-align: center; font-weight: 600; font-size: 13px;
+            color: #64748b; cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent;
+        }
+        .tab-btn:hover { background: #e2e8f0; }
+        .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; background: white; }
+
+        .panel-content { flex: 1; overflow-y: auto; padding: 20px; display: none; }
+        .panel-content.active { display: block; }
+
+        /* Inputs */
+        .input-group { margin-bottom: 15px; }
+        .input-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #f8fafc; }
+        .field:focus { border-color: #2563eb; background: white; outline: none; }
+
+        /* Botão Mágico IA */
+        .magic-btn {
+            font-size: 10px; background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 10px;
+            cursor: pointer; display: flex; align-items: center; gap: 3px; border: none;
+        }
+        .magic-btn:hover { background: #7c3aed; }
+
+        /* LADO DIREITO: O PAPEL (PREVIEW) */
+        .preview-area {
+            flex: 1; background: #64748b; display: flex; justify-content: center; align-items: flex-start;
+            overflow-y: auto; padding: 40px; position: relative;
         }
 
-        /* Colunas */
-        .editor-col { background: white; border-right: 1px solid #cbd5e1; overflow-y: auto; padding: 20px; z-index: 20; }
-        .preview-col { background: #64748b; position: relative; display: flex; justify-content: center; align-items: flex-start; padding-top: 20px; }
-        .chat-col { background: #111827; display: flex; flex-direction: column; height: 100%; }
+        .a4-paper {
+            width: 210mm; min-height: 297mm; background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex; position: relative;
+            /* Layout Interno do Currículo */
+        }
 
-        /* Papel A4 */
-        .a4-paper { width: 210mm; min-height: 297mm; background: white; box-shadow: 0 10px 40px rgba(0,0,0,0.5); transform: scale(0.85); transform-origin: top center; display: flex; }
-        .cv-sidebar { width: 75mm; background: #0f172a; color: white; padding: 30px 20px; text-align: center; }
-        .cv-main { flex: 1; padding: 30px; color: #334155; }
-        
+        .cv-left { width: 32%; background: #1e293b; color: white; padding: 30px 20px; text-align: center; }
+        .cv-right { width: 68%; padding: 40px 30px; color: #334155; }
+
         /* Elementos CV */
-        .photo-box { width: 130px; height: 130px; border-radius: 50%; border: 4px solid white; margin: 0 auto 20px; overflow: hidden; background: #ffffff20; }
-        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-        h1.cv-name { font-size: 24pt; font-weight: 800; text-transform: uppercase; margin: 0; color: #0f172a; line-height: 1; }
-        .cv-role { color: #2563eb; font-weight: 600; font-size: 12pt; text-transform: uppercase; margin-bottom: 20px; }
-        .cv-title { border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; margin: 20px 0 10px; font-weight: bold; text-transform: uppercase; font-size: 12pt; color: #0f172a; }
-        .cv-title-side { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin: 25px 0 10px; font-weight: bold; text-transform: uppercase; font-size: 10pt; color: #cbd5e1; text-align: left; }
-        .contact-item { display: flex; align-items: center; gap: 10px; font-size: 9pt; margin-bottom: 8px; text-align: left; }
-        .cv-text { text-align: justify; font-size: 10pt; line-height: 1.5; }
-
-        /* Inputs e Botões */
-        .input-wrapper { margin-bottom: 20px; }
-        .input-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .field-input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; background: #f8fafc; }
-        .ai-btn-sm { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+        .photo-frame { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; margin: 0 auto 20px; overflow: hidden; background: #334155; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Chat */
-        .chat-header { padding: 15px; background: #1f2937; border-bottom: 1px solid #374151; display: flex; justify-content: space-between; align-items: center; }
-        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 90%; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.5; word-wrap: break-word; }
-        .msg-ai { align-self: flex-start; background: #374151; border-left: 3px solid #22c55e; color: #e5e7eb; }
-        .msg-user { align-self: flex-end; background: #2563eb; color: white; }
-        .chat-input { padding: 10px; background: #1f2937; border-top: 1px solid #374151; }
+        .cv-name { font-size: 26pt; font-weight: 800; text-transform: uppercase; line-height: 1; color: #0f172a; margin: 0; }
+        .cv-role { font-size: 12pt; color: #2563eb; font-weight: 600; text-transform: uppercase; margin-bottom: 25px; }
+        
+        .section-title { font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #cbd5e1; margin: 20px 0 10px; padding-bottom: 5px; color: #0f172a; }
+        .side-title { font-size: 10pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2); margin: 20px 0 10px; padding-bottom: 5px; color: #94a3b8; text-align: left; }
+        
+        .contact-row { display: flex; align-items: center; gap: 10px; font-size: 9pt; margin-bottom: 8px; text-align: left; word-break: break-all; }
+        .exp-item { margin-bottom: 15px; }
+        .exp-role { font-weight: 700; font-size: 11pt; color: #1e293b; }
+        .exp-desc { font-size: 10pt; text-align: justify; line-height: 1.4; color: #475569; }
 
-        /* Mobile Nav */
-        .mobile-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; font-size: 10px; font-weight: 600; width: 33%; height: 100%; cursor: pointer; }
-        .nav-item.active { color: #2563eb; background: #eff6ff; }
-        .nav-item i { font-size: 20px; margin-bottom: 2px; }
+        /* Chat Flutuante (Dentro da aba IA) */
+        .chat-box { height: 400px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px; border-radius: 8px; font-size: 13px; max-width: 90%; }
+        .ai-msg { background: #e0e7ff; color: #1e1b4b; align-self: flex-start; }
+        .user-msg { background: #2563eb; color: white; align-self: flex-end; }
 
+        /* RESPONSIVIDADE MOBILE */
+        @media (max-width: 1024px) {
+            .app-container { flex-direction: column; }
+            .control-panel { width: 100%; height: 50%; order: 2; }
+            .preview-area { height: 50%; order: 1; padding: 10px; align-items: center; }
+            .a4-paper { transform: scale(0.45); transform-origin: center; margin: 0; }
+        }
+
+        /* IMPRESSÃO */
         @media print {
-            .main-layout { display: block; }
-            .editor-col, .chat-col, .mobile-nav, #lockScreen { display: none !important; }
-            .preview-col { background: white; padding: 0; display: block; overflow: visible; height: auto; }
-            .a4-paper { transform: none !important; box-shadow: none; margin: 0; width: 100%; height: 100%; }
+            .control-panel, #lockScreen { display: none !important; }
+            .preview-area { padding: 0; background: white; display: block; }
+            .a4-paper { box-shadow: none; margin: 0; width: 100%; height: 100%; transform: none; }
             @page { margin: 0; size: A4; }
         }
     </style>
@@ -93,279 +114,283 @@
 <body>
 
 <div id="lockScreen">
-    <div class="mb-6 text-center">
-        <i class="fas fa-shield-alt text-6xl text-blue-500 mb-4"></i>
-        <h1 class="text-2xl font-bold">Sistema RH Seguro</h1>
-        <p class="text-sm text-gray-400">Autenticação de Rubens Fernandes</p>
+    <i class="fas fa-lock text-5xl mb-4 text-blue-500"></i>
+    <h2 class="text-xl font-bold mb-2">Sistema RH Seguro</h2>
+    <p class="text-sm text-gray-400 mb-4">Autenticado para: Rubens Fernandes</p>
+    <div class="flex gap-2">
+        <input type="password" id="passInput" placeholder="Senha (1234)" class="p-2 rounded text-black text-center w-32">
+        <button onclick="login()" class="bg-blue-600 px-4 py-2 rounded font-bold hover:bg-blue-700">Entrar</button>
     </div>
-    <div class="flex flex-col gap-3 w-64">
-        <input type="password" id="passInput" placeholder="Digite a senha (padrão: 1234)" class="p-3 rounded bg-gray-800 border border-gray-700 text-center text-white outline-none focus:border-blue-500">
-        <button onclick="checkLogin()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded transition">
-            <i class="fas fa-unlock mr-2"></i> ACESSAR
-        </button>
-        <p id="loginMsg" class="text-red-500 text-xs text-center h-4"></p>
-    </div>
+    <p id="errorMsg" class="text-red-500 text-xs mt-2 h-4"></p>
 </div>
 
-<div class="mobile-nav">
-    <div class="nav-item active" onclick="switchTab('editor')"><i class="fas fa-edit"></i><span>Editar</span></div>
-    <div class="nav-item" onclick="switchTab('preview')"><i class="fas fa-eye"></i><span>Ver</span></div>
-    <div class="nav-item" onclick="switchTab('chat')"><i class="fas fa-robot"></i><span>IA Chat</span></div>
-</div>
-
-<div class="main-layout" style="filter: blur(5px);" id="appContent">
+<div class="app-container">
     
-    <div id="col-editor" class="col editor-col active custom-scrollbar">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-            <i class="fas fa-user-tie text-blue-600"></i> Seus Dados
-        </h2>
-
-        <div class="input-wrapper bg-blue-50 p-2 rounded border border-blue-200">
-            <div class="flex justify-between items-center mb-2">
-                <label class="text-xs font-bold text-blue-800 uppercase" style="margin:0">Foto</label>
-                <input type="checkbox" id="checkPhoto" onchange="togglePhoto()" checked>
-            </div>
-            <input type="file" onchange="loadPhoto(event)" accept="image/*" class="text-xs w-full">
+    <div class="control-panel">
+        <div class="tabs">
+            <div class="tab-btn active" onclick="setTab('editor')"><i class="fas fa-pen"></i> DADOS (Editar)</div>
+            <div class="tab-btn" onclick="setTab('ai')"><i class="fas fa-robot"></i> CONSULTORA IA</div>
         </div>
 
-        <div class="input-wrapper">
-            <div class="input-label">Nome Completo</div>
-            <input type="text" id="inName" class="field-input" value="Maria Marleide Ramalho" oninput="updateCV()">
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">
-                Cargo / Objetivo
-                <button class="ai-btn-sm" onclick="improve('role')"><i class="fas fa-magic"></i> Sugerir</button>
-            </div>
-            <input type="text" id="inRole" class="field-input" value="Jovem Aprendiz" oninput="updateCV()">
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">Telefone</div>
-            <input type="tel" id="inPhone" class="field-input" value="(88) 99999-9999" oninput="updateCV()">
-        </div>
-        <div class="input-wrapper">
-            <div class="input-label">E-mail</div>
-            <input type="email" id="inEmail" class="field-input" value="email@exemplo.com" oninput="updateCV()">
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">
-                Resumo Profissional
-                <button class="ai-btn-sm" onclick="improve('summary')"><i class="fas fa-magic"></i> Melhorar</button>
-            </div>
-            <textarea id="inSummary" rows="5" class="field-input" oninput="updateCV()">Busco oportunidade para crescer.</textarea>
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">
-                Experiência
-                <button class="ai-btn-sm" onclick="improve('exp')"><i class="fas fa-magic"></i> Enriquecer</button>
-            </div>
-            <input type="text" id="inExpTitle" class="field-input font-bold mb-2" value="Vendedora - Loja X" oninput="updateCV()">
-            <textarea id="inExpDesc" rows="4" class="field-input" oninput="updateCV()">Vendas e atendimento.</textarea>
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">
-                Habilidades
-                <button class="ai-btn-sm" onclick="improve('skills')"><i class="fas fa-magic"></i> Listar</button>
-            </div>
-            <textarea id="inSkills" rows="4" class="field-input" oninput="updateCV()">Comunicação
-Pontualidade</textarea>
-        </div>
-
-        <div class="input-wrapper">
-            <div class="input-label">Escolaridade</div>
-            <input type="text" id="inSchool" class="field-input mb-2" value="Ensino Médio" oninput="updateCV()">
-            <input type="text" id="inSchoolDet" class="field-input" value="Cursando 3º Ano" oninput="updateCV()">
-        </div>
-
-        <div style="height: 50px"></div>
-    </div>
-
-    <div id="col-preview" class="col preview-col custom-scrollbar">
-        <div class="a4-paper">
-            <div class="cv-sidebar">
-                <div id="outPhotoBox" class="photo-box"><img id="outImg" src=""></div>
-                <div class="cv-title-side">Contato</div>
-                <div class="contact-item"><i class="fas fa-phone"></i> <span id="outPhone"></span></div>
-                <div class="contact-item"><i class="fas fa-envelope"></i> <span id="outEmail"></span></div>
-                <div class="cv-title-side">Educação</div>
-                <div style="text-align: left;">
-                    <div style="font-weight: bold;" id="outSchool"></div>
-                    <div style="font-size: 0.9em; opacity: 0.8;" id="outSchoolDet"></div>
-                </div>
-                <div class="cv-title-side">Habilidades</div>
-                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
-            </div>
-            <div class="cv-main">
-                <h1 class="cv-name" id="outName"></h1>
-                <div class="cv-role" id="outRole"></div>
-                <div class="cv-title"><i class="fas fa-user"></i> Sobre Mim</div>
-                <p id="outSummary" class="cv-text"></p>
-                <div class="cv-title"><i class="fas fa-briefcase"></i> Experiência</div>
-                <div style="margin-bottom: 15px;">
-                    <div style="font-weight: bold; font-size: 11pt; color: #1e293b;" id="outExpTitle"></div>
-                    <p id="outExpDesc" class="cv-text" style="color: #475569; margin-top: 5px;"></p>
+        <div id="tab-editor" class="panel-content active custom-scrollbar">
+            <div class="bg-blue-50 border border-blue-200 p-3 rounded mb-4">
+                <h3 class="text-xs font-bold text-blue-800 uppercase mb-2">Ações Rápidas</h3>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="bg-green-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-green-700 flex-1">
+                        <i class="fas fa-print"></i> Baixar PDF
+                    </button>
+                    <button onclick="analyzeResume()" class="bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-purple-700 flex-1">
+                        <i class="fas fa-star"></i> Analisar com IA
+                    </button>
                 </div>
             </div>
-        </div>
-        <button onclick="window.print()" class="fixed bottom-20 right-5 lg:bottom-10 lg:right-10 bg-red-600 text-white p-4 rounded-full shadow-2xl hover:bg-red-700 z-50">
-            <i class="fas fa-file-pdf text-xl"></i>
-        </button>
-    </div>
 
-    <div id="col-chat" class="col chat-col">
-        <div class="chat-header">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white shadow">
-                    <i class="fas fa-robot"></i>
+            <div class="input-group">
+                <div class="input-label">
+                    <span>Foto de Perfil</span>
+                    <input type="checkbox" id="checkPhoto" checked onchange="update()">
                 </div>
-                <div>
-                    <h3 class="font-bold text-sm text-white">Gemini RH Pro</h3>
-                    <p class="text-[10px] text-green-400">Autenticado: Rubens P. Fernandes</p>
-                </div>
+                <input type="file" id="photoInput" onchange="loadPhoto(event)" class="text-xs">
             </div>
-        </div>
-        <div class="chat-messages custom-scrollbar" id="chatContainer">
-            <div class="msg msg-ai">
-                <b>Segurança Ativada.</b><br>
-                Chave API mascarada e sistema protegido.<br><br>
-                Olá! Sou sua IA. Use o editor ou fale comigo aqui para criar um currículo perfeito.
+
+            <div class="input-group">
+                <div class="input-label">Nome Completo</div>
+                <input type="text" id="inName" class="field" value="Maria Marleide Ramalho" oninput="update()">
             </div>
-        </div>
-        <div class="chat-input">
+            <div class="input-group">
+                <div class="input-label">Cargo / Objetivo <button class="magic-btn" onclick="ask('role')">✨ Sugerir</button></div>
+                <input type="text" id="inRole" class="field" value="Jovem Aprendiz" oninput="update()">
+            </div>
+
             <div class="flex gap-2">
-                <input type="text" id="userInput" placeholder="Digite algo..." class="flex-1 bg-gray-700 text-white rounded p-3 border border-gray-600 focus:border-blue-500 outline-none" onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()" class="bg-blue-600 px-4 rounded text-white"><i class="fas fa-paper-plane"></i></button>
+                <div class="input-group flex-1">
+                    <div class="input-label">Telefone</div>
+                    <input type="text" id="inPhone" class="field" value="(88) 8831-4122" oninput="update()">
+                </div>
+                <div class="input-group flex-1">
+                    <div class="input-label">Email</div>
+                    <input type="text" id="inEmail" class="field" value="ccontato138@gmail.com" oninput="update()">
+                </div>
             </div>
-            <button onclick="improve('courses')" class="w-full mt-3 bg-purple-600 text-white text-xs font-bold py-3 rounded">
-                <i class="fas fa-graduation-cap mr-2"></i> Indicar Cursos
+            <div class="input-group">
+                <div class="input-label">Endereço</div>
+                <input type="text" id="inLoc" class="field" value="Cidade Brasileira - CE" oninput="update()">
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Resumo <button class="magic-btn" onclick="ask('summary')">✨ Melhorar</button></div>
+                <textarea id="inSummary" rows="4" class="field" oninput="update()">Busco a primeira oportunidade de emprego, visando desenvolver habilidades profissionais e contribuir com dedicação para o crescimento da empresa.</textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Experiência 1 <button class="magic-btn" onclick="ask('exp')">✨ Enriquecer</button></div>
+                <input type="text" id="inExpTitle" class="field mb-1" value="Vendedora - Dorinha Confecções" placeholder="Cargo - Empresa" oninput="update()">
+                <textarea id="inExpDesc" rows="3" class="field" placeholder="O que fazia?" oninput="update()">Atendimento ao cliente e vendas.</textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Experiência 2 (Opcional)</div>
+                <input type="text" id="inExpTitle2" class="field mb-1" value="Autônoma / Serviços Gerais" oninput="update()">
+                <textarea id="inExpDesc2" rows="3" class="field" oninput="update()">Comerciante e cuidadora de crianças.</textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Escolaridade</div>
+                <input type="text" id="inSchool" class="field" value="Ensino Médio - Cursando 3º Ano" oninput="update()">
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Habilidades <button class="magic-btn" onclick="ask('skills')">✨ Listar</button></div>
+                <textarea id="inSkills" rows="4" class="field" oninput="update()">Comunicação
+Pontualidade
+Trabalho em Equipe</textarea>
+            </div>
+        </div>
+
+        <div id="tab-ai" class="panel-content custom-scrollbar">
+            <div class="flex items-center gap-2 mb-4 p-2 bg-gray-100 rounded">
+                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h3 class="font-bold text-sm">Gemini RH</h3>
+                    <p class="text-[10px] text-gray-500">Chave Segura Ativada</p>
+                </div>
+            </div>
+
+            <div id="chatBox" class="chat-box custom-scrollbar">
+                <div class="msg ai-msg">
+                    Olá! Sou sua consultora de RH. <br>
+                    Estou monitorando o que você escreve. Clique nos botões <b>✨</b> no editor para eu ajudar, ou peça uma <b>Análise Completa</b> quando terminar.
+                </div>
+            </div>
+
+            <div class="mt-3 flex gap-2">
+                <input type="text" id="chatInput" placeholder="Faça uma pergunta..." class="field" onkeypress="if(event.key==='Enter') sendChat()">
+                <button onclick="sendChat()" class="bg-blue-600 text-white px-3 rounded hover:bg-blue-700"><i class="fas fa-paper-plane"></i></button>
+            </div>
+            
+            <button onclick="ask('courses')" class="w-full mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded text-xs flex justify-center items-center gap-2">
+                <i class="fas fa-lightbulb"></i> Me indique cursos para minha área
             </button>
         </div>
-        <div style="height: 60px" class="lg:hidden"></div>
     </div>
+
+    <div class="preview-area custom-scrollbar">
+        <div class="a4-paper">
+            
+            <div class="cv-left">
+                <div id="photoContainer" class="photo-frame"><img id="outImg" src=""></div>
+                
+                <div class="side-title">Contato</div>
+                <div class="contact-row"><i class="fas fa-phone text-blue-400"></i> <span id="outPhone"></span></div>
+                <div class="contact-row"><i class="fas fa-envelope text-blue-400"></i> <span id="outEmail"></span></div>
+                <div class="contact-row"><i class="fas fa-map-marker-alt text-blue-400"></i> <span id="outLoc"></span></div>
+
+                <div class="side-title">Educação</div>
+                <div style="text-align: left; font-size: 0.9em; line-height: 1.4;" id="outSchool"></div>
+
+                <div class="side-title">Competências</div>
+                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
+            </div>
+
+            <div class="cv-right">
+                <h1 class="cv-name" id="outName"></h1>
+                <div class="cv-role" id="outRole"></div>
+
+                <div class="section-title">Sobre Mim</div>
+                <p class="cv-text" id="outSummary"></p>
+
+                <div class="section-title">Experiência Profissional</div>
+                
+                <div class="exp-item">
+                    <div class="exp-role" id="outExpTitle"></div>
+                    <div class="exp-desc" id="outExpDesc"></div>
+                </div>
+
+                <div class="exp-item" id="exp2Box">
+                    <div class="exp-role" id="outExpTitle2"></div>
+                    <div class="exp-desc" id="outExpDesc2"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <script>
-    // --- SEGURANÇA MASCARADA (OFUSCAÇÃO) ---
-    // A chave real não está legível para humanos. O sistema a remonta.
-    // ASCII Codes para: AIzaSyCt2utmXB26ptkJ05OT4a1wR50LPZ_YEvY
-    const _0x1a2b = [65, 73, 122, 97, 83, 121, 67, 116, 50, 117, 116, 109, 88, 66, 50, 54, 112, 116, 107, 74, 48, 53, 79, 84, 52, 97, 49, 119, 82, 53, 48, 76, 80, 90, 95, 89, 69, 118, 89];
-    
-    function getKey() {
-        return String.fromCharCode(..._0x1a2b);
-    }
+    // --- SEGURANÇA (Ofuscação) ---
+    const _0x1 = [65,73,122,97,83,121,67,116,50,117,116,109,88,66,50,54,112,116,107,74,48,53,79,84,52,97,49,119,82,53,48,76,80,90,95,89,69,118,89];
+    const getKey = () => String.fromCharCode(..._0x1);
 
-    // --- SISTEMA DE LOGIN ---
-    function checkLogin() {
-        const pass = document.getElementById('passInput').value;
-        // Senha padrão simples: 1234 (Pode mudar aqui)
-        if(pass === "1234") {
+    // --- LOGIN ---
+    function login() {
+        if(document.getElementById('passInput').value === "1234") {
             document.getElementById('lockScreen').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('lockScreen').style.display = 'none';
-                document.getElementById('appContent').style.filter = 'none';
-            }, 500);
+            setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
         } else {
-            document.getElementById('loginMsg').innerText = "Senha incorreta!";
+            document.getElementById('errorMsg').innerText = "Senha Incorreta";
         }
     }
 
-    // --- UPDATE CV ---
-    function updateCV() {
-        setText('outName', 'inName'); setText('outRole', 'inRole');
-        setText('outPhone', 'inPhone'); setText('outEmail', 'inEmail');
-        setText('outSummary', 'inSummary'); setText('outSchool', 'inSchool');
-        setText('outSchoolDet', 'inSchoolDet'); setText('outExpTitle', 'inExpTitle');
-        setText('outExpDesc', 'inExpDesc');
-        const lines = document.getElementById('inSkills').value.split('\n');
-        document.getElementById('outSkills').innerHTML = lines.map(l => l.trim() ? `<div>• ${l}</div>` : '').join('');
-    }
-    function setText(out, inp) { document.getElementById(out).innerText = document.getElementById(inp).value; }
-    
-    function togglePhoto() {
-        document.getElementById('outPhotoBox').style.display = document.getElementById('checkPhoto').checked ? 'block' : 'none';
-    }
-    function loadPhoto(event) {
-        const reader = new FileReader();
-        reader.onload = e => document.getElementById('outImg').src = e.target.result;
-        if(event.target.files[0]) reader.readAsDataURL(event.target.files[0]);
-    }
-
-    // --- IA / GEMINI ---
-    async function callGemini(prompt) {
-        addMessage('ai', '<i class="fas fa-circle-notch fa-spin"></i> Pensando...');
-        const loadMsg = document.querySelector('.msg-ai:last-child');
+    // --- NAVEGAÇÃO ---
+    function setTab(name) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.panel-content').forEach(p => p.classList.remove('active'));
         
-        // Mobile UX: vai pro chat
-        if(window.innerWidth < 1024) switchTab('chat');
+        // Ativa a aba clicada
+        event.currentTarget.classList.add('active');
+        document.getElementById('tab-'+name).classList.add('active');
+    }
 
+    // --- UPDATE CV (Sincronia) ---
+    function update() {
+        setText('outName', 'inName'); setText('outRole', 'inRole');
+        setText('outPhone', 'inPhone'); setText('outEmail', 'inEmail'); setText('outLoc', 'inLoc');
+        setText('outSummary', 'inSummary'); setText('outSchool', 'inSchool');
+        setText('outExpTitle', 'inExpTitle'); setText('outExpDesc', 'inExpDesc');
+        
+        // Exp 2
+        const t2 = document.getElementById('inExpTitle2').value;
+        if(t2) {
+            document.getElementById('exp2Box').style.display = 'block';
+            document.getElementById('outExpTitle2').innerText = t2;
+            document.getElementById('outExpDesc2').innerText = document.getElementById('inExpDesc2').value;
+        } else {
+            document.getElementById('exp2Box').style.display = 'none';
+        }
+
+        // Skills
+        const skills = document.getElementById('inSkills').value.split('\n');
+        document.getElementById('outSkills').innerHTML = skills.map(s => s.trim() ? `<div>• ${s}</div>` : '').join('');
+
+        // Foto
+        document.getElementById('photoContainer').style.display = document.getElementById('checkPhoto').checked ? 'block' : 'none';
+    }
+    function setText(o, i) { document.getElementById(o).innerText = document.getElementById(i).value; }
+    
+    function loadPhoto(e) {
+        const r = new FileReader();
+        r.onload = ev => document.getElementById('outImg').src = ev.target.result;
+        if(e.target.files[0]) r.readAsDataURL(e.target.files[0]);
+    }
+
+    // --- IA GEMINI ---
+    function addMsg(cls, txt) {
+        const d = document.createElement('div');
+        d.className = `msg ${cls}`;
+        d.innerHTML = marked.parse(txt);
+        document.getElementById('chatBox').appendChild(d);
+        document.getElementById('chatBox').scrollTop = 9999;
+    }
+
+    async function callGemini(prompt) {
+        setTab('ai'); // Força ir para aba IA
+        addMsg('ai-msg', '⏳ Analisando...');
+        
         try {
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${getKey()}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${getKey()}`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
             });
-            const data = await response.json();
-            loadMsg.remove();
-            return data.candidates[0].content.parts[0].text;
-        } catch (e) {
-            loadMsg.innerHTML = "Erro de conexão.";
-            return "Erro.";
-        }
+            const json = await res.json();
+            document.querySelector('.ai-msg:last-child').remove(); // Remove loading
+            return json.candidates[0].content.parts[0].text;
+        } catch(e) { return "Erro de conexão."; }
     }
 
     async function improve(type) {
         const role = document.getElementById('inRole').value;
-        const summary = document.getElementById('inSummary').value;
-        const exp = document.getElementById('inExpDesc').value;
-        let prompt = ""; let label = "";
+        const sum = document.getElementById('inSummary').value;
+        let p = "";
+        
+        if(type==='role') p = `Sugira 3 cargos profissionais para quem digitou "${role}". Lista simples.`;
+        if(type==='summary') p = `Reescreva este resumo para RH, foque em resultados: "${sum}". Cargo: ${role}.`;
+        if(type==='exp') p = `Melhore esta descrição de experiência: "${document.getElementById('inExpDesc').value}".`;
+        if(type==='skills') p = `Liste 5 skills essenciais para ${role}.`;
+        if(type==='courses') p = `Indique 3 cursos online (com nome real) para a área de ${role}.`;
 
-        if(type === 'role') { label = "Cargos"; prompt = `Sugira 3 cargos para: "${role}". Lista.`; }
-        if(type === 'summary') { label = "Resumo"; prompt = `Reescreva profissionalmente para RH: "${summary}". Cargo: ${role}.`; }
-        if(type === 'exp') { label = "Experiência"; prompt = `Melhore esta descrição com verbos de ação: "${exp}".`; }
-        if(type === 'skills') { label = "Skills"; prompt = `Liste 5 skills para ${role}.`; }
-        if(type === 'courses') { label = "Cursos"; prompt = `Recomende 3 cursos online para ${role}.`; }
-
-        addMessage('user', `🪄 ${label}`);
-        const res = await callGemini(prompt);
-        addMessage('ai', res);
+        const txt = await callGemini(p);
+        addMsg('ai-msg', txt);
     }
 
-    async function sendMessage() {
-        const txt = document.getElementById('userInput').value;
-        if(!txt) return;
-        addMessage('user', txt);
-        document.getElementById('userInput').value = "";
-        const context = `Usuário: ${document.getElementById('inName').value}, Cargo: ${document.getElementById('inRole').value}.`;
-        const res = await callGemini(context + txt);
-        addMessage('ai', res);
+    async function analyzeResume() {
+        const allText = `Nome: ${document.getElementById('inName').value}. Cargo: ${document.getElementById('inRole').value}. Resumo: ${document.getElementById('inSummary').value}. Experiência: ${document.getElementById('inExpDesc').value}.`;
+        const p = `Atue como Recrutador Sênior. Analise este currículo: "${allText}". Dê uma nota de 0 a 10 e liste 3 pontos específicos para melhorar. Seja direto.`;
+        const txt = await callGemini(p);
+        addMsg('ai-msg', `📊 **Análise do Currículo:**\n\n${txt}`);
     }
 
-    function addMessage(sender, text) {
-        const div = document.createElement('div');
-        div.className = `msg msg-${sender}`;
-        div.innerHTML = marked.parse(text);
-        const container = document.getElementById('chatContainer');
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
+    async function sendChat() {
+        const t = document.getElementById('chatInput').value;
+        if(!t) return;
+        addMsg('user-msg', t);
+        document.getElementById('chatInput').value = "";
+        const r = await callGemini(`Contexto: Usuário fazendo currículo para ${document.getElementById('inRole').value}. Pergunta: ${t}`);
+        addMsg('ai-msg', r);
     }
 
-    // --- MOBILE NAV ---
-    function switchTab(tabName) {
-        document.querySelectorAll('.col').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        document.getElementById('col-' + tabName).classList.add('active');
-        const icons = document.querySelectorAll('.nav-item');
-        if(tabName === 'editor') icons[0].classList.add('active');
-        if(tabName === 'preview') icons[1].classList.add('active');
-        if(tabName === 'chat') icons[2].classList.add('active');
-    }
-
-    window.onload = updateCV;
+    // Start
+    window.onload = update;
 </script>
 
 </body>
