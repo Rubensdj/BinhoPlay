@@ -98,6 +98,7 @@
             position: relative; width: 300px; height: 420px;
             transform-style: preserve-3d; transition: transform 1s;
         }
+        
         /* PÁGINAS */
         .page {
             position: absolute; width: 290px; height: 410px; top: 5px; left: 0;
@@ -106,7 +107,9 @@
             border-radius: 2px 10px 10px 2px;
             box-shadow: 0 0 5px rgba(0,0,0,0.2);
             transform-origin: left center; transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-            z-index: 1; padding: 25px; overflow: hidden; backface-visibility: hidden;
+            z-index: 1; padding: 30px 25px;
+            overflow: hidden; 
+            backface-visibility: hidden;
         }
         .page.back {
             background: var(--page-bg); transform: rotateY(180deg); z-index: 0;
@@ -122,13 +125,23 @@
         .cover h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; text-shadow: 1px 1px 2px #000; border-bottom: 2px solid var(--gold); padding-bottom: 10px; text-align: center; }
         .flipped { transform: rotateY(-180deg); }
 
+        /* TEXTO SEM SCROLL E SEM TÍTULOS */
         .book-text {
-            font-family: 'Crimson Text', serif; font-size: 1.15rem; line-height: 1.5;
-            text-align: justify; color: #1a1a1a;
+            font-family: 'Crimson Text', serif; 
+            font-size: 1.15rem; /* Levemente maior para preencher melhor */
+            line-height: 1.6;
+            text-align: justify; 
+            color: #1a1a1a;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centraliza o texto na página */
         }
+
         .book-text::first-letter {
-            font-size: 3rem; font-family: 'Cinzel', serif; float: left; margin-right: 8px; color: var(--primary);
+            font-size: 2.8rem; font-family: 'Cinzel', serif; float: left; margin-right: 8px; color: var(--primary);
         }
+        
         .page-number { position: absolute; bottom: 15px; width: 100%; text-align: center; font-family: 'Cinzel', serif; font-size: 0.8rem; color: #888; left: 0; }
 
         .book-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
@@ -199,7 +212,6 @@
 
                     <div class="page" id="page1" style="z-index: 9;">
                         <div class="book-text">
-                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">O Propósito</h3>
                             <p>Eu sou um cara muito focado em propósitos e objetivos. Não sou de me deixar levar só por emoção passageira, eu busco o que é real e o que faz sentido pro futuro.</p>
                             <br>
                             <p>E é por isso que preciso te falar: quando digo que gosto de você, ou quando solto um 'te amo', não são palavras vazias. Elas têm um significado muito específico pra mim.</p>
@@ -209,7 +221,6 @@
 
                     <div class="page" id="page2" style="z-index: 8;">
                         <div class="book-text">
-                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">A Conexão</h3>
                             <p>Eu amo a conexão que a gente criou desde sexta-feira, dia 23. Eu amo o teu sotaque de São Paulo misturado com o meu de Recife e a nossa zoação.</p>
                             <br>
                             <p>Mas, principalmente, eu amo o jeito que você interage comigo, a forma inteligente como você interpreta as coisas e como a gente se entende. Isso é raro.</p>
@@ -219,7 +230,6 @@
 
                     <div class="page" id="page3" style="z-index: 7;">
                         <div class="book-text">
-                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">O Caminho</h3>
                             <p>Pra mim, o relacionamento profundo vem como consequência dessa sintonia e do respeito. E é isso que vejo em você: uma mulher que bate com os meus propósitos.</p>
                             <br>
                             <p>Mesmo a gente não se conhecendo pessoalmente ainda, o que me prende é essa admiração por quem você é e pelo jeito que funcionamos juntos. É isso que importa.</p>
@@ -339,7 +349,7 @@
             el.classList.add('active');
         }
 
-        // --- NOVO QUIZ DETALHADO ---
+        // --- QUIZ ---
         function enviarQuizDetalhado() {
             const r1 = document.getElementById('resp1').value;
             const r2 = document.getElementById('resp2').value;
