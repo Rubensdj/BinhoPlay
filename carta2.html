@@ -1,397 +1,366 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Criador Profissional com IA - Rubens Fernandes</title>
+    <title>Rubens Projetos ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* --- CORE --- */
-        body { background: #cbd5e1; font-family: 'Inter', sans-serif; height: 100vh; margin: 0; overflow: hidden; }
+        :root {
+            --primary: #800000; /* Vinho Sangue */
+            --gold: #d4af37;    /* Dourado */
+            --page-bg: #fffbf0; 
+            --text-color: #2c3e50;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
-        /* TELA DE LOGIN */
-        #lockScreen {
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a0000 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        /* === MÚSICA === */
+        .music-control {
+            position: fixed; top: 20px; right: 20px; z-index: 6000;
+            background: rgba(255, 255, 255, 0.1); border: 2px solid var(--gold);
+            color: var(--gold); width: 45px; height: 45px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            backdrop-filter: blur(5px); transition: 0.3s;
+        }
+        .music-control:hover { transform: scale(1.1); background: rgba(0,0,0,0.5); }
+
+        /* === LOGIN === */
+        #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0f172a; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white; transition: opacity 0.5s;
+            background: #fff; z-index: 5000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px; transition: transform 0.8s ease-in-out;
+        }
+        .login-box { width: 100%; max-width: 320px; text-align: center; }
+        .login-input {
+            width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; text-align: center; background: #f8f9fa; outline: none;
+        }
+        .btn-modern {
+            width: 100%; padding: 12px; background: var(--primary);
+            color: var(--gold); border: 1px solid var(--gold); border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* LAYOUT PRINCIPAL (2 COLUNAS) */
-        .app-container { display: flex; height: 100vh; }
-
-        /* LADO ESQUERDO: CONTROLES (Editor + IA) */
-        .control-panel {
-            width: 400px; background: white; border-right: 1px solid #94a3b8;
-            display: flex; flex-direction: column; z-index: 20;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
-        }
-
-        /* Abas do Painel */
-        .tabs { display: flex; background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
-        .tab-btn {
-            flex: 1; padding: 15px; text-align: center; font-weight: 600; font-size: 13px;
-            color: #64748b; cursor: pointer; transition: 0.2s; border-bottom: 3px solid transparent;
-        }
-        .tab-btn:hover { background: #e2e8f0; }
-        .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; background: white; }
-
-        .panel-content { flex: 1; overflow-y: auto; padding: 20px; display: none; }
-        .panel-content.active { display: block; }
-
-        /* Inputs */
-        .input-group { margin-bottom: 15px; }
-        .input-label { font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; margin-bottom: 5px; display: flex; justify-content: space-between; }
-        .field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #f8fafc; }
-        .field:focus { border-color: #2563eb; background: white; outline: none; }
-
-        /* Botão Mágico IA */
-        .magic-btn {
-            font-size: 10px; background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 10px;
-            cursor: pointer; display: flex; align-items: center; gap: 3px; border: none;
-        }
-        .magic-btn:hover { background: #7c3aed; }
-
-        /* LADO DIREITO: O PAPEL (PREVIEW) */
-        .preview-area {
-            flex: 1; background: #64748b; display: flex; justify-content: center; align-items: flex-start;
-            overflow-y: auto; padding: 40px; position: relative;
-        }
-
-        .a4-paper {
-            width: 210mm; min-height: 297mm; background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            display: flex; position: relative;
-            /* Layout Interno do Currículo */
-        }
-
-        .cv-left { width: 32%; background: #1e293b; color: white; padding: 30px 20px; text-align: center; }
-        .cv-right { width: 68%; padding: 40px 30px; color: #334155; }
-
-        /* Elementos CV */
-        .photo-frame { width: 120px; height: 120px; border-radius: 50%; border: 4px solid white; margin: 0 auto 20px; overflow: hidden; background: #334155; }
-        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        /* === APP === */
+        #app-container { display: none; width: 100%; height: 100vh; overflow-y: auto; padding-bottom: 90px; }
         
-        .cv-name { font-size: 26pt; font-weight: 800; text-transform: uppercase; line-height: 1; color: #0f172a; margin: 0; }
-        .cv-role { font-size: 12pt; color: #2563eb; font-weight: 600; text-transform: uppercase; margin-bottom: 25px; }
-        
-        .section-title { font-size: 12pt; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #cbd5e1; margin: 20px 0 10px; padding-bottom: 5px; color: #0f172a; }
-        .side-title { font-size: 10pt; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.2); margin: 20px 0 10px; padding-bottom: 5px; color: #94a3b8; text-align: left; }
-        
-        .contact-row { display: flex; align-items: center; gap: 10px; font-size: 9pt; margin-bottom: 8px; text-align: left; word-break: break-all; }
-        .exp-item { margin-bottom: 15px; }
-        .exp-role { font-weight: 700; font-size: 11pt; color: #1e293b; }
-        .exp-desc { font-size: 10pt; text-align: justify; line-height: 1.4; color: #475569; }
-
-        /* Chat Flutuante (Dentro da aba IA) */
-        .chat-box { height: 400px; overflow-y: auto; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 10px; border-radius: 8px; font-size: 13px; max-width: 90%; }
-        .ai-msg { background: #e0e7ff; color: #1e1b4b; align-self: flex-start; }
-        .user-msg { background: #2563eb; color: white; align-self: flex-end; }
-
-        /* RESPONSIVIDADE MOBILE */
-        @media (max-width: 1024px) {
-            .app-container { flex-direction: column; }
-            .control-panel { width: 100%; height: 50%; order: 2; }
-            .preview-area { height: 50%; order: 1; padding: 10px; align-items: center; }
-            .a4-paper { transform: scale(0.45); transform-origin: center; margin: 0; }
+        .app-header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.95); position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
-        /* IMPRESSÃO */
-        @media print {
-            .control-panel, #lockScreen { display: none !important; }
-            .preview-area { padding: 0; background: white; display: block; }
-            .a4-paper { box-shadow: none; margin: 0; width: 100%; height: 100%; transform: none; }
-            @page { margin: 0; size: A4; }
+        .content-section { display: none; padding: 20px; animation: fadeIn 0.6s ease; }
+        .content-section.active-section { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { 
+            background: rgba(255,255,255,0.95); border-radius: 15px; padding: 25px; margin-bottom: 20px; 
+            border: 1px solid var(--gold);
         }
+
+        /* === QUIZ === */
+        .quiz-container { text-align: left; }
+        .quiz-question-block { margin-bottom: 25px; }
+        .quiz-label {
+            font-weight: 600; font-size: 1.1rem; color: var(--primary);
+            display: block; margin-bottom: 10px; font-family: 'Cinzel', serif;
+        }
+        .quiz-textarea {
+            width: 100%; min-height: 80px; padding: 10px; border: 1px solid #ccc;
+            border-radius: 5px; font-family: 'Poppins', sans-serif;
+            background: #fffdf0; border-left: 4px solid var(--primary);
+            resize: none; outline: none; font-size: 0.95rem;
+        }
+        .quiz-textarea:focus { border-color: var(--gold); background: #fff; }
+
+        /* === O LIVRO 3D === */
+        .book-wrapper {
+            perspective: 1500px;
+            display: flex; justify-content: center; align-items: center;
+            height: 420px; margin-top: 10px;
+        }
+        .book {
+            position: relative; width: 300px; height: 420px;
+            transform-style: preserve-3d; transition: transform 1s;
+        }
+        /* PÁGINAS */
+        .page {
+            position: absolute; width: 290px; height: 410px; top: 5px; left: 0;
+            background: var(--page-bg);
+            background-image: linear-gradient(to right, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 5%, rgba(0,0,0,0) 100%); 
+            border-radius: 2px 10px 10px 2px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            transform-origin: left center; transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+            z-index: 1; padding: 25px; overflow: hidden; backface-visibility: hidden;
+        }
+        .page.back {
+            background: var(--page-bg); transform: rotateY(180deg); z-index: 0;
+            border-radius: 10px 2px 2px 10px;
+            background-image: linear-gradient(to left, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 5%, rgba(0,0,0,0) 100%);
+        }
+        .cover {
+            background: var(--primary); border: 2px solid #5a0000; z-index: 10;
+            border-radius: 5px 15px 15px 5px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: var(--gold);
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.6);
+        }
+        .cover h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; text-shadow: 1px 1px 2px #000; border-bottom: 2px solid var(--gold); padding-bottom: 10px; text-align: center; }
+        .flipped { transform: rotateY(-180deg); }
+
+        .book-text {
+            font-family: 'Crimson Text', serif; font-size: 1.15rem; line-height: 1.5;
+            text-align: justify; color: #1a1a1a;
+        }
+        .book-text::first-letter {
+            font-size: 3rem; font-family: 'Cinzel', serif; float: left; margin-right: 8px; color: var(--primary);
+        }
+        .page-number { position: absolute; bottom: 15px; width: 100%; text-align: center; font-family: 'Cinzel', serif; font-size: 0.8rem; color: #888; left: 0; }
+
+        .book-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .book-btn {
+            background: var(--primary); color: var(--gold); border: 1px solid var(--gold);
+            padding: 10px 20px; border-radius: 30px; cursor: pointer; font-family: 'Cinzel', serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* NAV */
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; height: 65px; background: white; border-radius: 50px; display: flex; justify-content: space-evenly; align-items: center; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .nav-item { color: #bdc3c7; font-size: 1.4rem; transition: 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+        .nav-item.active { color: white; background: var(--primary); transform: translateY(-10px); box-shadow: 0 5px 15px rgba(128, 0, 0, 0.4); }
     </style>
 </head>
 <body>
 
-<div id="lockScreen">
-    <i class="fas fa-lock text-5xl mb-4 text-blue-500"></i>
-    <h2 class="text-xl font-bold mb-2">Sistema RH Seguro</h2>
-    <p class="text-sm text-gray-400 mb-4">Autenticado para: Rubens Fernandes</p>
-    <div class="flex gap-2">
-        <input type="password" id="passInput" placeholder="Senha (1234)" class="p-2 rounded text-black text-center w-32">
-        <button onclick="login()" class="bg-blue-600 px-4 py-2 rounded font-bold hover:bg-blue-700">Entrar</button>
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-control" onclick="toggleMusic()">
+        <i class="fas fa-play" id="musicIcon"></i>
     </div>
-    <p id="errorMsg" class="text-red-500 text-xs mt-2 h-4"></p>
-</div>
 
-<div class="app-container">
-    
-    <div class="control-panel">
-        <div class="tabs">
-            <div class="tab-btn active" onclick="setTab('editor')"><i class="fas fa-pen"></i> DADOS (Editar)</div>
-            <div class="tab-btn" onclick="setTab('ai')"><i class="fas fa-robot"></i> CONSULTORA IA</div>
-        </div>
-
-        <div id="tab-editor" class="panel-content active custom-scrollbar">
-            <div class="bg-blue-50 border border-blue-200 p-3 rounded mb-4">
-                <h3 class="text-xs font-bold text-blue-800 uppercase mb-2">Ações Rápidas</h3>
-                <div class="flex gap-2">
-                    <button onclick="window.print()" class="bg-green-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-green-700 flex-1">
-                        <i class="fas fa-print"></i> Baixar PDF
-                    </button>
-                    <button onclick="analyzeResume()" class="bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded hover:bg-purple-700 flex-1">
-                        <i class="fas fa-star"></i> Analisar com IA
-                    </button>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">
-                    <span>Foto de Perfil</span>
-                    <input type="checkbox" id="checkPhoto" checked onchange="update()">
-                </div>
-                <input type="file" id="photoInput" onchange="loadPhoto(event)" class="text-xs">
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Nome Completo</div>
-                <input type="text" id="inName" class="field" value="Maria Marleide Ramalho" oninput="update()">
-            </div>
-            <div class="input-group">
-                <div class="input-label">Cargo / Objetivo <button class="magic-btn" onclick="ask('role')">✨ Sugerir</button></div>
-                <input type="text" id="inRole" class="field" value="Jovem Aprendiz" oninput="update()">
-            </div>
-
-            <div class="flex gap-2">
-                <div class="input-group flex-1">
-                    <div class="input-label">Telefone</div>
-                    <input type="text" id="inPhone" class="field" value="(88) 8831-4122" oninput="update()">
-                </div>
-                <div class="input-group flex-1">
-                    <div class="input-label">Email</div>
-                    <input type="text" id="inEmail" class="field" value="ccontato138@gmail.com" oninput="update()">
-                </div>
-            </div>
-            <div class="input-group">
-                <div class="input-label">Endereço</div>
-                <input type="text" id="inLoc" class="field" value="Cidade Brasileira - CE" oninput="update()">
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Resumo <button class="magic-btn" onclick="ask('summary')">✨ Melhorar</button></div>
-                <textarea id="inSummary" rows="4" class="field" oninput="update()">Busco a primeira oportunidade de emprego, visando desenvolver habilidades profissionais e contribuir com dedicação para o crescimento da empresa.</textarea>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Experiência 1 <button class="magic-btn" onclick="ask('exp')">✨ Enriquecer</button></div>
-                <input type="text" id="inExpTitle" class="field mb-1" value="Vendedora - Dorinha Confecções" placeholder="Cargo - Empresa" oninput="update()">
-                <textarea id="inExpDesc" rows="3" class="field" placeholder="O que fazia?" oninput="update()">Atendimento ao cliente e vendas.</textarea>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Experiência 2 (Opcional)</div>
-                <input type="text" id="inExpTitle2" class="field mb-1" value="Autônoma / Serviços Gerais" oninput="update()">
-                <textarea id="inExpDesc2" rows="3" class="field" oninput="update()">Comerciante e cuidadora de crianças.</textarea>
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Escolaridade</div>
-                <input type="text" id="inSchool" class="field" value="Ensino Médio - Cursando 3º Ano" oninput="update()">
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Habilidades <button class="magic-btn" onclick="ask('skills')">✨ Listar</button></div>
-                <textarea id="inSkills" rows="4" class="field" oninput="update()">Comunicação
-Pontualidade
-Trabalho em Equipe</textarea>
-            </div>
-        </div>
-
-        <div id="tab-ai" class="panel-content custom-scrollbar">
-            <div class="flex items-center gap-2 mb-4 p-2 bg-gray-100 rounded">
-                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white"><i class="fas fa-robot"></i></div>
-                <div>
-                    <h3 class="font-bold text-sm">Gemini RH</h3>
-                    <p class="text-[10px] text-gray-500">Chave Segura Ativada</p>
-                </div>
-            </div>
-
-            <div id="chatBox" class="chat-box custom-scrollbar">
-                <div class="msg ai-msg">
-                    Olá! Sou sua consultora de RH. <br>
-                    Estou monitorando o que você escreve. Clique nos botões <b>✨</b> no editor para eu ajudar, ou peça uma <b>Análise Completa</b> quando terminar.
-                </div>
-            </div>
-
-            <div class="mt-3 flex gap-2">
-                <input type="text" id="chatInput" placeholder="Faça uma pergunta..." class="field" onkeypress="if(event.key==='Enter') sendChat()">
-                <button onclick="sendChat()" class="bg-blue-600 text-white px-3 rounded hover:bg-blue-700"><i class="fas fa-paper-plane"></i></button>
-            </div>
-            
-            <button onclick="ask('courses')" class="w-full mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded text-xs flex justify-center items-center gap-2">
-                <i class="fas fa-lightbulb"></i> Me indique cursos para minha área
-            </button>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1 style="color: var(--primary); font-family: 'Cinzel', serif; font-size: 2rem;">Propósito & Amor</h1>
+            <p style="color: #555; margin-bottom: 20px;">Rubens Projetos</p>
+            <input type="text" id="inputName" class="login-input" placeholder="Seu Nome">
+            <input type="date" id="inputDate" class="login-input">
+            <input type="password" id="inputPass" class="login-input" placeholder="Senha">
+            <button class="btn-modern" onclick="entrar()">ABRIR LIVRO</button>
         </div>
     </div>
 
-    <div class="preview-area custom-scrollbar">
-        <div class="a4-paper">
-            
-            <div class="cv-left">
-                <div id="photoContainer" class="photo-frame"><img id="outImg" src=""></div>
-                
-                <div class="side-title">Contato</div>
-                <div class="contact-row"><i class="fas fa-phone text-blue-400"></i> <span id="outPhone"></span></div>
-                <div class="contact-row"><i class="fas fa-envelope text-blue-400"></i> <span id="outEmail"></span></div>
-                <div class="contact-row"><i class="fas fa-map-marker-alt text-blue-400"></i> <span id="outLoc"></span></div>
-
-                <div class="side-title">Educação</div>
-                <div style="text-align: left; font-size: 0.9em; line-height: 1.4;" id="outSchool"></div>
-
-                <div class="side-title">Competências</div>
-                <div id="outSkills" style="text-align: left; font-size: 0.9em; line-height: 1.6;"></div>
-            </div>
-
-            <div class="cv-right">
-                <h1 class="cv-name" id="outName"></h1>
-                <div class="cv-role" id="outRole"></div>
-
-                <div class="section-title">Sobre Mim</div>
-                <p class="cv-text" id="outSummary"></p>
-
-                <div class="section-title">Experiência Profissional</div>
-                
-                <div class="exp-item">
-                    <div class="exp-role" id="outExpTitle"></div>
-                    <div class="exp-desc" id="outExpDesc"></div>
-                </div>
-
-                <div class="exp-item" id="exp2Box">
-                    <div class="exp-role" id="outExpTitle2"></div>
-                    <div class="exp-desc" id="outExpDesc2"></div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-</div>
-
-<script>
-    // --- SEGURANÇA (Ofuscação) ---
-    const _0x1 = [65,73,122,97,83,121,67,116,50,117,116,109,88,66,50,54,112,116,107,74,48,53,79,84,52,97,49,119,82,53,48,76,80,90,95,89,69,118,89];
-    const getKey = () => String.fromCharCode(..._0x1);
-
-    // --- LOGIN ---
-    function login() {
-        if(document.getElementById('passInput').value === "1234") {
-            document.getElementById('lockScreen').style.opacity = '0';
-            setTimeout(() => document.getElementById('lockScreen').style.display = 'none', 500);
-        } else {
-            document.getElementById('errorMsg').innerText = "Senha Incorreta";
-        }
-    }
-
-    // --- NAVEGAÇÃO ---
-    function setTab(name) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.panel-content').forEach(p => p.classList.remove('active'));
+    <div id="app-container">
         
-        // Ativa a aba clicada
-        event.currentTarget.classList.add('active');
-        document.getElementById('tab-'+name).classList.add('active');
-    }
+        <div class="app-header">
+            <span style="font-weight: 700; color: #333;">RUBENS PROJETOS</span>
+            <i class="fas fa-book-reader" style="color: var(--primary);"></i>
+        </div>
 
-    // --- UPDATE CV (Sincronia) ---
-    function update() {
-        setText('outName', 'inName'); setText('outRole', 'inRole');
-        setText('outPhone', 'inPhone'); setText('outEmail', 'inEmail'); setText('outLoc', 'inLoc');
-        setText('outSummary', 'inSummary'); setText('outSchool', 'inSchool');
-        setText('outExpTitle', 'inExpTitle'); setText('outExpDesc', 'inExpDesc');
-        
-        // Exp 2
-        const t2 = document.getElementById('inExpTitle2').value;
-        if(t2) {
-            document.getElementById('exp2Box').style.display = 'block';
-            document.getElementById('outExpTitle2').innerText = t2;
-            document.getElementById('outExpDesc2').innerText = document.getElementById('inExpDesc2').value;
-        } else {
-            document.getElementById('exp2Box').style.display = 'none';
+        <section id="home" class="content-section active-section">
+            <div class="card">
+                <h2 style="text-align: center; color: var(--primary); font-family: 'Dancing Script', cursive; font-size: 2.2rem;">Bem-vinda, <span class="user-name">...</span></h2>
+                <div style="background: #fff0f0; padding: 20px; border-radius: 10px; text-align: center; margin-top: 15px; border: 1px dashed var(--primary);">
+                    <p style="color: #555;">Desde o início há:</p>
+                    <h1 id="timerDisplay" style="color: var(--primary); font-size: 2.5rem; margin: 5px 0;">0</h1>
+                    <p style="color: #555;">Dias</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="book-section" class="content-section">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <h2 style="font-family: 'Cinzel', serif; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">O Livro da Verdade</h2>
+            </div>
+
+            <div class="book-wrapper">
+                <div class="book" id="myBook">
+                    
+                    <div class="page cover" id="page0" style="z-index: 10;">
+                        <i class="fas fa-heart" style="font-size: 3rem; margin-bottom: 20px;"></i>
+                        <h1>NOSSA<br>HISTÓRIA</h1>
+                        <p style="margin-top: 20px; color: #d4af37;">Rubens & <span class="user-name">Ela</span></p>
+                    </div>
+
+                    <div class="page" id="page1" style="z-index: 9;">
+                        <div class="book-text">
+                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">O Propósito</h3>
+                            <p>Eu sou um cara muito focado em propósitos e objetivos. Não sou de me deixar levar só por emoção passageira, eu busco o que é real e o que faz sentido pro futuro.</p>
+                            <br>
+                            <p>E é por isso que preciso te falar: quando digo que gosto de você, ou quando solto um 'te amo', não são palavras vazias. Elas têm um significado muito específico pra mim.</p>
+                        </div>
+                        <div class="page-number">1</div>
+                    </div>
+
+                    <div class="page" id="page2" style="z-index: 8;">
+                        <div class="book-text">
+                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">A Conexão</h3>
+                            <p>Eu amo a conexão que a gente criou desde sexta-feira, dia 23. Eu amo o teu sotaque de São Paulo misturado com o meu de Recife e a nossa zoação.</p>
+                            <br>
+                            <p>Mas, principalmente, eu amo o jeito que você interage comigo, a forma inteligente como você interpreta as coisas e como a gente se entende. Isso é raro.</p>
+                        </div>
+                        <div class="page-number">2</div>
+                    </div>
+
+                    <div class="page" id="page3" style="z-index: 7;">
+                        <div class="book-text">
+                            <h3 style="text-align:center; font-family:'Cinzel'; margin-bottom:10px; color:var(--primary);">O Caminho</h3>
+                            <p>Pra mim, o relacionamento profundo vem como consequência dessa sintonia e do respeito. E é isso que vejo em você: uma mulher que bate com os meus propósitos.</p>
+                            <br>
+                            <p>Mesmo a gente não se conhecendo pessoalmente ainda, o que me prende é essa admiração por quem você é e pelo jeito que funcionamos juntos. É isso que importa.</p>
+                        </div>
+                        <div class="page-number">3</div>
+                    </div>
+
+                    <div class="page" id="page4" style="z-index: 6; background: #2c3e50; display:flex; align-items:center; justify-content:center; text-align:center;">
+                        <div>
+                            <h2 style="font-family: 'Cinzel'; color: var(--gold);">CONTINUA...</h2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="book-controls">
+                <button class="book-btn" onclick="prevPage()"><i class="fas fa-arrow-left"></i></button>
+                <button class="book-btn" onclick="nextPage()"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <section id="quiz" class="content-section">
+            <div class="card">
+                <h2 style="font-family: 'Cinzel'; color: var(--primary); text-align: center; margin-bottom: 20px;">Confissões ❤️</h2>
+                
+                <div class="quiz-container">
+                    
+                    <div class="quiz-question-block">
+                        <label class="quiz-label">1. O que você sente quando te chamo de minha?</label>
+                        <textarea id="resp1" class="quiz-textarea" placeholder="Descreva seu sentimento..."></textarea>
+                    </div>
+
+                    <div class="quiz-question-block">
+                        <label class="quiz-label">2. Se estivéssemos juntos agora, o que faríamos?</label>
+                        <textarea id="resp2" class="quiz-textarea" placeholder="Seja sincera (e direta)..."></textarea>
+                    </div>
+
+                    <div class="quiz-question-block">
+                        <label class="quiz-label">3. Defina o que eu sou pra você:</label>
+                        <textarea id="resp3" class="quiz-textarea" placeholder="Ex: Amor da vida, Porto seguro, etc..."></textarea>
+                    </div>
+
+                    <button class="btn-modern" style="width: 100%; margin-top: 10px; background: #27ae60; color: #fff; border: none;" onclick="enviarQuizDetalhado()">ENVIAR RESPOSTAS 💌</button>
+                </div>
+            </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="nav('home', this)"><i class="fas fa-home"></i></a>
+            <a href="#" class="nav-item" onclick="nav('book-section', this)"><i class="fas fa-book"></i></a>
+            <a href="#" class="nav-item" onclick="nav('quiz', this)"><i class="fas fa-heart"></i></a>
+        </nav>
+    </div>
+
+    <script>
+        let userData = { nome: "" };
+        const TEL_RUBENS = "5581989501999"; 
+        const audio = document.getElementById('bgMusic');
+
+        // --- LÓGICA DO LIVRO ---
+        let currentPage = 0;
+        const totalPages = 4;
+
+        function nextPage() {
+            if (currentPage <= totalPages) {
+                const page = document.getElementById('page' + currentPage);
+                if(page) {
+                    page.classList.add('flipped');
+                    currentPage++;
+                }
+            }
         }
 
-        // Skills
-        const skills = document.getElementById('inSkills').value.split('\n');
-        document.getElementById('outSkills').innerHTML = skills.map(s => s.trim() ? `<div>• ${s}</div>` : '').join('');
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                const page = document.getElementById('page' + currentPage);
+                if(page) {
+                    page.classList.remove('flipped');
+                }
+            }
+        }
 
-        // Foto
-        document.getElementById('photoContainer').style.display = document.getElementById('checkPhoto').checked ? 'block' : 'none';
-    }
-    function setText(o, i) { document.getElementById(o).innerText = document.getElementById(i).value; }
-    
-    function loadPhoto(e) {
-        const r = new FileReader();
-        r.onload = ev => document.getElementById('outImg').src = ev.target.result;
-        if(e.target.files[0]) r.readAsDataURL(e.target.files[0]);
-    }
+        // --- MÚSICA ---
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (audio.paused) {
+                audio.play();
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+            } else {
+                audio.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+            }
+        }
 
-    // --- IA GEMINI ---
-    function addMsg(cls, txt) {
-        const d = document.createElement('div');
-        d.className = `msg ${cls}`;
-        d.innerHTML = marked.parse(txt);
-        document.getElementById('chatBox').appendChild(d);
-        document.getElementById('chatBox').scrollTop = 9999;
-    }
+        // --- SISTEMA ---
+        function entrar() {
+            const nome = document.getElementById('inputName').value;
+            if(!nome) return alert("Digite seu nome!");
+            userData.nome = nome;
+            document.querySelectorAll('.user-name').forEach(el => el.innerText = nome);
+            document.getElementById('login-screen').style.transform = "translateY(-100%)";
+            setTimeout(() => {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+                audio.play().catch(()=>{});
+            }, 500);
+        }
 
-    async function callGemini(prompt) {
-        setTab('ai'); // Força ir para aba IA
-        addMsg('ai-msg', '⏳ Analisando...');
+        function nav(id, el) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-section');
+            el.classList.add('active');
+        }
+
+        // --- NOVO QUIZ DETALHADO ---
+        function enviarQuizDetalhado() {
+            const r1 = document.getElementById('resp1').value;
+            const r2 = document.getElementById('resp2').value;
+            const r3 = document.getElementById('resp3').value;
+
+            if(!r1 || !r2 || !r3) {
+                return alert("Por favor, responda todas as perguntas com carinho! ❤️");
+            }
+
+            const msg = `📕 *CONFISSÕES DO LIVRO*\n\n👤 Ela: *${userData.nome}*\n\n1️⃣ *O que sente quando chamo de minha?*\nR: ${r1}\n\n2️⃣ *O que faríamos agora?*\nR: ${r2}\n\n3️⃣ *O que eu sou pra você?*\nR: ${r3}`;
+            
+            window.open(`https://wa.me/${TEL_RUBENS}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
         
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${getKey()}`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
-            const json = await res.json();
-            document.querySelector('.ai-msg:last-child').remove(); // Remove loading
-            return json.candidates[0].content.parts[0].text;
-        } catch(e) { return "Erro de conexão."; }
-    }
-
-    async function improve(type) {
-        const role = document.getElementById('inRole').value;
-        const sum = document.getElementById('inSummary').value;
-        let p = "";
-        
-        if(type==='role') p = `Sugira 3 cargos profissionais para quem digitou "${role}". Lista simples.`;
-        if(type==='summary') p = `Reescreva este resumo para RH, foque em resultados: "${sum}". Cargo: ${role}.`;
-        if(type==='exp') p = `Melhore esta descrição de experiência: "${document.getElementById('inExpDesc').value}".`;
-        if(type==='skills') p = `Liste 5 skills essenciais para ${role}.`;
-        if(type==='courses') p = `Indique 3 cursos online (com nome real) para a área de ${role}.`;
-
-        const txt = await callGemini(p);
-        addMsg('ai-msg', txt);
-    }
-
-    async function analyzeResume() {
-        const allText = `Nome: ${document.getElementById('inName').value}. Cargo: ${document.getElementById('inRole').value}. Resumo: ${document.getElementById('inSummary').value}. Experiência: ${document.getElementById('inExpDesc').value}.`;
-        const p = `Atue como Recrutador Sênior. Analise este currículo: "${allText}". Dê uma nota de 0 a 10 e liste 3 pontos específicos para melhorar. Seja direto.`;
-        const txt = await callGemini(p);
-        addMsg('ai-msg', `📊 **Análise do Currículo:**\n\n${txt}`);
-    }
-
-    async function sendChat() {
-        const t = document.getElementById('chatInput').value;
-        if(!t) return;
-        addMsg('user-msg', t);
-        document.getElementById('chatInput').value = "";
-        const r = await callGemini(`Contexto: Usuário fazendo currículo para ${document.getElementById('inRole').value}. Pergunta: ${t}`);
-        addMsg('ai-msg', r);
-    }
-
-    // Start
-    window.onload = update;
-</script>
-
+        setInterval(() => {
+            const start = document.getElementById('inputDate').value;
+            if(start) {
+                const diff = new Date() - new Date(start);
+                document.getElementById('timerDisplay').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
