@@ -3,107 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💰 Hub de Renda - Rubensdj</title>
+<meta name="theme-color" content="#0f172a">
+<title>💰 Hub Renda Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+:root { --bg: #0f172a; --card: #1e293b; --primary: #38bdf8; --accent: #8b5cf6; --gold: #fbbf24; --success: #10b981; --text: #f1f5f9; --text-muted: #94a3b8; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 20px; padding-bottom: 80px; overflow-x: hidden; }
 .container { max-width: 600px; margin: 0 auto; }
-h1 { text-align: center; color: #007bff; margin-bottom: 5px; }
-.subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px; }
-.card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-.card h2 { margin-top: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-.btn { display: block; background: #007bff; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; }
-.btn:hover { background: #0056b3; }
-.link-list a { display: block; padding: 10px; background: #e9ecef; border-radius: 6px; margin-bottom: 8px; text-decoration: none; color: #333; }
-.link-list a:hover { background: #dde2e6; }
-.text-preview { background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; }
-.audio-box { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; }
-.audio-box button { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 10px 20px; border-radius: 6px; font-size: 1rem; cursor: pointer; margin: 5px; }
-.ganho-display { font-size: 2rem; font-weight: bold; color: #28a745; text-align: center; display: block; margin: 10px 0; }
+header { background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 25px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2); text-align: center; margin-bottom: 25px; position: relative; overflow: hidden; }
+header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%); animation: spin 10s linear infinite; }
+@keyframes spin { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+h1 { font-size: 1.8rem; margin-bottom: 5px; position: relative; z-index: 1; }
+.subtitle { font-size: 0.9rem; opacity: 0.9; position: relative; z-index: 1; }
+.grid-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+.stat-card { background: var(--card); padding: 15px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s; }
+.stat-card:active { transform: scale(0.95); }
+.stat-val { font-size: 1.6rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+.stat-card.rougue .stat-val { color: var(--gold); }
+.stat-card.success .stat-val { color: var(--success); }
+.stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.section { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+.section h2 { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; color: var(--primary); }
+.section h2 span { font-size: 1.3rem; }
+.link-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 8px; transition: background 0.2s; }
+.link-item:active { background: rgba(255,255,255,0.1); }
+.link-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+.link-text span { font-size: 0.8rem; color: var(--text-muted); }
+.btn-link { background: var(--primary); color: #000; padding: 6px 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.8rem; white-space: nowrap; }
+.script-box { background: #111; padding: 12px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--gold); border-left: 4px solid var(--gold); margin: 10px 0; position: relative; cursor: pointer; }
+.script-box:active { opacity: 0.8; }
+.copy-hint { position: absolute; top: 5px; right: 10px; font-size: 0.7rem; opacity: 0.6; }
+.chat-row { display: flex; gap: 10px; margin-top: 10px; }
+.chat-btn { flex: 1; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
+.chat-btn.speak:active { transform: scale(0.95); }
+.check-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.check-item:last-child { border-bottom: none; }
+.check-box { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--text-muted); display: grid; place-items: center; cursor: pointer; transition: all 0.2s; }
+.check-item.done .check-box { background: var(--success); border-color: var(--success); }
+.check-item.done .check-box::after { content: '✓'; color: white; font-weight: bold; font-size: 14px; }
+.check-item.done span { text-decoration: line-through; opacity: 0.5; }
+.floating-input { background: var(--card); padding: 10px; border-radius: 50px; display: flex; gap: 10px; align-items: center; position: fixed; bottom: 20px; left: 5%; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--primary); z-index: 100; }
+.floating-input input { flex: 1; background: transparent; border: none; color: white; padding: 5px; font-size: 1rem; outline: none; }
+.floating-input button { background: var(--success); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; }
 </style>
 </head>
 <body>
-
 <div class="container">
-  <header>
-    <h1>💰 Hub de Renda</h1>
-    <p class="subtitle">Seu painel único de ganhos em casa</p>
-  </header>
-
-  <!-- MÓDULO 1: PESQUISAS -->
-  <div class="card">
-    <h2>📋 1. Pesquisas Pagas</h2>
-    <p>Cadastrados nesses sites e responda pesquisas rápidas:</p>
-    <div class="link-list">
-      <a href="https://www.premia.com.br" target="_blank">➡️ Premia (Paga via Pix)</a>
-      <a href="https://www.lifepointspanel.com" target="_blank">➡️ LifePoints (Internacional)</a>
-      <a href="https://www.toluna.com" target="_blank">➡️ Toluna (Testes de produtos)</a>
+    <header>
+        <h1>🚀 Hub Renda PRO</h1>
+        <p class="subtitle">Painel de Controle & Automação</p>
+    </header>
+    <div class="grid-stats">
+        <div class="stat-card success"><div class="stat-val" id="totalMoney">R$ 0</div><div class="stat-label">Ganhos Hoje</div></div>
+        <div class="stat-card rouge"><div class="stat-val" id="progressBar">0%</div><div class="stat-label">Meta Semanal</div></div>
+        <div class="stat-card"><div class="stat-val" id="tasksCount">0/5</div><div class="stat-label">Tarefas</div></div>
+        <div class="stat-card"><div class="stat-val" id="levelDisplay">Nível 1</div><div class="stat-label">Pro</div></div>
     </div>
-  </div>
-
-  <!-- MÓDULO 2: AFILIADOS -->
-  <div class="card">
-    <h2>💳 2. Afiliados (Texto Pronto)</h2>
-    <p>Copie e cole no seu Status ou WhatsApp:</p>
-    <div class="text-preview">🔥 Curso de Marketing Digital - aprenda do zero e comece a faturar online! Link na bio.</div>
-    <p style="font-size:0.8rem; color:#888; margin-top:5px;">(Toque e segure no texto para copiar)</p>
-  </div>
-
-  <!-- MÓDULO 3: ÁUDIO -->
-  <div class="audio-box">
-    <h3 style="margin-top:0;">🎧 Ouça suas Dicas</h3>
-    <p>Seu celular vai falar com você!</p>
-    <button onclick="falar('Oi Rubens! Hoje o foco é cadastrar nos sites de pesquisa e ganhar pelo menos 20 reais.')">▶️ Dica da Pesquisa</button>
-    <button onclick="falar('Afiliado é simples: você divulga e ganha comissão. Não precisa ter produto.')">▶️ Como Afiliado</button>
-    <button onclick="falar('Consistência é tudo! Faça todo dia um pouquinho e o resultado vem.')">▶️ Mentalidade</button>
-  </div>
-
-  <!-- MÓDULO 4: CONTROLE -->
-  <div class="card">
-    <h2>💸 3. Seu Ganho Hoje</h2>
-    <span class="ganho-display" id="totalGanho">R$ 0,00</span>
-    <input type="number" id="valorInput" placeholder="Valor ganho (ex: 20)" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; margin:10px 0;">
-    <button class="btn" onclick="somarGanho()">+ Somar ao Total</button>
-    <p style="font-size:0.8rem; color:#666; text-align:center; margin-top:10px;">(Os dados ficam salvos só no seu celular)</p>
-  </div>
-
-  <footer style="text-align:center; margin-top:30px; font-size:0.7rem; color:#888;">
-    Hub de Renda • Desenvolvido por Hermes Agent 🤖
-  </footer>
-
-
-
+    <div class="section">
+        <h2>📈 Evolução de Ganhos</h2>
+        <canvas id="myChart" height="200"></canvas>
+    </div>
+    <div class="section">
+        <h2><span>📋</span> Câmaras de Renda (Pesquisas)</h2>
+        <div class="link-item"><div class="link-text"><strong>Premia (Pix)</strong><span>Paga por pesquisa rápida</span></div><a href="https://www.premia.com.br" target="_blank" class="btn-link">Acessar</a></div>
+        <div class="link-item"><div class="link-text"><strong>LifePoints Global</strong><span>Alta disponibilidade</span></div><a href="https://www.lifepointspanel.com" target="_blank" class="btn-link">Acessar</a></div>
+    </div>
+    <div class="section">
+        <h2><span>💳</span> Scripts de Vendas (Copia)</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Toque para copiar:</p>
+        <div class="script-box" onclick="copiar(this, '🔥 Curso de Marketing Digital - aprenda do zero. Eu comecei aqui e faturei!')">🚀 Marketing Digital <span class="copy-hint">Copiar</span></div>
+        <div class="script-box" onclick="copiar(this, '💰 Quer investir do zero? Esse método me ajudou a organizar minhas finanças. Chevrona no link!')">📈 Investimentos <span class="copy-hint">Copiar</span></div>
+    </div>
+    <div class="section">
+        <h2><span>🎧</span> Inteligência de Voz</h2>
+        <p style="font-size:0.8rem; color:var(--text-muted); mb-2;">Onde sua IA fala com você:</p>
+        <div class="chat-row">
+            <button class="chat-btn speak" onclick="falar('Rubens, o foco hoje é cadastrar em 3 sites de pesquisa e ganhar 20 reais. Vamos lá!')">🗣️ Iniciar Dia</button>
+            <button class="chat-btn speak" style="background:var(--primary); color:#000;" onclick="falar('Dica de ouro: não se desanime. A consistência traz o resultado. Continue tentando.')">🧠 Motivação</button>
+        </div>
+    </div>
+    <div class="section">
+        <h2><span>✅</span> Missão do Dia</h2>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Cadastrar no Premia</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Responder 1 pesquisa</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Copiar script de vendas</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Postar 1 vídeo curto</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"></div><span>Anotar ganho no painel</span></div>
+    </div>
 </div>
-
+<div class="floating-input"><input type="number" id="gainInput" placeholder="Valor ganho (R$)"><button onclick="somar()">+</button></div>
 <script>
-// Carregar ganho salvo
-let total = parseFloat(localStorage.getItem('hubRendaTotal') || '0');
-document.getElementById('totalGanho').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-
-function somarGanho() {
-    const v = parseFloat(document.getElementById('valorInput').value);
-    if(!v || v <= 0) return alert('Digite um valor válido!');
-    total += v;
-    localStorage.setItem('hubRendaTotal', total);
-    document.getElementById('totalGanho').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
-    document.getElementById('valorInput').value = '';
-    alert('✅ ' + v + ' real(s) somado! Continue assim!');
-}
-
-function falar(texto) {
-    if ('speechSynthesis' in window) {
-        const u = new SpeechSynthesisUtterance(texto);
-        u.lang = 'pt-BR';
-        window.speechSynthesis.speak(u);
-    } else {
-        alert('Seu navegador não tem voz, mas o texto é: ' + texto);
-    }
-}
+let total = parseFloat(localStorage.getItem('hubTotal') || '0');
+let history = JSON.parse(localStorage.getItem('hubData') || '[0,0,0,0,0,0,0]');
+document.getElementById('totalMoney').innerText = 'R$ ' + total.toFixed(2);
+updateStats();
+const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, { type: 'line', data: { labels: ['Av', 'Sq', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'], datasets: [{ label: 'Ganhos (R$)', data: history, borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.2)', borderWidth: 2, tension: 0.4, fill: true, pointBackgroundColor: '#fff' }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: {size: 10} } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } } } } });
+function somar() { const val = parseFloat(document.getElementById('gainInput').value); if(!val || val <= 0) return alert('Digite um valor válido!'); total += val; localStorage.setItem('hubTotal', total); const hoje = new Date().getDay(); history[hoje] += val; localStorage.setItem('hubData', JSON.stringify(history)); myChart.update(); const input = document.getElementById('gainInput'); input.value = ''; updateStats(); alert('✅ R$ ' + val.toFixed(2) + ' somado! Parabéns!'); }
+function updateStats() { document.getElementById('totalMoney').innerText = 'R$ ' + total.toFixed(2); const meta = 500; const prog = Math.min(100, Math.round((total / meta) * 100)); document.getElementById('progressBar').innerText = prog + '%'; const level = Math.floor(total / 100) + 1; document.getElementById('levelDisplay').innerText = 'Nível ' + level; }
+function toggleCheck(el) { el.classList.toggle('done'); const done = document.querySelectorAll('.check-item.done').length; document.getElementById('tasksCount').innerText = done + '/5'; }
+function falar(text) { if('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(text); u.lang = 'pt-BR'; u.rate = 1.0; window.speechSynthesis.speak(u); } else { alert('Navegador não fala. Texto: ' + text); } }
+function copiar(el, texto) { navigator.clipboard.writeText(texto).then(() => { const hint = el.querySelector('.copy-hint'); const original = hint.innerText; hint.innerText = 'Copiado!'; hint.style.color = '#10b981'; setTimeout(() => { hint.innerText = original; hint.style.color = ''; }, 1500); }); }
 </script>
-
 </body>
 </html>
-```
-
-4. Role para baixo da caixa de texto e, em *"Commit new file"*, toque no botão *"Commit changes"*.
-
----
