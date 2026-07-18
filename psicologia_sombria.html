@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2c3e50">
+<title>🧠 Mente Sombria & Controle - Academia do Amor Pro</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary: #e74c3c; /* Vermelho psicológico */
+    --dark: #2c3e50;
+    --bg: #f4f6f7;
+    --card: #ffffff;
+    --text: #333;
+    --accent: #8e44ad; /* Roxo hipnótico */
+    --success: #27ae60;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+
+header { background: linear-gradient(135deg, var(--dark), #34495e); color: white; padding: 40px 20px; text-align: center; margin-bottom: 30px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3); }
+header h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; margin-bottom: 10px; letter-spacing: 2px; }
+header p { font-size: 1rem; opacity: 0.8; font-style: italic; }
+
+nav { display: flex; overflow-x: auto; gap: 8px; padding: 10px 20px; margin-bottom: 25px; scrollbar-width: none; }
+nav::-webkit-scrollbar { display: none; }
+.nav-btn { background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 50px; white-space: nowrap; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #555; }
+.nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
+.nav-btn.hypno { background: var(--accent); color: white; }
+
+.content-area { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+.section { display: none; animation: fadeIn 0.5s ease-in-out; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.card { background: var(--card); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
+.card.dark-mode { background: #2c3e50; color: white; border-color: var(--accent); }
+.card h2 { font-family: 'Merriweather', serif; color: var(--primary); margin-bottom: 15px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+.card.dark-mode h2 { color: #e67e22; }
+.card h3 { font-size: 1.1rem; color: var(--dark); margin: 20px 0 10px; font-weight: 700; }
+.card.dark-mode h3 { color: #bdc3c7; }
+.card p { line-height: 1.7; font-size: 0.95rem; color: #555; margin-bottom: 12px; }
+.card.dark-mode p { color: #ecf0f1; }
+
+.alert { padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 0.9rem; border-left: 4px solid; }
+.alert-danger { background: #fadbd8; border-color: #c0392b; color: #7b241c; }
+.alert-info { background: #d4efdf; border-color: #27ae60; color: #145a32; }
+.alert-warning { background: #fcf3cf; border-color: #f1c40f; color: #7d6608; }
+
+.list-check { list-style: none; }
+.list-check li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; }
+.list-check li::before { content: "🔥"; font-size: 1.2rem; line-height: 1.2; }
+.list-check li.dark::before { content: "⚠️"; }
+
+.box-quote { background: #fef9e7; padding: 20px; border-radius: 12px; font-style: italic; color: #7d6608; border-left: 4px solid #f1c40f; margin: 15px 0; font-family: 'Merriweather', serif; }
+.dark-mode .box-quote { background: #34495e; color: #f1c40f; border-color: #f39c12; }
+
+.btn-action { display: inline-block; background: var(--dark); color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.btn-action:active { transform: scale(0.98); }
+
+/* Hipnose Visual */
+.hypno-train { text-align: center; padding: 20px; background: linear-gradient(45deg, #8e44ad, #9b59b6); color: white; border-radius: 15px; margin: 20px 0; cursor: pointer; transition: 0.3s; }
+.hypno-train:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(142, 68, 173, 0.5); }
+.hypno-circle { width: 60px; height: 60px; border-radius: 50%; background: white; margin: 0 auto 10px; border: 3px solid #f1c40f; animation: spin 3s linear infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #8e44ad; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.back-btn { position: fixed; top: 20px; left: 20px; background: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 100; font-size: 1.3rem; text-decoration: none; color: var(--text); border: none; }
+
+@media (max-width: 600px) {
+    header h1 { font-size: 1.8rem; }
+    .card { padding: 20px; }
+}
+</style>
+</head>
+<body>
+
+<a href="amor.html" class="back-btn">←</a>
+
+<header>
+    <h1>🧠 A Mente Sombria</h1>
+    <p>Manipulação, Obsessão e Hipnose: A Ciência Real por trás</p>
+</header>
+
+<nav>
+    <button class="nav-btn active" onclick="showSection('intro')">🛡️ Defesa</button>
+    <button class="nav-btn" onclick="showSection('manip')">🎭 Manipulação</button>
+    <button class="nav-btn" onclick="showSection('obsessao')">🔥 Obsessão</button>
+    <button class="nav-btn" onclick="showSection('hipnose')">🌀 Hipnose</button>
+    <button class="nav-btn" onclick="showSection('proibido')">⚠️ Proibido</button>
+</nav>
+
+<div class="content-area">
+
+    <!-- INTRO / DEFESA -->
+    <div id="intro" class="section active">
+        <div class="card">
+            <h2>🛡️ Por que você está aqui?</h2>
+            <p>
+                Entender a "Psicologia Proibida" não serve para você se tornar um manipulador. 
+                Serve para você **furar o heater**.
+            </p>
+            <div class="alert alert-danger">
+                <strong>⚠️ AVISO:</strong> Manipular alguém para fins egoístas destrói relacionamentos a longo prazo. O amor verdadeiro exige transparência. Use este conhecimento para <strong>se proteger</strong> de pessoas tóxicas, Narcisistas eзади.
+            </div>
+            <p>Aqui você vai aprender:</p>
+            <ul class="list-check">
+                <li><strong>Manipulação:</strong> Como usam "culpa" e "escassez" contra você.</li>
+                <li><strong>Obsessão:</strong> A linha tênue entre "amor intenso" e "aosamência patológica" (Limerência).</li>
+                <li><strong>Hipnose:</strong> Como a linguagem afeta o subconsciente (NLP).</li>
+                <li><strong>Proibido:</strong> Por que o que é vedado vira o desejo número 1.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MANIPULAÇÃO -->
+    <div id="manip" class="section">
+        <div class="card">
+            <h2>🎭 As Máscaras da Manipulação</h2>
+            <p>A manipulação não é "controlar a mente com magia". É usar viéses cognitivos para guiar decisões.</p>
+            
+            <h3>1. A Técnica da "Pé na Portada" (Foot-in-the-Door)</h3>
+            <p>Peça algo pequeno aceito (ex: "Pode me dar uma dica?"). Quando a pessoa diz sim, ela se compromete com a imagem de "alguém prestativo". Em seguida, peça algo grande (ex: "Agora pode me ajudar numa tarefa pesada?"). A согласия anterior aumenta a chance de dizer sim de novo.</p>
+            
+            <h3>2. Escassez Artificial</h3>
+            <div class="box-quote">
+                <strong>Cenário:</strong> "Não sou eu, é que tenho muita gente me chamando..." <br>
+                <strong>Efeito:</strong> O cérebro humano valoriza o que é raro. Fingir indisponibilidade aumenta o desejo do outro.
+            </div>
+            <p><strong>Como neutralizar:</strong> Se sentir que estão "se escondendo" para causar ciúmes, pergunte direto: "Está evitando me falar algo?". Transparência quebra o jogo.</p>
+
+            <h3>3. Gaslighting (Apagamento de Luz)</h3>
+            <div class="alert alert-danger">
+                <strong>⚠️ Sinal Perigoso:</strong> "Você está louca", "Isso nunca aconteceu", "Você exagera demais". <br>
+                O manipulador faz a vítima duvidar da própria realidade para ganhar poder.
+            </div>
+            <p><strong>Defesa:</strong> Anote fatos. Revise conversas. Confie na sua memória, não na palavra distorcida deles.</p>
+        </div>
+    </div>
+
+    <!-- OBSESSÃO -->
+    <div id="obsessao" class="section">
+        <div class="card dark-mode">
+            <h2>🔥 Obsessão (Limerência) vs. Amor</h2>
+            <p>Existe um estado mental chamado <strong>Limerência</strong>. É quando você está viciado na POSSIBILITY de amor, não no amor em si.</p>
+            
+            <ul class="list-check dark">
+                <li class="dark"><strong>Ansiedade constante:</strong> Precisa de confirmação o tempo todo.</li>
+                <li class="dark"><strong>Idealização:</strong> Ignora defeitos óbvios. O outro é "perfeito" na sua cabeça.</li>
+                <li class="dark"><strong>Medo da rejeição:</strong> Qualquer sinal de frieza causa pânico ou raiva.</li>
+            </ul>
+            
+            <div class="alert alert-warning">
+                <strong>A Ciência:</strong> A limerência é causada por baixos níveis de serotonina (como na depressão) e altos de dopamina (como na cocaína). O cérebro está em vício.
+            </div>
+            
+            <h3>Saída da Obsessão:</h3>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li><strong>Corte de Dopamina:</strong> Pare de checar redes sociais. O "alguém que eu amo" vira um vício no celular.</li>
+                <li><strong>Realidade Barata:</strong> Liste 3 defeitos reais da pessoa. Isso quebra a idealização.</li>
+                <li><strong>Tempo:</strong> A limerência química dura em média 6 meses a 3 anos. Se passar disso e ser sofrimento, não é amor, é vício.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- HIPNOSE -->
+    <div id="hipnose" class="section">
+        <div class="card">
+            <h2>🌀 Hipnose e Programação (NLP)</h2>
+            <p>Hipnose não é "dormir com os olhos abertos". É um estado de <strong>foco hiper-concentrado</strong> e sugestibilidade.</p>
+            
+            <h3>1. A Técnica do "Espelhamento" (Rapport)</h3>
+            <p>Quando você copia sutilmente a postura, tom de voz e respiração de alguém, o cérebro delas libera Oxitocina, gerando confiança imediata. É o "estar na mesma página".</p>
+            
+            <h3>2. Frame Control (Controle do Enquadre)</h3>
+            <div class="box-quote">
+                <strong>Exemplo:</strong>
+                <br>A: "Você está muito latejo!" (Frame dela: você está errado)
+                <br>B: "Estou разочарован porque o que eu viajamos não foi feito." (Seu Frame: o problema é a ação, não você).
+            </div>
+            <p>A pessoa que controla o "Frame" da conversa controla a realidade da disputa.</p>
+            
+            <h3>3. Sugestões Embutidas</h3>
+            <p>Em vez de dizer "Você deve me amar", use: "Você pode perceber quanto se sente seguro ao meu lado, não é?". O cérebro processa a afirmação como uma descoberta própria.</p>
+            
+            <div class="hypno-train" onclick="alert('Foque na respiração. Inspire... Expire... Sinta-se tranquilo. Isso é auto-hipnose básica.')">
+                <div class="hypno-circle">↻</div>
+                <strong>Pratique Auto-Hipnose</strong>
+                <p style="font-size:0.8rem; margin-top:5px;">Toque para relaxar a mente</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROIBIDO -->
+    <div id="proibido" class="section">
+        <div class="card">
+            <h2>⚠️ O Efeito do Proibido</h2>
+            <p>Por que algo pesado nos atrai mais? <strong>Reatividade Psicológica.</strong></p>
+            <p>Ao ser proibido, algo perde sua "ações" e ganha um valor simbólico de "poder" e "liberdade". Se você diz "Você não pode ganhar isso", o cérebro vê como um desafio.</p>
+            
+            <h3>Como usar (ou evitar ser manipulado):</h3>
+            <ul class="list-check">
+                <li><strong>Em montagem:</strong> Se você quer algo, não mostre que é urgente. Mostre que é "difícil de conseguir".</li>
+                <li><strong>Em defesa:</strong> Se alguém diz "Isso foi pra você lembrar que não é nada para mim", eles estão usando o efeito proibido. Não caia no jogo. Responda: "Entendi. Vamos seguir em paz."</li>
+            </ul>
+            
+            <div class="alert alert-info">
+                <strong>Dica de Ouro:</strong> O "jogo da sedução" é só um jogo. O amor real é a segurança de ser você mesmo, sem proibições mentais.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(id).classList.add('active');
+    // Procura o botão que chamou (pode ser otimizado, mas funciona)
+    const btns = document.querySelectorAll('.nav-btn');
+    if(id === 'intro') btns[0].classList.add('active');
+    if(id === 'manip') btns[1].classList.add('active');
+    if(id === 'obsessao') btns[2].classList.add('active');
+    if(id === 'hipnose') btns[3].classList.add('active');
+    if(id === 'proibido') btns[4].classList.add('active');
+}
+</script>
+
+</body>
+</html>
