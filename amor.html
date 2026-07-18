@@ -4,225 +4,377 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ff6b95">
-<title>💖 Nosso Amor - Área Privativa</title>
+<title>💖 Nosso Mundo & Academia do Amor</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Merriweather:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
-:root { --primary: #ff6b95; --secondary: #ff9eaa; --bg: #fff0f5; --card: #ffffff; --text: #4a4a4a; --success: #4CAF50; --error: #ff4444; }
+:root {
+    --primary: #ff6b95; --secondary: #ff9eaa; --bg: #fff0f5; --card: #ffffff;
+    --text: #4a4a4a; --success: #4CAF50; --error: #ff4444; --info: #2196F3; --dark: #2c3e50;
+}
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
 body {
     background: linear-gradient(135deg, #ffe6ee, #fff0f5);
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    position: relative;
+    color: var(--text);
+    padding-bottom: 60px;
     overflow-x: hidden;
 }
 
-.bg-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-.heart-bg { position: absolute; color: rgba(255, 107, 149, 0.1); animation: floatUp 15s linear infinite; font-size: 2rem; }
-@keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+/* Fundo de Corações */
+.bg-hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.4; }
+.heart { position: absolute; color: var(--primary); animation: floatUp 12s linear infinite; font-size: 2rem; }
+@keyframes floatUp { 0% { transform: translateY(110vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
 
-.container {
-    position: relative; z-index: 1; width: 100%; max-width: 450px;
-    background: var(--card); border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(255, 107, 149, 0.2);
-    padding: 30px; overflow: hidden;
-    display: none; /* Escondido até carregar JS */
-}
-.container.active { display: block; animation: fadeIn 0.5s; }
-
+/* Containers */
+.container { position: relative; z-index: 1; width: 100%; max-width: 500px; margin: 0 auto; padding: 20px; }
+.screen { display: none; animation: fadeIn 0.5s; }
+.screen.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+/* Header */
 header { text-align: center; margin-bottom: 30px; }
-h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.5rem; margin-bottom: 5px; }
-.subtitle { color: var(--text); font-size: 0.9rem; font-weight: 300; }
+h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.8rem; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.05); }
+.subtitle { color: #666; font-size: 0.95rem; }
 
-.form-group { margin-bottom: 20px; }
-label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text); font-size: 0.9rem; }
-input {
-    width: 100%; padding: 14px 18px; border: 2px solid #eee; border-radius: 15px;
-    font-size: 1rem; transition: all 0.3s; background: #fafafa; outline: none;
-}
-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255, 107, 149, 0.1); }
+/* Cards & Telas */
+.card { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(255, 107, 149, 0.1); border-left: 5px solid var(--primary); }
+.card h2 { font-family: 'Merriweather', serif; color: var(--dark); font-size: 1.4rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+.card p { line-height: 1.7; color: #555; font-size: 0.95rem; margin-bottom: 12px; }
+.card ul { list-style: none; margin: 10px 0; }
+.card ul li { padding: 6px 0; border-bottom: 1px solid #eee; display: flex; gap: 10px; font-size: 0.9rem; }
+.card ul li::before { content: "✨"; }
 
-.btn {
-    width: 100%; padding: 16px; border: none; border-radius: 15px;
-    font-size: 1.1rem; font-weight: 600; cursor: pointer;
-    transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    margin-bottom: 10px;
-}
-.btn-primary { background: linear-gradient(45deg, var(--primary), #ff9eaa); color: white; }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3); }
+/* Inputs & Buttons */
+input { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 15px; font-size: 1rem; outline: none; transition: 0.3s; }
+input:focus { border-color: var(--primary); background: #fff8fb; }
+
+.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 15px rgba(255, 107, 149, 0.3); }
+.btn-primary:active { transform: scale(0.98); }
 .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
 .btn-panic { background: #ff4444; color: white; font-size: 0.9rem; }
+.btn-academy { background: #673ab7; color: white; margin-top: 10px; }
 
-.hidden { display: none; }
-.error-msg { color: var(--error); font-size: 0.85rem; margin-top: 10px; text-align: center; }
+/* Navegação (Abas) */
+.tabs { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; margin-bottom: 20px; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn { background: white; border: 1px solid #ddd; padding: 8px 16px; border-radius: 50px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 8px rgba(255, 107, 149, 0.3); }
 
-/* Dashboard Styles */
-.dashboard-header { text-align: center; margin-bottom: 25px; }
-.timer {
-    background: linear-gradient(135deg, var(--primary), #ff8fa8); color: white;
-    padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 25px;
-    box-shadow: 0 10px 25px rgba(255, 107, 149, 0.25);
-}
-.timer h3 { font-size: 1.1rem; opacity: 0.9; margin-bottom: 10px; }
-.timer-display { font-size: 2rem; font-weight: 700; font-family: monospace; }
-.timer-label { font-size: 0.8rem; opacity: 0.8; }
-.heart-pulse { color: white; animation: pulse 1s infinite; display: inline-block; margin-right: 5px; }
+/*Timer*/
+.timer-box { background: linear-gradient(135deg, var(--primary), #ff8fa8); color: white; padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(255, 107, 149, 0.25); }
+.timer-val { font-size: 2.2rem; font-weight: 700; font-family: monospace; margin: 10px 0; }
+.timer-label { font-size: 0.9rem; opacity: 0.9; }
+.heart-pulse { animation: pulse 1s infinite; display: inline-block; margin-right: 5px; }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-.section-title { font-size: 1.1rem; color: var(--text); margin-bottom: 15px; border-bottom: 2px dashed #eee; padding-bottom: 10px; }
-.content-card { background: #f8f9fa; border-radius: 15px; padding: 20px; margin-bottom: 15px; border: 1px solid #eee; }
-.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.gallery-item { aspect-ratio: 1; background: #ddd; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #888; }
-.logout-btn { background: #eee; color: #666; border: none; padding: 10px 20px; border-radius: 10px; margin-top: 20px; cursor: pointer; width: 100%; }
+/* Alertas */
+.alert { padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 0.9rem; border-left: 4px solid; }
+.alert-info { background: #e3f2fd; border-color: #2196f3; color: #0d47a1; }
+.alert-success { background: #e8f5e9; border-color: #00c853; color: #1b5e20; }
+.alert-warning { background: #fff3e0; border-color: #ffab00; color: #e65100; }
 
-.back-btn { position: fixed; top: 20px; left: 20px; background: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; z-index: 100; font-size: 1.2rem; }
+/* Chat */
+.chat-box { height: 250px; overflow-y: auto; background: #f9f9f9; border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid #eee; }
+.chat-msg { padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; max-width: 85%; font-size: 0.9rem; line-height: 1.4; }
+.chat-msg.bot { background: #fff; color: #333; border: 1px solid #eee; }
+.chat-msg.user { background: var(--primary); color: white; margin-left: auto; text-align: right; }
+.chat-input { display: flex; gap: 8px; }
+.chat-input input { margin-bottom: 0; }
+.chat-input button { width: 50px; border-radius: 10px; }
+
+/* Galeria */
+.gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.gallery-item { aspect-ratio: 1; background: #eee; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #888; overflow: hidden; position: relative; }
+.gallery-item span { z-index: 2; }
+.gallery-item::after { content: '📷'; font-size: 2rem; opacity: 0.3; }
+
+/* Botão Voltar */
+.back-btn { position: fixed; top: 20px; left: 20px; background: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; z-index: 100; font-size: 1.4rem; text-decoration: none; color: var(--text); border: none; }
 </style>
 </head>
 <body>
 
 <div class="bg-hearts" id="heartsContainer"></div>
 
-<!-- TELA DE LOGIN -->
-<div class="container active" id="authScreen">
+<!-- TELA 1: LOGIN -->
+<div class="container screen active" id="loginScreen">
     <header>
-        <h1>💖 Acesso Restrito</h1>
-        <p class="subtitle">Entre no nosso mundo</p>
+        <h1>💖 Nosso Mundo</h1>
+        <p class="subtitle">Acesse com amor</p>
     </header>
 
-    <div id="loginForm">
+    <div class="card">
         <div class="form-group">
-            <label>Seu Nome</label>
-            <input type="text" id="loginUser" placeholder="Digite seu nome">
+            <label>Seu Nome (O que quer que apareça)</label>
+            <input type="text" id="loginUser" placeholder="Ex: João, Amor, Cidade...">
         </div>
-        <div class="form-group">
-            <label>Senha (Qualquer coisa funciona)</label>
-            <input type="password" id="loginPass" placeholder="Ex: amor">
-        </div>
-        <button class="btn btn-primary" onclick="fazerLogin()">
-            Entrar no nosso coração 💕
-        </button>
-        <button class="btn btn-panic" onclick="fazerLoginPanic()">
-            ⚠️ ENTRAR SEM SENHA (TESTE)
-        </button>
-        <p style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: #666;">
-            Não se preocupe com a senha.<x> Qualquer texto entra!</x>
-        </p>
+        <button class="btn btn-primary" onclick="entrar()">Entrar no nosso Coração ❤️</button>
+        <button class="btn btn-panic" onclick="entrarSemSenha()">⚠️ Entrar sem nada (Teste Rápido)</button>
     </div>
-    <div id="authError" class="error-msg hidden"></div>
 </div>
 
-<!-- PAINEL PRINCIPAL -->
-<div class="container hidden" id="dashboardScreen">
-    <div class="back-btn" onclick="sair()">🔙</div>
-    <header class="dashboard-header">
-        <h1>💖 Olá, <span id="userNomeExibicao">Amor</span>!</h1>
-        <p class="subtitle">Nossa jornada continua</p>
+<!-- TELA 2: DASHBOARD (HOME) -->
+<div class="container screen" id="homeScreen">
+    <button class="back-btn" onclick="sair()">🏠</button>
+    
+    <header>
+        <h1>Olá, <span id="nomeDisplay">Amor</span>!</h1>
+        <p class="subtitle">Bem-vindo(a) ao nosso cantinho</p>
     </header>
 
-    <div class="timer">
-        <h3>Juntos há</h3>
-        <div class="timer-display" id="timerDisplay">00d 00h 00m 00s</div>
+    <!-- Timer -->
+    <div class="timer-box">
         <div class="heart-pulse">❤️</div>
-        <div class="timer-label">Cada segundo conta!</div>
+        <div>Juntos há</div>
+        <div class="timer-val" id="timerDisplay">00d 00h 00m 00s</div>
+        <div class="timer-label">Cada segundo é eterno</div>
     </div>
 
-    <div class="content-card">
-        <div class="section-title">💌 Minha Carta</div>
+    <!-- Mensagem Principal -->
+    <div class="card">
+        <h2>💌 Minha Carta para Você</h2>
         <p>
             Meu amor,<br><br>
-            Desde o dia em que nos conhecemos, minha vida ganhou uma cor nova.
-            Sua risada é minha música favorita. <br><br>
-            Te amo mais do que palavras! ❤️
+            Desde o dia em que nos conhecemos, minha vida ganhou uma cor nova. 
+            Sua risada é minha música favorita e seus olhos são meu lugar favorito no mundo.
+            <br><br>
+            Obrigado por ser minha parceira, minha melhor amiga e o grande amor da minha vida.
+            Te amo mais do que palavras podem dizer!
         </p>
     </div>
 
-    <div class="section-title">📸 Nossos Momentos</div>
-    <div class="gallery-grid">
-        <div class="gallery-item" style="background: #ffcce0;">Foto 1</div>
-        <div class="gallery-item" style="background: #ffdaed;">Foto 2</div>
-        <div class="gallery-item" style="background: #ffe6f2;">Foto 3</div>
-        <div class="gallery-item" style="background: #fff0f7;">Foto 4</div>
+    <!-- Galeria Placeholder -->
+    <div class="card">
+        <h2>📸 Nossos Momentos</h2>
+        <div class="gallery">
+            <div class="gallery-item"><span>Foto 1</span></div>
+            <div class="gallery-item"><span>Foto 2</span></div>
+            <div class="gallery-item"><span>Foto 3</span></div>
+            <div class="gallery-item"><span>Foto 4</span></div>
+        </div>
+        <p style="font-size:0.8rem; color:#888; margin-top:10px; text-align:center;">
+            (Para adicionar fotos, edite o código no GitHub substituindo os divs por <code><img src="foto.jpg"></code>)
+        </p>
     </div>
 
-    <button class="btn btn-primary" style="margin-top: 15px;" onclick="alert('Surpresa: Eu te amo infinito!')">🎁 Abrir Surpresa</button>
+    <button class="btn btn-primary" onclick="alert('Surpresa: Você é o meu tudo! Eu te amo infinito! 💖')">🎁 Abrir SURPRESA</button>
     
-    <a href="academia.html" target="_blank" class="btn" style="background: #9c27b0; color: white;">🧠 Academia do Amor</a>
+    <button class="btn btn-academy" onclick="mostrarAcademia()">🧠 Acedir à Academia do Amor</button>
+</div>
 
-    <button class="logout-btn" onclick="sair()">Sair</button>
+<!-- TELA 3: ACADEMIA DO AMOR (TUDO EM UM) -->
+<div class="container screen" id="academiaScreen">
+    <button class="back-btn" onclick="voltarHome()">←</button>
+    
+    <header>
+        <h1 style="font-size: 2rem;">🧠 Academia do Amor</h1>
+        <p class="subtitle">Guia Completo de Relacionamentos</p>
+    </header>
+
+    <!-- Abas da Academia -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="mudarAba('intro')">🏠 Início</button>
+        <button class="tab-btn" onclick="mudarAba('com')">💬 Falar</button>
+        <button class="tab-btn" onclick="mudarAba('ciencia')">🧬 Ciência</button>
+        <button class="tab-btn" onclick="mudarAba('bandeiras')">🚩 Sinais</button>
+        <button class="tab-btn" onclick="mudarAba('intim')">🔥 Chama</button>
+        <button class="tab-btn" onclick="mudarAba('chat')">🤖 Chat</button>
+    </div>
+
+    <!-- Conteúdo Abas -->
+    <div id="contentIntro" class="card">
+        <h2>💖 Bem-vindo</h2>
+        <p>Aqui reunimos tudo o que a ciência e a psicologia dizem sobre relacionamentos saudáveis.</p>
+        <div class="alert alert-info"><strong>Dica:</strong> Leia uma seção por semana com seu parceiro(a).</div>
+    </div>
+
+    <div id="contentCom" class="card" style="display:none;">
+        <h2>💬 Comunicação sem Brigas</h2>
+        <div class="alert alert-warning"><strong>O Segredo:</strong> Fale sobre VOCÊ, não sobre o OUTRO.</div>
+        <p><strong>Errado:</strong> "Você é irresponsável!"<br><strong>Certo:</strong> "Eu me sinto frustrada quando a pia está suja."</p>
+        <h3>Regra de Ouro:</h3>
+        <ul>
+            <li>Nunca ataque a pessoa, ataque o problema.</li>
+            <li>Ouça para entender, não para responder.</li>
+            <li>Pedindo desculpas: Sope o erro = "Sinto muito".</li>
+        </ul>
+    </div>
+
+    <div id="contentCiencia" class="card" style="display:none;">
+        <h2>🧬 A Química do Amor</h2>
+        <p>O amor tem 3 fases:</p>
+        <ul>
+            <li><strong>1. Luxúria (Dopamina):</strong> Fogo inicial, curto prazo.</li>
+            <li><strong>2. Atração (Serotonina):</strong> Euforia, borboletas. Dura até 2 anos.</li>
+            <li><strong>3. Apego (Ocitocina):</strong> Amor maduro, segurança. <strong>Aqui queremos ficar!</strong></li>
+        </ul>
+        <div class="alert alert-success"><strong>Desafio:</strong> Abraço de 20 segundos todos os dias libera Ocitocina (hormônio do vínculo).</div>
+    </div>
+
+    <div id="contentBandeiras" class="card" style="display:none;">
+        <h2>🚩 Sinais (Red vs Green Flags)</h2>
+        <h3 style="color:#d32f2f;">🚩 Red Flags (Fujam!)</h3>
+        <ul>
+            <li>Isolamento de amigos/família.</li>
+            <li>Ciúmes excessivo (chega a controlar).</li>
+            <li>Nunca erra (culpa sempre o outro).</li>
+            <li>Desvaloriza você ("brincadeiras" maldosas).</li>
+        </ul>
+        <h3 style="color:#2e7d32; margin-top:15px;">💚 Green Flags (Fiquem!)</h3>
+        <ul>
+            <li>Respeita o "Não".</li>
+            <li>Pede desculpas e muda.</li>
+            <li>Tem vida própria fora do namoro.</li>
+        </ul>
+    </div>
+
+    <div id="contentIntim" class="card" style="display:none;">
+        <h2>🔥 Mantendo a Chama</h2>
+        <p>A rotina mata o amor. O segredo é a <strong>NOVIDADE</strong>.</p>
+        <ul>
+            <li>Façam algo novo a cada 15 dias (cozinha, parque, jogo).</li>
+            <li>Toque sem intenção sexual (abraços, mãos dadas).</li>
+            <li>Comunicação sobre sexo: Fale o que gosta, não espere adivinharem.</li>
+        </ul>
+    </div>
+
+    <div id="contentChat" class="card" style="display:none;">
+        <h2>🤖 Consultor de Amor</h2>
+        <p>Pergunte: "Ciúmes", "Pedido de desculpa", "Briga", "Tédio".</p>
+        <div class="chat-box" id="chatBox">
+            <div class="chat-msg bot">Olá! O que está sentindo hoje?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Digite sua dúvida...">
+            <button class="btn" onclick="responder()">→</button>
+        </div>
+    </div>
 </div>
 
 <script>
-// DATA DO NAMORO (Mude aqui!)
-const DATA_INICIO = new Date("2024-01-01").getTime();
+// DATA DO NAMORO (ALTERE AQUI: AAAA-MM-DD)
+const DATA_INICIO = new Date("2024-01-01");
 
-// FUNÇÃO DE LOGIN (Sem verificação real, só visual)
-function fazerLogin() {
-    const user = document.getElementById('loginUser').value.trim() || "Amor";
-    document.getElementById('userNomeExibicao').textContent = user;
-    
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('authScreen').classList.remove('active');
-    
-    const dash = document.getElementById('dashboardScreen');
-    dash.classList.add('active');
-    setTimeout(() => { dash.style.display = 'block'; }, 50);
-    
+// --- SISTEMA DE NAVEGAÇÃO ---
+function entrar() {
+    const nome = document.getElementById('loginUser').value.trim();
+    telemetroDisplay.innerText = nome || "Amor";
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('homeScreen').classList.add('active');
     iniciarTimer();
-    iniciarCorações();
+    lancarCoracoes();
 }
 
-// FUNÇÃO DE PENICINA (Entrar sem nada)
-function fazerLoginPanic() {
-    fazerLogin();
+function entrarSemSenha() {
+    document.getElementById('loginUser').value = "Amor";
+    entrar();
 }
 
 function sair() {
-    location.reload();
+    document.getElementById('homeScreen').classList.remove('active');
+    document.getElementById('academiaScreen').classList.remove('active');
+    document.getElementById('loginScreen').classList.add('active');
 }
 
+function mostrarAcademia() {
+    document.getElementById('homeScreen').classList.remove('active');
+    document.getElementById('academiaScreen').classList.add('active');
+}
+
+function voltarHome() {
+    document.getElementById('academiaScreen').classList.remove('active');
+    document.getElementById('homeScreen').classList.add('active');
+}
+
+// --- ACADÂMIA ABAS ---
+function mudarAba(id) {
+    // Esconder todos
+    document.getElementById('contentIntro').style.display = 'none';
+    document.getElementById('contentCom').style.display = 'none';
+    document.getElementById('contentCiencia').style.display = 'none';
+    document.getElementById('contentBandeiras').style.display = 'none';
+    document.getElementById('contentIntim').style.display = 'none';
+    document.getElementById('contentChat').style.display = 'none';
+    
+    // Remover active dos botões
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    // Mostrar o selecionado
+    if(id === 'intro') document.getElementById('contentIntro').style.display = 'block';
+    if(id === 'com') document.getElementById('contentCom').style.display = 'block';
+    if(id === 'ciencia') document.getElementById('contentCiencia').style.display = 'block';
+    if(id === 'bandeiras') document.getElementById('contentBandeiras').style.display = 'block';
+    if(id === 'intim') document.getElementById('contentIntim').style.display = 'block';
+    if(id === 'chat') document.getElementById('contentChat').style.display = 'block';
+    
+    event.target.classList.add('active');
+}
+
+// --- TIMER ---
 function iniciarTimer() {
     setInterval(() => {
-        const agora = new Date().getTime();
+        const agora = new Date();
         const diff = agora - DATA_INICIO;
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById('timerDisplay').textContent = `${d}d ${h}h ${m}m ${s}s`;
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+        document.getElementById('timerDisplay').innerText = `${d}d ${h}h ${m}m ${s}s`;
     }, 1000);
-    // Atualiza imediato
-    fazerLogin();
+    // Atualizar imediato
+    iniciarTimer();
 }
 
-function iniciarCorações() {
+// --- CORAÇÕES ---
+function lancarCoracoes() {
     const container = document.getElementById('heartsContainer');
-    const hearts = ['❤️', '💖', '💕', '💗'];
-    for(let i=0; i<10; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart-bg');
-        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.animationDuration = (10 + Math.random() * 10) + 's';
-        heart.style.animationDelay = (Math.random() * 5) + 's';
-        heart.style.fontSize = (1 + Math.random() * 2) + 'rem';
-        container.appendChild(heart);
+    container.innerHTML = '';
+    for(let i=0; i<12; i++) {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.innerText = ['❤️', '💖', '💕'][Math.floor(Math.random()*3)];
+        h.style.left = Math.random() * 100 + '%';
+        h.style.animationDuration = (8 + Math.random() * 10) + 's';
+        h.style.animationDelay = Math.random() * 5 + 's';
+        h.style.fontSize = (1 + Math.random() * 2) + 'rem';
+        container.appendChild(h);
     }
 }
 
-// Garante carregamento inicial
-window.onload = function() {
-    document.getElementById('authScreen').style.display = 'block';
+// --- CHATBOT SIMPLES ---
+const base = {
+    'ciúme': 'O ciúmes vem de insegurança. Em vez de controlar, pergunte: "O que estou sentindo?". Valide o sentimento, mas não deixe ele ditar ações.',
+    'desculpa': 'Pedir desculpas perfeito: 1. Reconhecer erro. 2. Mostrar empatia. 3. Plano de ação. Não use "SE errei".',
+    'briga': 'Respire. Fale "Eu me sinto...", não "Você é...". Se esquentar, peça 20 min de pausa.',
+    'tédio': 'A tédio ganha com NOVIDADE. Inventem uma data diferente a cada 15 dias.',
+    'amor': 'Amor é ação, não só sentimento. Escolher a pessoa todo dia.'
 };
-</script>
 
+function responder() {
+    const input = document.getElementById('chatInput');
+    const txt = input.value.toLowerCase();
+    const box = document.getElementById('chatBox');
+    if(!txt) return;
+    
+    box.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
+    input.value = '';
+    box.scrollTop = box.scrollHeight;
+    
+    let resp = "Não entendi. Tente: 'ciúmes', 'desculpa', 'briga'.";
+    for(let k in base) if(txt.includes(k)) resp = base[k];
+    
+    setTimeout(() => {
+        box.innerHTML += `<div class="chat-msg bot">${resp}</div>`;
+        box.scrollTop = box.scrollHeight;
+    }, 500);
+}
+
+// Iniciar corações ao carregar
+window.onload = lancarCoracoes;
+</script>
 </body>
 </html>
