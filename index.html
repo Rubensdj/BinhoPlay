@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💰 Hub de Renda - Rubensdj</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+.container { max-width: 600px; margin: 0 auto; }
+h1 { text-align: center; color: #007bff; margin-bottom: 5px; }
+.subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px; }
+.card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.card h2 { margin-top: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+.btn { display: block; background: #007bff; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+.btn:hover { background: #0056b3; }
+.link-list a { display: block; padding: 10px; background: #e9ecef; border-radius: 6px; margin-bottom: 8px; text-decoration: none; color: #333; }
+.link-list a:hover { background: #dde2e6; }
+.text-preview { background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; }
+.audio-box { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; }
+.audio-box button { background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 10px 20px; border-radius: 6px; font-size: 1rem; cursor: pointer; margin: 5px; }
+.ganho-display { font-size: 2rem; font-weight: bold; color: #28a745; text-align: center; display: block; margin: 10px 0; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>💰 Hub de Renda</h1>
+    <p class="subtitle">Seu painel único de ganhos em casa</p>
+  </header>
+
+  <!-- MÓDULO 1: PESQUISAS -->
+  <div class="card">
+    <h2>📋 1. Pesquisas Pagas</h2>
+    <p>Cadastrados nesses sites e responda pesquisas rápidas:</p>
+    <div class="link-list">
+      <a href="https://www.premia.com.br" target="_blank">➡️ Premia (Paga via Pix)</a>
+      <a href="https://www.lifepointspanel.com" target="_blank">➡️ LifePoints (Internacional)</a>
+      <a href="https://www.toluna.com" target="_blank">➡️ Toluna (Testes de produtos)</a>
+    </div>
+  </div>
+
+  <!-- MÓDULO 2: AFILIADOS -->
+  <div class="card">
+    <h2>💳 2. Afiliados (Texto Pronto)</h2>
+    <p>Copie e cole no seu Status ou WhatsApp:</p>
+    <div class="text-preview">🔥 Curso de Marketing Digital - aprenda do zero e comece a faturar online! Link na bio.</div>
+    <p style="font-size:0.8rem; color:#888; margin-top:5px;">(Toque e segure no texto para copiar)</p>
+  </div>
+
+  <!-- MÓDULO 3: ÁUDIO -->
+  <div class="audio-box">
+    <h3 style="margin-top:0;">🎧 Ouça suas Dicas</h3>
+    <p>Seu celular vai falar com você!</p>
+    <button onclick="falar('Oi Rubens! Hoje o foco é cadastrar nos sites de pesquisa e ganhar pelo menos 20 reais.')">▶️ Dica da Pesquisa</button>
+    <button onclick="falar('Afiliado é simples: você divulga e ganha comissão. Não precisa ter produto.')">▶️ Como Afiliado</button>
+    <button onclick="falar('Consistência é tudo! Faça todo dia um pouquinho e o resultado vem.')">▶️ Mentalidade</button>
+  </div>
+
+  <!-- MÓDULO 4: CONTROLE -->
+  <div class="card">
+    <h2>💸 3. Seu Ganho Hoje</h2>
+    <span class="ganho-display" id="totalGanho">R$ 0,00</span>
+    <input type="number" id="valorInput" placeholder="Valor ganho (ex: 20)" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:6px; margin:10px 0;">
+    <button class="btn" onclick="somarGanho()">+ Somar ao Total</button>
+    <p style="font-size:0.8rem; color:#666; text-align:center; margin-top:10px;">(Os dados ficam salvos só no seu celular)</p>
+  </div>
+
+  <footer style="text-align:center; margin-top:30px; font-size:0.7rem; color:#888;">
+    Hub de Renda • Desenvolvido por Hermes Agent 🤖
+  </footer>
+
+
+
+</div>
+
+<script>
+// Carregar ganho salvo
+let total = parseFloat(localStorage.getItem('hubRendaTotal') || '0');
+document.getElementById('totalGanho').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+
+function somarGanho() {
+    const v = parseFloat(document.getElementById('valorInput').value);
+    if(!v || v <= 0) return alert('Digite um valor válido!');
+    total += v;
+    localStorage.setItem('hubRendaTotal', total);
+    document.getElementById('totalGanho').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+    document.getElementById('valorInput').value = '';
+    alert('✅ ' + v + ' real(s) somado! Continue assim!');
+}
+
+function falar(texto) {
+    if ('speechSynthesis' in window) {
+        const u = new SpeechSynthesisUtterance(texto);
+        u.lang = 'pt-BR';
+        window.speechSynthesis.speak(u);
+    } else {
+        alert('Seu navegador não tem voz, mas o texto é: ' + texto);
+    }
+}
+</script>
+
+</body>
+</html>
+```
+
+4. Role para baixo da caixa de texto e, em *"Commit new file"*, toque no botão *"Commit changes"*.
+
+---
