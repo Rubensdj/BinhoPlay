@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff6b95">
+<title>💖 Nosso Amor - Área Privativa</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary: #ff6b95;
+    --secondary: #ff9eaa;
+    --bg: #fff0f5;
+    --card: #ffffff;
+    --text: #4a4a4a;
+    --success: #4CAF50;
+    --error: #ff4444;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+    background: linear-gradient(135deg, #ffe6ee, #fff0f5);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Coração flutuante no fundo */
+.bg-hearts {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+.heart-bg {
+    position: absolute;
+    color: rgba(255, 107, 149, 0.1);
+    animation: floatUp 15s linear infinite;
+    font-size: 2rem;
+}
+@keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    background: var(--card);
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(255, 107, 149, 0.2);
+    padding: 30px;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    color: var(--primary);
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.subtitle {
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+/* Formas */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: #fafafa;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px rgba(255, 107, 149, 0.1);
+}
+
+.toggle-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--primary), #ff9eaa);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 107, 149, 0.3);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--bg);
+}
+
+.hidden { display: none; }
+
+.error-msg {
+    color: var(--error);
+    font-size: 0.85rem;
+    margin-top: 10px;
+    text-align: center;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Painel Principal */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.timer {
+    background: linear-gradient(135deg, var(--primary), #ff8fa8);
+    color: white;
+    padding: 20px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 25px rgba(255, 107, 149, 0.25);
+}
+
+.timer h3 { font-size: 1.1rem; opacity: 0.9; margin-bottom: 10px; }
+.timer-display { font-size: 2rem; font-weight: 700; font-family: monospace; }
+.timer-label { font-size: 0.8rem; opacity: 0.8; }
+
+.heart-pulse {
+    color: white;
+    animation: pulse 1s infinite;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.section-title {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.content-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+}
+
+ врачи p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.gallery-item {
+    aspect-ratio: 1;
+    background: #ddd;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 0.8rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.1);
+}
+
+.logout-btn {
+    background: #eee;
+    color: #666;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Música */
+.music-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 100;
+    border: none;
+    font-size: 1.2rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg-hearts" id="heartsContainer"></div>
+
+<!-- TELA DE LOGIN/CADASTRO -->
+<div class="container" id="authScreen">
+    <header>
+        <h1>💖 Nosso Amor</h1>
+        <p class="subtitle">Acesse nosso cantinho especial</p>
+    </header>
+
+    <div id="loginForm" class="hidden">
+        <div class="form-group">
+            <label>Seu Nome</label>
+            <input type="text" id="loginUser" placeholder="Digite seu nome">
+        </div>
+        <div class="form-group">
+            <label>Senha de Amor</label>
+            <input type="password" id="loginPass" placeholder="Senha secreta">
+        </div>
+        <button class="btn btn-primary" onclick="fazerLogin()">
+            Entrar no nosso coração 💕
+        </button>
+        <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+            Não tem login? <a href="#" onclick="toggleAuth(true)" style="color: var(--primary); font-weight: bold;">Cadastre-se aqui</a>
+        </p>
+    </div>
+
+    <div id="registerForm" class="hidden">
+        <p style="text-align: center; margin-bottom: 20px; color: #666; font-size: 0.9rem;">
+            Crie seu acesso único para entrar no nosso mundo
+        </p>
+        <div class="form-group">
+            <label>Seu Nome</label>
+            <input type="text" id="regUser" placeholder="Ex: João">
+        </div>
+        <div class="form-group">
+            <label>Nome Dela (Opcional)</label>
+            <input type="text" id="regHer" placeholder="Ex: Maria">
+        </div>
+        <div class="form-group">
+            <label>Defina sua Senha de Amor</label>
+            <input type="password" id="regPass" placeholder="Crie uma senha secreta">
+        </div>
+        <button class="btn btn-secondary" onclick="cadastrar()">
+            Criar Acesso 💌
+        </button>
+        <p style="text-align: center; margin-top: 15px; font-size: 0.85rem;">
+            Já tem login? <a href="#" onclick="toggleAuth(false)" style="color: var(--primary); font-weight: bold;">Fazer Login</a>
+        </p>
+    </div>
+
+    <div id="authError" class="error-msg hidden"></div>
+</div>
+
+<!-- PAINEL PRINCIPAL (DASHBOARD) -->
+<div class="container hidden" id="dashboardScreen">
+    <header class="dashboard-header">
+        <h1>💖 Olá, <span id="userNomeExibicao">Amor</span>!</h1>
+        <p class="subtitle">Nossa jornada começa aqui</p>
+    </header>
+
+    <!-- Contador -->
+    <div class="timer">
+        <h3>Juntos há</h3>
+        <div class="timer-display" id="timerDisplay">00d 00h 00m 00s</div>
+        <div class="heart-pulse">❤️</div>
+        <div class="timer-label">Cada segundo conta!</div>
+    </div>
+
+    <!-- Mensagens -->
+    <div class="content-card">
+        <div class="section-title">💌 Minha Carta Para Você</div>
+        <p>
+            Meu amor,<br><br>
+            Desde o dia em que nos conhecemos, minha vida ganhou uma cor nova. 
+            Sua risada é minha música favorita e seus olhos são meu lugar favorito no mundo.
+            <br><br>
+            Gracias por ser minha parceira, minha melhor amiga e o grande amor da minha vida.
+            Te amo mais do que palavras podem dizer!
+        </p>
+    </div>
+
+    <!-- Galeria (Exemplo visual) -->
+    <div class="section-title">📸 Nossos Momentos</div>
+    <div class="gallery-grid">
+        <div class="gallery-item" style="background: #ffcce0; color: #d63384;">Foto 1</div>
+        <div class="gallery-item" style="background: #ffdaed; color: #e03e92;">Foto 2</div>
+        <div class="gallery-item" style="background: #ffe6f2; color: #e91e85;">Foto 3</div>
+        <div class="gallery-item" style="background: #fff0f7; color: #f48fb1;">Foto 4</div>
+    </div>
+
+    <!-- Motivos -->
+    <div class="content-card" style="margin-top: 20px;">
+        <div class="section-title">⭐ 3 Motivos que te Amo</div>
+        <p>1. Seu sorriso que ilumina meu dia ☀️</p>
+        <p>2. Como você me apoia em tudo 🤝</p>
+        <p>3. Sua gentileza com todo mundo 💖</p>
+    </div>
+
+    <button class="btn btn-secondary hidden" id="secretBtn" onclick="mostrarSurpresa()">
+        🔓 Abrir SURPRESA
+    </button>
+
+    <div id="surpresaBox" class="hidden" style="background: #fff0f5; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px;">
+        <h3 style="color: var(--primary);">🎉 SURPRESA!</h3>
+        <p>Prepare o coração... <br> Eu te amo infinitamente! ❤️</p>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Sair do Sistema</button>
+</div>
+
+<!-- Controle de Música -->
+<button class="music-control" onclick="toggleMusic()" title="Tocar Música">🎵</button>
+<audio id="bgMusic" loop>
+    <!-- Substitua por um link de música real ou arquivo local -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// --- CONFIGURAÇÃO DO PAR (Data de início do namoro)
+const DATA_INICIO = new Date("2024-01-01").getTime(); // DATA: Mude aqui para a data do namoro!
+
+// --- SISTEMA DE USUÁRIO (Local Storage)
+let currentUser = null;
+
+function toggleAuth(showRegister) {
+    document.getElementById('loginForm').classList.toggle('hidden', !showRegister);
+    document.getElementById('registerForm').classList.toggle('hidden', showRegister);
+    document.getElementById('authError').classList.add('hidden');
+}
+
+function cadastrar() {
+    const user = document.getElementById('regUser').value.trim();
+    const pass = document.getElementById('regPass').value.trim();
+    
+    if (!user || !pass) {
+        mostrarErro("Preencha nome e senha!");
+        return;
+    }
+    
+    // Simples verificação se já existe (em prod seria BD)
+    if (localStorage.getItem('user_' + user)) {
+        mostrarErro("Usuário já existe!");
+        return;
+    }
+    
+    // Salva usuário
+    const userData = { user: user, pass: pass, regDate: new Date().toISOString() };
+    localStorage.setItem('user_' + user, JSON.stringify(userData));
+    localStorage.setItem('allUsers', JSON.stringify([...JSON.parse(localStorage.getItem('allUsers') || '[]'), user]));
+    
+    alert("✅ Cadastro realizado com sucesso! Faça login agora.");
+    toggleAuth(false);
+}
+
+function fazerLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    
+    const storedData = localStorage.getItem('user_' + user);
+    
+    if (!storedData) {
+        mostrarErro("Usuário não encontrado!");
+        return;
+    }
+    
+    const userData = JSON.parse(storedData);
+    if (userData.pass !== pass) {
+        mostrarErro("Senha incorreta!");
+        return;
+    }
+    
+    // Login bem sucedido
+    currentUser = userData.user;
+    document.getElementById('userNomeExibicao').textContent = currentUser;
+    
+    document.getElementById('authScreen').classList.add('hidden');
+    document.getElementById('dashboardScreen').classList.remove('hidden');
+    
+    iniciarTimer();
+    iniciarMusic();
+    iniciarCorações();
+}
+
+function logout() {
+    currentUser = null;
+    document.getElementById('dashboardScreen').classList.add('hidden');
+    document.getElementById('loginForm').classList.remove('hidden');
+    document.getElementById('authScreen').classList.remove('hidden');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('bgMusic').pause();
+}
+
+function mostrarErro(msg) {
+    const err = document.getElementById('authError');
+    err.textContent = msg;
+    err.classList.remove('hidden');
+    setTimeout(() => err.classList.add('hidden'), 3000);
+}
+
+function mostrarSurpresa() {
+    alert("💖 Eba! Você descobriu! Eu te amo muito!");
+    document.getElementById('surpresaBox').classList.remove('hidden');
+    criarConfete();
+}
+
+// --- TIMER
+function iniciarTimer() {
+    setInterval(() => {
+        const agora = new Date().getTime();
+        const diff = agora - DATA_INICIO;
+        
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('timerDisplay').textContent = 
+            `${d}d ${h}h ${m}m ${s}s`;
+    }, 1000);
+}
+
+// --- MÚSICA
+function toggleMusic() {
+    const music = document.getElementById('bgMusic');
+    if (music.paused) {
+        music.play();
+        document.querySelector('.music-control').textContent = '⏸️';
+    } else {
+        music.pause();
+        document.querySelector('.music-control').textContent = '🎵';
+    }
+}
+function iniciarMusic() {
+    // Tenta tocar automaticamente (muitos navegadores exigem interação)
+    const music = document.getElementById('bgMusic');
+    music.volume = 0.3;
+    // Descomente se quiser tentar tocar na entrada
+    // music.play().catch(() => console.log('Autoplay bloqueado'));
+}
+
+// --- CORAÇÕES FLUTUANTES
+function iniciarCorações() {
+    const container = document.getElementById('heartsContainer');
+    const hearts = ['❤️', '💖', '💕', '💗'];
+    for(let i=0; i<15; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart-bg');
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDuration = (10 + Math.random() * 10) + 's';
+        heart.style.animationDelay = (Math.random() * 5) + 's';
+        heart.style.fontSize = (1 + Math.random() * 2) + 'rem';
+        container.appendChild(heart);
+    }
+}
+
+function criarConfete() {
+    // Simples confete com CSS ou alerta
+    for(let i=0; i<30; i++) {
+        const c = document.createElement('div');
+        c.textContent = '✨';
+        c.style.position = 'fixed';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.top = '-50px';
+        c.style.fontSize = (1 + Math.random() * 2) + 'rem';
+        c.style.transition = 'top 3s ease-in, opacity 3s ease';
+        c.style.zIndex = 9999;
+        document.body.appendChild(c);
+        
+        setTimeout(() => {
+            c.style.top = '110vh';
+            c.style.opacity = '0';
+        }, 100);
+        
+        setTimeout(() => c.remove(), 3000);
+    }
+}
+
+</script>
+</body>
+</html>
