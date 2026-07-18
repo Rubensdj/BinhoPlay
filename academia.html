@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff6b95">
+<title>💖 Academia do Amor - Guia Completo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary: #ff6b95;
+    --secondary: #ff9eaa;
+    --bg: #fff0f5;
+    --card: #ffffff;
+    --text: #4a4a4a;
+    --success: #4CAF50;
+    --error: #ff4444;
+    --info: #2196F3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+    background: linear-gradient(135deg, #ffe6ee, #fff0f5);
+    min-height: 100vh;
+    color: var(--text);
+    padding: 20px;
+    padding-bottom: 60px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(255,107,149,0.1);
+}
+
+h1 { font-family: 'Dancing Script', cursive; color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
+.subtitle { color: #666; font-size: 0.9rem; }
+
+/* Navegação por Abas */
+.tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+    background: white;
+    border: 2px solid #eee;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    color: #666;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.85rem;
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(255,107,149,0.3);
+}
+
+/* Conteúdo das Abas */
+.tab-content { display: none; animation: fadeIn 0.5s; }
+.tab-content.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Cards de Conteúdo */
+.module-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--primary);
+}
+
+.module-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.module-text { font-size: 0.9rem; line-height: 1.6; color: #555; margin-bottom: 15px; }
+.module-text img { max-width: 100%; border-radius: 10px; margin: 10px 0; }
+
+.list-check { list-style: none; margin: 10px 0; }
+.list-check li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.list-check li::before {
+    content: "✨";
+}
+
+/* Dicas Rápidas */
+.tip-box {
+    background: #f0f8ff;
+    border-left: 4px solid var(--info);
+    padding: 12px;
+    border-radius: 0 10px 10px 0;
+    margin: 10px 0;
+    font-size: 0.85rem;
+}
+
+/* Botões de Ação */
+.action-btn {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.action-btn.soft { background: var(--primary); }
+
+/* Botão Voltar */
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    z-index: 100;
+    font-size: 1.2rem;
+}
+
+/* Chatbot */
+.chat-container {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    height: 300px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+.chat-msg {
+    padding: 8px 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    max-width: 80%;
+    font-size: 0.85rem;
+}
+.chat-msg.bot { background: #f0f0f0; color: #333; align-self: flex-start; }
+.chat-msg.user { background: var(--primary); color: white; margin-left: auto; text-align: right; }
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+}
+.chat-input button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    h1 { font-size: 2rem; }
+    .module-card { padding: 15px; }
+}
+</style>
+</head>
+<body>
+
+<div class="back-btn" onclick="window.location.href='index.html'">🏠</div>
+
+<div class="header">
+    <h1>🧠 Academia do Amor</h1>
+    <p class="subtitle">O guia definitivo para um relacionamento saudável</p>
+</div>
+
+<!-- Navegação -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="abrirTab('inicio')">🏠 Início</button>
+    <button class="tab-btn" onclick="abrirTab('comunicacao')">💬 Comunicação</button>
+    <button class="tab-btn" onclick="abrirTab('ciencia')">🧬 Ciência</button>
+    <button class="tab-btn" onclick="abrirTab('bandeiras')">🚩 Sinais</button>
+    <button class="tab-btn" onclick="abrirTab('intimidade')">🔥 Intimidade</button>
+    <button class="tab-btn" onclick="abrirTab('toolbox')">🛠️ Ferramentas</button>
+    <button class="tab-btn" onclick="abrirTab('chat')">🤖 Chatbot</button>
+</div>
+
+<!-- CONTEÚDO DAS ABAS -->
+
+<!-- INÍCIO -->
+<div id="inicio" class="tab-content active">
+    <div class="module-card">
+        <div class="module-title">💝 Bem-vindo à Academia do Amor!</div>
+        <div class="module-text">
+            Relacionamentos não nascem prontos, eles são construídos todos os dias. 
+            Aqui você encontrará um compilado de <strong>ciência, psicologia e práticas comprovadas</strong> para ajudar vocês a terem um amor mais intenso, saudável e duradouro.
+            <br><br>
+            Explore as abas acima para aprender:
+            <ul class="list-check">
+                <li>Como brigar sem destruição</li>
+                <li>O que diz a ciência sobre o amor</li>
+                <li>Sinais de um relacionamento tóxico</li>
+                <li>Dicas para a intimidade</li>
+            </ul>
+        </div>
+        <button class="action-btn soft" onclick="abrirTab('comunicao')">Começar agora →</button>
+    </div>
+</div>
+
+<!-- COMUNICAÇÃO -->
+<div id="comunicacao" class="tab-content">
+    <div class="module-card">
+        <div class="module-title">💬 O Segredo: Comunicação Não-Violenta</div>
+        <div class="module-text">
+            A maior causa de rompimentos não é "não se amar mais", é <strong>não saber se comunicar</strong>.
+        </div>
+        <div class="tip-box">
+            <strong>Fórmula Mágica (CNV):</strong><br>
+            Em vez de: *"Você sempre deixa a louça suja, é irresponsável!"*<br>
+            Diga: *"Eu me sinto frustrada quando vejo a pia suja, porque valorizo a organização. Podia lavar agora?"*
+        </div>
+        <div class="module-text">
+            <strong>Regras de Ouro:</strong>
+            <ul class="list-check">
+                <li>Nunca ataque a pessoa, ataque o problema.</li>
+                <li>Ouça para entender, não para responder. 💡</li>
+                <li>"Estou com raiva" é melhor que "Você me deixou com raiva".</li>
+                <li>Respeite a necessidade de tempo individual para processar emoções.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="module-card">
+        <div class="module-title">👂 Ouvindo Ativamente</div>
+        <div class="module-text">
+            Quando ela/alguém estiver desabafando, não tente resolver. apenas <strong>valide o sentimento</strong>.
+            <br><br>
+            Frases que curam:
+            <ul class="list-check">
+                <li>"Entendo que isso te machucou."</li>
+                <li>"Eu vejo como isso foi importante para você."</li>
+                <li>"Obrigada por compartilhar isso comigo."</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- CIÊNCIA -->
+<div id="ciencia" class="tab-content">
+    <div class="module-card">
+        <div class="module-title">🧬 O Amor não é Mágica, é Química!</div>
+        <div class="module-text">
+            São 3 fases do amor segundo a neurociência:
+        </div>
+        <div class="list-check">
+            <li><strong>Luxúria (Testosterona/Estrogênio):</strong> O "fogo inicial". Dura semanas.</li>
+            <li><strong>Atração (Dopamina/Serotonina):</strong> A fase de "borboletas", euforia, tudo é perfeito. Dura de 6 meses a 2 anos.</li>
+            <li><strong>Apego (Ocitocina/Vasopressina):</strong> O amor maduro. Segurança, calma, profundo vínculo. <strong>É aqui que queremos ficar!</strong></li>
+        </div>
+        <div class="tip-box">
+            💡 <strong>Dica:</strong> A queda da euforia inicial é normal! Não significa que o amor acabou. Significa que o relacionamento evoluiu para um estágio mais seguro.
+        </div>
+    </div>
+    <div class="module-card">
+        <div class="module-title">❤️ O Poder do Toque</div>
+        <div class="module-text">
+            Abraços de <strong>20 segundos</strong> liberam Oxitocina, o "hormônio do amor", que reduz estresse e fortalece o vínculo.
+            <br>
+            <strong>Desafio:</strong> Um abraço longo todos os dias antes de sair ou ao chegar.
+        </div>
+    </div>
+</div>
+
+<!-- BANDEIRAS -->
+<div id="bandeiras" class="tab-content">
+    <div class="module-card">
+        <div class="module-title" style="color: var(--error);">🚩 Red Flags (Sinais de Perigo)</div>
+        <div class="module-text">
+            <strong>Observe se houver:</strong>
+            <ul class="list-check">
+                <li><strong>Isolamento:</strong> Ele/Ela tenta afastar você de amigos e família.</li>
+                <li><strong>Ciúmes excessivo:</strong> "Vou te proteger" se torna "Não quero falar com ninguém".</li>
+                <li><strong>Culpar o outro:</strong> Ninguém nunca erra, sempre é "sua culpa".</li>
+                <li><strong>Controle de tempo/roupa/redes:</strong> Exige acesso a senhas, fotos, localização o tempo todo.</li>
+                <li><strong>Desvalorização:</strong> Cervejas, críticas disfarçadas de "brincadeira".</li>
+            </ul>
+        </div>
+        <button class="action-btn" style="background:var(--error);" onclick="alert('Se você identicou 3 ou mais, busque ajuda especializada.')">Verificar Se Há Problemas</button>
+    </div>
+    <div class="module-card">
+        <div class="module-title" style="color: var(--success);">💚 Green Flags (Sinais Bons)</div>
+        <div class="module-text">
+            <strong>Valorize quem tem:</strong>
+            <ul class="list-check">
+                <li>Respeito aos limites pessoais.</li>
+                <li>Capacidade de pedir desculpas sinceras.</li>
+                <li>Paciente para ouvir até quando você está "errada".</li>
+                <li>Começa o processo de construção de confiança.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- INTIMIDADE -->
+<div id="intimidade" class="tab-content">
+    <div class="module-card">
+        <div class="module-title">🔥 Mantendo a Chama Acesa</div>
+        <div class="module-text">
+            A rotina é o inimigo nº 1 da intimidade. Como combatê-la?
+        </div>
+        <div class="list-check">
+            <li><strong>Regra do "Não-Telefone":</strong> 30 min por dia sem eletrônicos, só conversando.</li>
+            <li><strong>Novidade gera conexão:</strong> Façam algo novo juntos a cada 2 semanas (um tricô novo, um lugar novo, uma receita nova).</li>
+            <li><strong>Datas marcadas:</strong> Terça-feira de-date, 15 minuto de "ficar junto".</li>
+        </div>
+    </div>
+    <div class="module-card">
+        <div class="module-title">💞 Intimidade & Sexo</div>
+        <div class="module-text">
+            <strong>Dicas baseadas em especialistas:</strong>
+            <ul class="list-check">
+                <li>Sexo não é só penetração. Beijos, toques, massagens e conversas são sexo.</li>
+                <li><strong>Comunicação:</strong> Diga o que gosta e o que não gosta. Não espere que adivinhem.</li>
+                <li><strong>Consentimento:</strong> O "sim" deve ser entusiasmado. "Não" é resposta completa.</li>
+                <li><strong>Jogos:</strong> Cartas de perguntas profundas (ex: "O que te faz sentir seguro?") aumentam a intimidade emocional mesmo sem roupa.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- TOOLBOX -->
+<div id="toolbox" class="tab-content">
+    <div class="module-card">
+        <div class="module-title">🛠️ Turn Action Kit</div>
+        <div class="module-text">
+            <strong>Livros Recomendados:</strong>
+            <ul class="list-check">
+                <li>"Seis Pilares da Autoestima" - Nathaniel Branden</li>
+                <li>"Os 5 Linguagens do Amor" - Gary Chapman</li>
+                <li>"Comunicação Não-Violenta" - Marshall Rosenberg</li>
+            </ul>
+            <br>
+            <strong>Ferramenta Prática:</strong>
+            <br>
+            O Desafio dos 5 Minutos: Todos os dias, dediquem 5 minutos para elogiar genuinamente algo do outro.
+        </div>
+        <button class="action-btn soft" onclick="alert('Imprima esta página e cole na geladeira!')">Imprimir Dicas</button>
+    </div>
+    <div class="module-card">
+        <div class="module-title">📝 Diário do Casal</div>
+        <div class="module-text">
+            Proporção:
+            <br>
+            <strong>1x por semana:</strong> Cada um escreve 1 coisa que agradece pelo outro e 1 coisa que gostaria de melhorar (sem culpar).
+            <br>
+            <strong>1x por mês:</strong> Leiam juntos e discutam.
+        </div>
+    </div>
+</div>
+
+<!-- CHATBOT -->
+<div id="chat" class="tab-content">
+    <div class="module-card">
+        <div class="module-title">🤖 Consultor de Amor</div>
+        <div class="module-text">
+            Pergunte algo breve e vou te dar uma dica baseada em psicologia:
+        </div>
+        <div class="chat-container" id="chatDisplay">
+            <div class="chat-msg bot">Olá! Aqui é o consultor. O que está sentindo? (ex: "Como pedir desculpas", "Estou com ciúmes", "Ela não quer conversar")</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Digite sua dúvida...">
+            <button onclick="sendMessage()">→</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Abas
+function abrirTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Chatbot Simples (Baseado em palavras-chave)
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.toLowerCase();
+    const display = document.getElementById('chatDisplay');
+    
+    if (!text) return;
+    
+    // Mensagem do usuário
+    display.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
+    input.value = '';
+    display.scrollTop = display.scrollHeight;
+    
+    let resposta = "Não entendi bem, mas suggest: converse abertamente e sem julgamento. [Tente palavras como: ciúmes, briga, amor, sexo, desculpas]";
+    
+    if (text.includes('ciúmel') || text.includes('ciúme')) {
+        resposta = "O ciúmes vem de insegurança. Em vez de controlar a outra pessoa, pergunte: 'O que estou sentindo que me faz ter medo de perdê-lo?' Valide seu sentimento, mas não deixe que ele dite ações agressivas.";
+    } else if (text.includes('briga') || text.includes('discussão')) {
+        resposta = "Durante uma briga: 1. Respire. 2. Fale de VOCÊ ('Eu me sinto...'), nunca de VOCÊ. 3. Se a raiva subir muito, faça um 'tempo fora' de 20 min e volte.";
+    } else if (text.includes('desculpa') || text.includes('perdoar')) {
+        resposta = "Um pedido de desculpas perfeito tem 3 partes: 1. Reconhecer o erro (não 'se eu errei'). 2. Mostrar empatia (como isso te machucou). 3. Plano de ação (como vou evitar de novo).";
+    } else if (text.includes('eixo') || text.includes('perfeição')) {
+        resposta = "Ninguém é perfeito. O amor não é sobre achar o príncipe azul, é sobre amar alguém com defeitos também! Foque na conexão real.";
+    } else if (text.includes('rotina') || text.includes('tédio')) {
+        resposta = "A tédio é um sinal de que existe espaço para novidade. Invençam uma aventura mensal. Detalhes pequenos (um bilhete, um abraço de 20s) quebra a rotina.";
+    } else if (text.includes('sexo') || text.includes('intimidade')) {
+        resposta = "Comunicação é chave! Pergunte o que a outra pessoa gosta, não o que você acha. Consensualidade e respeito são essenciais.";
+    }
+    
+    setTimeout(() => {
+        display.innerHTML += `<div class="chat-msg bot">${resposta}</div>`;
+        display.scrollTop = display.scrollHeight;
+    }, 600);
+}
+
+// Permitir Enter no chat
+document.getElementById('chatInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') sendMessage();
+});
+</script>
+
+</body>
+</html>
