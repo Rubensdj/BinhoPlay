@@ -1,292 +1,485 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4a4a4a">
-<title>🧠 Academia do Amor - O Guia Completo</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Poppins:wght@300;400;600&display=swap');
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OSINT LAB: JOÃO SILVA (ALVO FICTÍCIO)</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></scri
+    pt>
+        <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min
+    .css" rel="stylesheet">
+        <style>
+            body { background: #050505; color: #00ff41; font-family: 'Courier
+    New', monospace; overflow-x: hidden; }
+            .scan { position: fixed; top: 0; left: 0; width: 100%; height:
+    100%; background: linear-gradient(to bottom, rgba(0,0,0,0) 50%,
+    rgba(0,0,255,0.05) 50%); background-size: 100% 4px; z-index: 0;
+    pointer-events: none; }
+            .terminal { background: #000; border: 1px solid #00ff41; padding:
+    15px; height: 250px; overflow-y: scroll; font-size: 13px; color: #00ff41;
+    box-shadow: 0 0 10px rgba(0,255,65,0.2); }
+            .log-entry { margin-bottom: 5px; border-left: 2px solid #004400; padding-left: 8px; }
+            .log-success { border-left-color: #00ff41; color: #fff;
+    background: rgba(0,255,65,0.1); }                                                        .log-info { border-left-color: #00aaff; color: #aafaff; }
+            .log-warning { border-left-color: #ffcc00; color: #fff;
+    background: rgba(255,204,0,0.1); }
+            .log-error { border-left-color: #ff0000; color: #ffcccc; }
+            .btn-action { background: #003300; border: 1px solid #00ff41;
+    color: #00ff41; font-family: monospace; transition: all 0.2s; }
+            .btn-action:hover { background: #00ff41; color: #000; box-shadow:
+    0 0 15px #00ff41; }
+            .card { background: rgba(0, 10, 0, 0.8); border: 1px solid               #004400; padding: 15px; margin-bottom: 15px; position: relative; overflow: hidden; }
+            .card::before { content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%; background: #00ff41; }
+            .blink { animation: blink 1s infinite; }
+            @keyframes blink { 50% { opacity: 0; } }
+        </style>
+    </head>
+    <body class="relative z-10">
+        <div class="scan"></div>
 
-:root {
-    --primary: #e91e63;
-    --secondary: #880e4f;
-    --bg: #fafafa;
-    --card: #ffffff;
-    --text: #333333;
-    --accent: #ff4081;
-    --success: #00c853;
-    --warning: #ffab00;
-}
+        <header class="p-4 border-b border-gray-800 bg-black/90 sticky top-0
+    z-20">
+            <div class="flex items-center justify-between">                                      <h1 class="text-xl font-bold text-green-400"><i
+    class="fa-solid fa-radar mr-2"></i> LAB OSINT: JOÃO SILVA</h1>
+                <span class="text-xs text-gray-500 border border-gray-700 px-2
+    py-1 rounded">ALVO FICTÍCIO - TREINO SEGURO</span>
+            </div>                                                                       </header>
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        <main class="p-4 max-w-4xl mx-auto space-y-6">
 
-body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+            <!-- PAINEL DE CONTROLE -->
+            <div class="card">
+                <h2 class="text-lg font-bold text-white mb-2"><i
+    class="fa-solid fa-terminal mr-2"></i> Console de Operações</h2>
+                <p class="text-xs text-gray-400 mb-4">Selecione uma ferramenta
+    para testar. Os dados abaixo são simulados.</p>
 
-header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 40px 20px; text-align: center; margin-bottom: 30px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 10px 20px rgba(233, 30, 99, 0.2); }
-header h1 { font-family: 'Merriweather', serif; font-size: 2.2rem; margin-bottom: 10px; }
-header p { font-size: 1rem; opacity: 0.9; }
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <button onclick="startSim('username')" class="btn-action
+    py-3 px-2 text-sm rounded">🔍 USER:<br>Sherlock</button>                                         <button onclick="startSim('email')" class="btn-action py-3
+    px-2 text-sm rounded">💣 EMAIL:<br>Leak Check</button>
+                    <button onclick="startSim('ip')" class="btn-action py-3
+    px-2 text-sm rounded">🌍 IP:<br>Geo & Whois</button>
+                    <button onclick="startSim('photos')" class="btn-action
+    py-3 px-2 text-sm rounded">📸 FOTOS:<br>METADADOS</button>                                   </div>
 
-nav { display: flex; overflow-x: auto; gap: 10px; padding: 10px 20px; margin-bottom: 25px; scrollbar-width: none; }
-nav::-webkit-scrollbar { display: none; }
-
-.nav-btn { background: white; color: var(--text); border: 1px solid #ddd; padding: 10px 18px; border-radius: 50px; white-space: nowrap; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-.nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); transform: scale(1.05); box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3); }
-
-.content-area { max-width: 800px; margin: 0 auto; padding: 0 20px; }
-.section { display: none; animation: fadeIn 0.5s ease-in-out; }
-.section.active { display: block; }
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-.card { background: var(--card); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
-.card h2 { font-family: 'Merriweather', serif; color: var(--secondary); margin-bottom: 15px; font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
-.card h3 { font-size: 1.1rem; color: var(--primary); margin: 20px 0 10px; }
-.card p { line-height: 1.7; font-size: 0.95rem; color: #555; margin-bottom: 15px; }
-
-.alert { padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 0.9rem; }
-.alert-info { background: #e3f2fd; border-left: 4px solid #2196f3; color: #0d47a1; }
-.alert-warning { background: #fff3e0; border-left: 4px solid var(--warning); color: #e65100; }
-.alert-success { background: #e8f5e9; border-left: 4px solid var(--success); color: #1b5e20; }
-
-.list-check { list-style: none; }
-.list-check li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; gap: 12px; font-size: 0.9rem; }
-.list-check li::before { content: "✔️"; font-size: 1.2rem; line-height: 1.2; }
-.list-check li.warning::before { content: "⚠️"; }
-.list-check li.success::before { content: "💚"; }
-
-.box-quote { background: #fce4ec; padding: 20px; border-radius: 12px; font-style: italic; color: var(--secondary); border-left: 4px solid var(--accent); margin: 15px 0; }
-.box-quote strong { display: block; margin-bottom: 5px; font-style: normal; font-family: 'Merriweather', serif; }
-
-.btn-action { display: inline-block; background: var(--primary); color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; margin-top: 10px; text-align: center; box-shadow: 0 4px 10px rgba(233, 30, 99, 0.2); }
-.btn-action:hover { background: var(--secondary); }
-
-.chat-box { background: white; border: 1px solid #eee; border-radius: 12px; padding: 15px; height: 400px; overflow-y: auto; margin-bottom: 15px; font-size: 0.9rem; }
-.chat-msg { padding: 10px 14px; border-radius: 10px; margin-bottom: 10px; max-width: 85%; line-height: 1.5; }
-.chat-msg.bot { background: #f5f5f5; color: #333; border-bottom-left-radius: 2px; }
-.chat-msg.user { background: var(--accent); color: white; margin-left: auto; border-bottom-right-radius: 2px; }
-.chat-input { display: flex; gap: 10px; }
-.chat-input input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; }
-.chat-input button { background: var(--primary); color: white; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-
-.back-btn { position: fixed; top: 20px; left: 20px; background: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); cursor: pointer; z-index: 100; font-size: 1.3rem; text-decoration: none; color: var(--text); }
-
-@media (max-width: 600px) {
-    header h1 { font-size: 1.8rem; }
-    .card { padding: 20px; }
-}
-</style>
-</head>
-<body>
-
-<a href="amor.html" class="back-btn">←</a>
-
-<header>
-    <h1>🧠 Academia do Amor</h1>
-    <p>Neurociência, Psicologia e Práticas para um Relacionamento Eterno</p>
-</header>
-
-<nav>
-    <button class="nav-btn active" onclick="showSection('intro')">🏠 Início</button>
-    <button class="nav-btn" onclick="showSection('comunicacao')">💬 Comunicação</button>
-    <button class="nav-btn" onclick="showSection('ciencia')">🧬 Ciência</button>
-    <button class="nav-btn" onclick="showSection('bandeiras')">🚩 Sinais</button>
-    <button class="nav-btn" onclick="showSection('intimidade')">🔥 Intimidade</button>
-    <button class="nav-btn" onclick="showSection('solo')">🧘 Autocuidado</button>
-    <button class="nav-btn" onclick="showSection('chat')">🤖 Consultor</button>
-</nav>
-
-<div class="content-area">
-
-    <!-- INÍCIO -->
-    <div id="intro" class="section active">
-        <div class="card">
-            <h2>💖 Bem-vindo ao Guia Definitivo</h2>
-            <p>
-                Relacionamentos não são "feijão com arroz", são uma habilidade que se aprende. 
-                Aqui reunimos o que há de mais moderno na ciência do amor para ajudar você e seu parceiro(a) 
-                a construírem algo único.
-            </p>
-            <div class="alert alert-info">
-                <strong>Como usar esta Academia:</strong><br>
-                Cada seção abaixo é um módulo. Leia com seu parceiro(a) uma vez por semana e discutam as práticas sugeridas.
+                <div id="console" class="terminal">
+                    <div class="log-entry text-gray-500">>> SISTEMA
+    INICIALIZADO AGUARDANDO COMANDO...</div>
+                    <div class="log-entry text-gray-500">>> ALVO ATUAL: JOÃO
+    SILVA (ID: 774902)</div>                                                                         <div class="log-entry text-gray-500 blink">>> <span
+    id="cursor">_</span></div>
+                </div>
             </div>
-            <p>Navegue pelas abas acima para começar:</p>
-            <ul class="list-check">
-                <li>Comunicação sem brigas</li>
-                <li>O que a química diz sobre o amor</li>
-                <li>Como identificar toxidade</li>
-                <li>Mantendo a chama acesa</li>
-            </ul>
-        </div>
-    </div>
 
-    <!-- COMUNICAÇÃO -->
-    <div id="comunicacao" class="section">
-        <div class="card">
-            <h2>💬 A Arte de Brigar sem Destruir</h2>
-            <p>A maior causa de rompimentos não é a falta de amor, mas a <strong>falta de comunicação</strong>.</p>
-            
-            <h3>1. A Técnica da "Mensagem Eu"</h3>
-            <div class="box-quote">
-                <strong>Inválido:</strong> "Você sempre deixa a casa suja, é arrumado!" (Ataque)<br>
-                <strong>Válido:</strong> "Eu me sinto cansada quando vejo a pia cheia, porque preciso de ordem. Podemos organizar?" (Sentimento + Necessidade)
+            <!-- RESULTADOS DINÂMICOS -->
+            <div id="resultsArea" class="hidden space-y-4">
+                <!-- Os dados ramifications aparecerão aqui -->                              </div>                                         
+            <!-- EXPLORADOR DE DADOS (Simulação de achados) -->
+            <div class="card mt-8">
+                <h2 class="text-lg font-bold text-white mb-4"><i
+    class="fa-solid fa-database mr-2"></i> Bases de Dados (Simuladas)</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-brands fa-instagram text-pink-500"></i>
+                            <span class="text-sm">@joaosilva_oficial</span>
+                        </div>                                                                           <span class="text-xs bg-green-900/30 text-green-400          px-2 py-1 rounded">ENCONTRADO (12 posts)</span>                                                  </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-envelope text-blue-400"></i>
+                            <span class="text-sm">joao.silva1990@gmail.com</span>
+                        </div>
+                        <span class="text-xs bg-red-900/30 text-red-400 px-2
+    py-1 rounded">VAZADO (2019)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-house text-green-400"></i>
+                            <span class="text-sm">Rua das Flores, 123, Centro - SP</span>                                                                                                 </div>
+                        <span class="text-xs bg-blue-900/30 text-blue-400 px-2
+    py-1 rounded">GEOLOCALIZADO</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-yellow-400"></i>
+                            <span class="text-sm">senha_123 (Hash:
+    5f4dcc3b5aa765d61d8327deb882cf99)</span>
+                        </div>
+                        <span class="text-xs bg-orange-900/30 text-orange-400
+    px-2 py-1 rounded">QUEBRADO (MD5)</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-600 mt-2">*Dados acima são 100%
+    fictícios para treinamento. Nenhum dados real foi acessado.</p>
             </div>
-            
-            <h3>2. Regra dos 20 Minutos</h3>
-            <div class="alert alert-warning">
-                Se a discussão esquentar demais, pare! O cérebro entra em modo "luta ou fuga" e você perde a capacidade racional. Diga: "Amor, estou muito mexida(a). Vamos conversar em 20 minutos?".
+
+        </main>
+
+        <script>
+            const consoleDiv = document.getElementById('console');
+            const resultsArea = document.getElementById('resultsArea');
+
+            function addLog(msg, type = 'info') {                                          const line = document.createElement('div');
+                line.className = log-entry log-${type};
+
+                const time = new Date().toLocaleTimeString('pt-BR', { hour12: false });                                                                               line.innerHTML = <span class="opacity-50">[${time}]</span> ${msg};
+
+                // Remove o cursor blinking da última linha
+                const lastCursor = document.querySelector('.log-entry.blink');
+                if(lastCursor) lastCursor.style.display = 'none';
+
+                consoleDiv.insertBefore(line, consoleDiv.lastElementChild);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+
+                // Adiciona novo cursor
+                const cursor = document.createElement('div');
+                cursor.className = 'log-entry text-gray-500 blink';                        cursor.innerText = '>> _';
+                consoleDiv.appendChild(cursor);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+
+            function startSim(type) {                                                      resultsArea.classList.remove('hidden');
+                resultsArea.innerHTML = ''; // Limpa resultados anteriores
+
+                let simulation = [];                                  
+                if (type === 'username') {
+                    addLog('INICIANDO SCANNER SHERLOCK...', 'info');                                 simulation = [
+                        { msg: 'Conectando a 400+ redes...', delay: 500 },                         { msg: 'BUSCANDO: @joaosilva_oficial', delay: 800 },
+                        { msg: 'FOI! Instagram (Perfil Público)', delay: 1200, result: 'instagram' },
+                        { msg: 'FOI! Twitter/X (Ativo)', delay: 1500, result: 'twitter' },
+                        { msg: 'OFF! Facebook (Privado)', delay: 1800, result: 'facebook' },
+                        { msg: 'FOI! GitHub (Repositórios públicos)', delay:
+    2200, result: 'github' },                                                                 { msg: 'SCAN COMPLETO. 3 PERFIS ENCONTRADOS.', delay:
+    2500, type: 'success' }                                                               ];
+                } else if (type === 'email') {                                            addLog('VERIFICANDO VAZAMENTOS (HIBP/IntelX)...', 'warning');
+                    simulation = [                                                            { msg: 'Consultando 15B+ registros...', delay: 600 },                                                                                                 { msg: 'ALERTA! Email encontrado em vazamento                                                                 "Collection #1"', delay: 1200, type: 'error' },
+                        { msg: 'Dados expostos: Nome, IP, Senha (Hash MD5)',
+    delay: 1600, type: 'warning' },
+                        { msg: 'Hash recuperado:
+    5f4dcc3b5aa765d61d8327deb882cf99', delay: 2000, type: 'info' },                                { msg: 'Senha revelada (cracked): "senha123"', delay:
+    2400, type: 'error' },                                                                     ];                                                           } else if (type === 'ip') {
+                    addLog('APLICANDO WHOIS & GEOIP...', 'info');
+                    simulation = [                                                                 { msg: 'Resolvendo: 192.168.1.100 (Simulado)', delay:
+    500 },
+                        { msg: 'ISP: Provedor Fictício Ltda', delay: 800 },                        { msg: 'País: Brasil (BR)', delay: 1100 },
+                        { msg: 'Configurações de Firewall: Portas 80, 443
+    ABERTAS', delay: 1400, type: 'warning' },
+                        { msg: 'LOCAL: São Paulo, SP - Centro', delay: 1800,
+    result: 'geo' },
+                    ];                                                                } else if (type === 'photos') {                                                      addLog('EXTRAIENDO METADADOS EXIF...', 'info');
+                    simulation = [
+                        { msg: 'Analisando arquivo: foto_natal.jpg', delay: 500 },
+                        { msg: 'Camera: iPhone 13 Pro', delay: 800 },                                    { msg: 'Data: 25/12/2023 20:45:12', delay: 1100 },
+                        { msg: 'GPS LAT: -23.5505 / LON: -46.6333', delay:
+    1500, type: 'success' },
+                        { msg: 'LOCAL DECODE: Av. Paulista, 1000', delay:
+    1900, type: 'warning' },                                                                   ];
+                }
+
+                let totalDelay = 0;                                                   simulation.forEach(step => {
+                    totalDelay = step.delay;                                                   setTimeout(() => {
+                        addLog(step.msg, step.type || 'info');                                                                                                      if(step.result === 'instagram') {                                              showResult('instagram', 'Perfil Encontrado no
+    Instagram', 'Bio: "Amante de churrasco e jogos. SP."<br>Seguidores:
+    1.2k<br>Última foto: Praia de Santos');
+                        } else if(step.result === 'twitter') {
+                            showResult('twitter', 'Perfil Encontrado no X
+    (Twitter)', '@joaosilva_oficial<br>Seguindo 500 contas<br>Último Tweet:    "Ontem foi um dia!"');
+                        } else if(step.result === 'facebook') {                                        showResult('facebook', 'Perfil Não Encontrado', 'O
+    usuário configurou perfil privado.<br>GitHub sugere que o nome não existe.');                                                                                             } else if(step.result === 'github') {                                                                                                 showResult('github', 'Perfil Encontrado no
+    GitHub', 'Repositórios públicos:<br>- meu-site<br>- script-python');                           } else if(step.result === 'geo') {
+                            showResult('geo', 'Geolocalização Confirmada',     'Coordenadas: -23.5505, -46.6333<br>Mapa: [Simulado] Av. Paulista 1000, SP');
+                        }                                             
+                    }, step.delay);
+                });
+            }
+
+            function showResult(id, title, content) {
+                const div = document.createElement('div');
+                div.className = 'card border-l-4 ' + (id === 'facebook' ?            'border-red-500' : 'border-green-500');
+                div.innerHTML = `                                                              <h3 class="font-bold text-lg mb-2 text-white">${title}</h3>                                                                                           <div class="text-sm text-gray-300 break-words">${content}</div>                                                              <button class="mt-2 text-xs text-blue-400                  hover:text-blue-300 underline"                                   onclick="this.parentElement.remove()">Fechar Resultado</button>
+                `;                                                                         resultsArea.prepend(div);
+            }
             </div>
-            
-            <h3>3. Escuta Ativa (O Segredo)</h3>
-            <p>Quando o outro falar, <strong>não pense na sua resposta</strong>. Apenas escute. Depois, repita: "Então, você está se sentindo X porque Y. É isso?". Isso magja. O outro se sente ouvido.</p>
-        </div>
-    </div>
 
-    <!-- CIÊNCIA -->
-    <div id="ciencia" class="section">
-        <div class="card">
-            <h2>🧬 Que Fim Fez a Borboleta? (Química do Amor)</h2>
-            <p>O amor tem 3 fases químicas distintas. Entender isso evita crises.</p>
-            
-            <h3>1. Luxúria (Dopamina Testosterona)</h3>
-            <p>Dura pouco. É aquele fogo inicial, excitação física. O cérebro quer sexo imediato.</p>
-            
-            <h3>2. Atração (Dopamina, Serotonina, Norepinefrina)</h3>
-            <p>A fase da "loucura". Tudo é perfeito, esquece de dormir, de comer. <strong>Dura de 6 meses a 2 anos.</strong> A dopamina alta faz você sentir euforia.</p>
-            
-            <h3>3. Apego (Ocitocina e Vasopressina)</h3>
-            <p>É aqui que moramos! O amor maduro. Segurança, calma, profundo vínculo. <br>
-            <strong>O segredo:</strong> A queda da euforia inicial (fase 2) é <strong>NORMAL</strong>. Não significa que o amor acabou, significa que ele amadureceu. A Ocitocina exige gestos concretos (abraços, toques) para ser produzida.</p>
-            
-            <div class="alert alert-success">
-                <strong>Desafio Prático:</strong> Abraço de 20 segundos todos os dias. Isso libera Ocitocina e reduz o cortisol (estresse).
-            </div>
-        </div>
-    </div>
+            <!-- EXPLORADOR DE DADOS (Simulação de achados) -->
+            <div class="card mt-8">
+                <h2 class="text-lg font-bold text-white mb-4"><i          class="fa-solid fa-database mr-2"></i> Bases de Dados (Simuladas)</h2>
+                <div class="space-y-2">                                                   <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-brands fa-instagram text-pink-500"></i>
+                            <span class="text-sm">@joaosilva_oficial</span>                                                                                         </div>
+                        <span class="text-xs bg-green-900/30 text-green-400
+    px-2 py-1 rounded">ENCONTRADO (12 posts)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">                                     <i class="fa-solid fa-envelope text-blue-400"></i>                                                                                          <span class="text-sm">joao.silva1990@gmail.com</span>
+                        </div>
+                        <span class="text-xs bg-red-900/30 text-red-400 px-2
+    py-1 rounded">VAZADO (2019)</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2     bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-house text-green-400"></i>
+                            <span class="text-sm">Rua das Flores, 123, Centro - SP</span>
+                        </div>
+                        <span class="text-xs bg-blue-900/30 text-blue-400 px-2
+    py-1 rounded">GEOLOCALIZADO</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-yellow-400"></i>
+                            <span class="text-sm">senha_123 (Hash:        5f4dcc3b5aa765d61d8327deb882cf99)</span>
+                        </div>
+                        <span class="text-xs bg-orange-900/30 text-orange-400
+    px-2 py-1 rounded">QUEBRADO (MD5)</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-600 mt-2">*Dados acima são 100%
+    fictícios para treinamento. Nenhum dados real foi acessado.</p>
+            </div>                                                    
+        </main>
 
-    <!-- BANDEIRAS -->
-    <div id="bandeiras" class="section">
-        <div class="card">
-            <h2>🚩 Red Flags vs. Green Flags</h2>
-            <p>Saber identificar sinais de alerta cedo economiza anos de vida.</p>
-            
-            <h3>⚠️ Red Flags (Fuja!) - Sinais de Perigo</h3>
-            <ul class="list-check">
-                <li class="warning"><strong>Isolamento:</strong> "Não curto seus amigos", "Não gosto que você fala com ele/ela". Tenta afastar você da rede de apoio.</li>
-                <li class="warning"><strong>Ciúmes Excessivo:</strong> Vira "proteção". Exige senhas, localizações em tempo real, checa mensagens.</li>
-                <li class="warning"><strong>Culpar o outro:</strong> A culpa é sempre sua, "você me deixou assim", "você provocou".</li>
-                <li class="warning"><strong>Gaslighting:</strong> "Você tá louca", "isso nunca aconteceu". Distorce a realidade para deixar você inseguro(a).</li>
-            </ul>
+        <script>
+            const consoleDiv = document.getElementById('console');
+            const resultsArea = document.getElementById('resultsArea');
 
-            <h3>💚 Green Flags (Fique!) - Sinais de Saúde</h3>
-            <ul class="list-check">
-                <li class="success"><strong>Respeito ao "Não":</strong> Se você diz não, ele(a) respeita sem insistir ou ficar chateado.</li>
-                <li class="success"><strong>Pede Desculpas:</strong> Sabe reconhecer o erro e muda o comportamento.</li>
-                <li class="success"><strong>Indo bem individualmente:</strong> O parceiro tem amigos, hobbies e vida própria fora do namoro.</li>
-            </ul>
-        </div>
-    </div>
+            function addLog(msg, type = 'info') {                                     const line = document.createElement('div');
+                line.className = log-entry log-${type};
+                                                                                      const time = new Date().toLocaleTimeString('pt-BR', { hour12: false });
+                line.innerHTML = <span class="opacity-50">[${time}]</span> ${msg};
 
-    <!-- INTIMIDADE -->
-    <div id="intimidade" class="section">
-        <div class="card">
-            <h2>🔥 Mantendo a Chama Acesa (e a Intimidade)</h2>
-            <p>A rotina é o maior inimigo. A novidade gera dopamina.</p>
-            
-            <h3>1. A Regra da Novidade</h3>
-            <p>Façam algo novo a cada 15 dias. Não precisa ser caro. Cozinhar uma receita nova, ir a um parque diferente, aprender um truque de mágica juntos. O cérebro libera dopamina na novidade, mimetizando a fase de atração.</p>
-            
-            <h3>2. O Toque não Sexual</h3>
-            <p>Muitos casais só se tocam para sexo. Toque sem intenção sexual gera segurança. Abraço ao chegar, dar as mãos filamentando, um carinho nas costas.</p>
-            
-            <h3>3. Sexo e Comunicação</h3>
-            <div class="alert alert-info">
-                <strong>O mito da leitura de mente:</strong> Ninguém sabe o que o outro quer. Fale o que gosta. Não espere que adivinhem. "Gosto quando você faz X" é muito melhor que silêncio.
-            </div>
-            
-            <h3>4. O "Devagar" e o "Rápido"</h3>
-            <p>Conheçam as "Linguagens do Amor". Para alguns, é tempo de qualidade (conversar). Para outros, é ato de serviço (ajudar). Descubra a do seu parceiro.</p>
-        </div>
-    </div>
+                // Remove o cursor blinking da última linha                           const lastCursor = document.querySelector('.log-entry.blink');                                                                              if(lastCursor) lastCursor.style.display = 'none';
 
-    <!-- AUTOCUIDADO -->
-    <div id="solo" class="section">
-        <div class="card">
-            <h2>🧘 Importante antes do "Nós": Você</h2>
-            <p>Um relacionamento saudável é a união de dois individuos integrais.</p>
-            <p>Não espere que o outro preencha todos os seus vazios. Se você é infeliz sozinho(a), estará infeliz em qualquer relacionamento.</p>
-            
-            <div class="alert alert-warning">
-                <strong>Regra de Ouro:</strong> Cuide de seus hobbies, amigos e corpo. Um parceiro que te vê brilhar (individualmente) se apaixona de novo toda vez.
-            </div>
-        </div>
-    </div>
+                consoleDiv.insertBefore(line, consoleDiv.lastElementChild);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
 
-    <!-- CHATBOT -->
-    <div id="chat" class="section">
-        <div class="card">
-            <h2>🤖 Consultor de Relacionamentos</h2>
-            <p>Pergunte algo curto e receba uma dica baseada em psicologia.</p>
-            <div class="chat-box" id="chatDisplay">
-                <div class="chat-msg bot">Oi! Sou o consultor. O que está acontecendo? <br>(Ex: "Estou com ciúmes", "Como pedir desculpas", "Ela não quer conversar")</div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Digite sua dúvida...">
-                <button onclick="enviarMensagem()">Enviar</button>
-            </div>
-        </div>
-    </div>
+                // Adiciona novo cursor                                               const cursor = document.createElement('div');
+                cursor.className = 'log-entry text-gray-500 blink';                   cursor.innerText = '>> _';
+                consoleDiv.appendChild(cursor);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
 
-</div>
+            function startSim(type) {
+                resultsArea.classList.remove('hidden');
+                resultsArea.innerHTML = ''; // Limpa resultados anteriores
 
-<script>
-function showSection(id) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    
-    document.getElementById(id).classList.add('active');
-    event.target.classList.add('active');
-}
+                let simulation = [];                                  
+                if (type === 'username') {
+                    addLog('INICIANDO SCANNER SHERLOCK...', 'info');
+                    simulation = [
+                        { msg: 'Conectando a 400+ redes...', delay: 500 },
+                        { msg: 'BUSCANDO: @joaosilva_oficial', delay: 800 },
+                        { msg: 'FOI! Instagram (Perfil Público)', delay: 1200, result: 'instagram' },
+                        { msg: 'FOI! Twitter/X (Ativo)', delay: 1500, result: 'twitter' },
+                        { msg: 'OFF! Facebook (Privado)', delay: 1800, result: 'facebook' },
+                        { msg: 'FOI! GitHub (Repositórios públicos)', delay:
+    2200, result: 'github' },
+                        { msg: 'SCAN COMPLETO. 3 PERFIS ENCONTRADOS.', delay:
+    2500, type: 'success' }
+                    ];
+                } else if (type === 'email') {
+                    addLog('VERIFICANDO VAZAMENTOS (HIBP/IntelX)...', 'warning');                                                                               simulation = [
+                        { msg: 'Consultando 15B+ registros...', delay: 600 },
+                        { msg: 'ALERTA! Email encontrado em vazamento     "Collection #1"', delay: 1200, type: 'error' },                                           { msg: 'Dados expostos: Nome, IP, Senha (Hash MD5)',
+    delay: 1600, type: 'warning' },
+                        { msg: 'Hash recuperado:
+    5f4dcc3b5aa765d61d8327deb882cf99', delay: 2000, type: 'info' },
+                        { msg: 'Senha revelada (cracked): "senha123"', delay:                                                                   2400, type: 'error' },
+                    ];
+                } else if (type === 'ip') {
+                    addLog('APLICANDO WHOIS & GEOIP...', 'info');
+                    simulation = [                                                            { msg: 'Resolvendo: 192.168.1.100 (Simulado)', delay:                                                                   500 },
+                        { msg: 'ISP: Provedor Fictício Ltda', delay: 800 },
+                        { msg: 'País: Brasil (BR)', delay: 1100 },                            { msg: 'Configurações de Firewall: Portas 80, 443                                                                       ABERTAS', delay: 1400, type: 'warning' },
+                        { msg: 'LOCAL: São Paulo, SP - Centro', delay: 1800,                                                                    result: 'geo' },
+                    ];
+                } else if (type === 'photos') {
+                    addLog('EXTRAIENDO METADADOS EXIF...', 'info');
+                    simulation = [
+                        { msg: 'Analisando arquivo: foto_natal.jpg', delay: 500 },
+                        { msg: 'Camera: iPhone 13 Pro', delay: 800 },
+                        { msg: 'Data: 25/12/2023 20:45:12', delay: 1100 },
+                        { msg: 'GPS LAT: -23.5505 / LON: -46.6333', delay:
+    1500, type: 'success' },
+                        { msg: 'LOCAL DECODE: Av. Paulista, 1000', delay:
+    1900, type: 'warning' },
+                    ];
+                }                                                     
+                let totalDelay = 0;
+                simulation.forEach(step => {
+                    totalDelay = step.delay;
+                    setTimeout(() => {                                                        addLog(step.msg, step.type || 'info');        
+                        if(step.result === 'instagram') {                                         showResult('instagram', 'Perfil Encontrado no
+    Instagram', 'Bio: "Amante de churrasco e jogos. SP."<br>Seguidores:
+    1.2k<br>Última foto: Praia de Santos');
+                        } else if(step.result === 'twitter') {
+                            showResult('twitter', 'Perfil Encontrado no X                                                                       (Twitter)', '@joaosilva_oficial<br>Seguindo 500 contas<br>Último Tweet:                                                                     "Ontem foi um dia!"');                                                                    } else if(step.result === 'facebook') {
+                            showResult('facebook', 'Perfil Não Encontrado', 'O
+    usuário configurou perfil privado.<br>GitHub sugere que o nome não existe.');
+                        } else if(step.result === 'github') {
+                            showResult('github', 'Perfil Encontrado no
+    GitHub', 'Repositórios públicos:<br>- meu-site<br>- script-python');
+                        } else if(step.result === 'geo') {
+                            showResult('geo', 'Geolocalização Confirmada',                                                                      'Coordenadas: -23.5505, -46.6333<br>Mapa: [Simulado] Av. Paulista 1000, SP');
+                        }                                             
+                    }, step.delay);
+                });
+            }
 
-// Chatbot Simples
-const baseConhecimento = {
-    'ciúmes': 'O ciúmes vem de insegurança interna. Em vez de controlar o outro, pergunte a si mesmo: "O que estou sentindo que me faz ter medo de perder?". Valide seu sentimento, mas não deixe ele ditar ações. A confiança é a cura.',
-    'desculpa': 'Um pedido de desculpas perfeito tem 3 partes: 1. Reconhecer o erro (não "se errei"), 2. Entregar a dor que causou ("sei que te machucou"), 3. Plano de ação ("vou mudar X").',
-    'brigas': 'Durante a briga: 1. Respire fundo. 2. Fale de você ("Eu me sinto..."), nunca de você ("Você é..."). 3. Se passar do limite, peça "Tempo Fora" de 20 minutos.',
-    'sexo': 'Comunicação é tudo. Não espere ser lido(a). Diga o que gosta. E lembre-se: intimidade é muito mais que penetração. Toque, beijo e atenção contam muito.',
-    'tédio': 'A tédio é um sinal de necessidade de novidade. Introduzam pequenas surpresas: uma carta, um novo lugar, um jogo. Quebrem a rotina a cada 15 dias.',
-    'amor': 'O amor não é um sentimento constante, é uma <strong>ação</strong>. É escolher a pessoa todos os dias, mesmo nos dias ruins. É compromisso, não apenas euforia.'
-};
+            function showResult(id, title, content) {                                 const div = document.createElement('div');
+                div.className = 'card border-l-4 ' + (id === 'facebook' ?
+    'border-red-500' : 'border-green-500');
+                div.innerHTML = `                                                         <h3 class="font-bold text-lg mb-2 text-white">${title}</h3>                                                                                 <div class="text-sm text-gray-300 break-words">${content}</div>
+                    <button class="mt-2 text-xs text-blue-400             hover:text-blue-300 underline"
+    onclick="this.parentElement.remove()">Fechar Resultado</button>
+                `;
+                resultsArea.prepend(div);
+            }
+            </div>                                                    
+            <!-- EXPLORADOR DE DADOS (Simulação de achados) -->                   <div class="card mt-8">
+                <h2 class="text-lg font-bold text-white mb-4"><i
+    class="fa-solid fa-database mr-2"></i> Bases de Dados (Simuladas)</h2>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">                                              <div class="flex items-center gap-2">
+                            <i class="fa-brands fa-instagram text-pink-500"></i>
+                            <span class="text-sm">@joaosilva_oficial</span>
+                        </div>                                                                <span class="text-xs bg-green-900/30 text-green-400
+    px-2 py-1 rounded">ENCONTRADO (12 posts)</span>
+                    </div>                                                                <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">                                     <i class="fa-solid fa-envelope text-blue-400"></i>                                                                                          <span class="text-sm">joao.silva1990@gmail.com</span>                                                                                   </div>                                                                <span class="text-xs bg-red-900/30 text-red-400 px-2                                                                    py-1 rounded">VAZADO (2019)</span>                                                    </div>
+                    <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-house text-green-400"></i>
+                            <span class="text-sm">Rua das Flores, 123, Centro - SP</span>
+                        </div>                                                                <span class="text-xs bg-blue-900/30 text-blue-400 px-2
+    py-1 rounded">GEOLOCALIZADO</span>
+                    </div>                                                                <div class="flex justify-between items-center p-2
+    bg-gray-900 rounded border border-gray-800">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-yellow-400"></i>                                                                                            <span class="text-sm">senha_123 (Hash:
+    5f4dcc3b5aa765d61d8327deb882cf99)</span>                                                  </div>
+                        <span class="text-xs bg-orange-900/30 text-orange-400
+    px-2 py-1 rounded">QUEBRADO (MD5)</span>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-600 mt-2">*Dados acima são 100%
+    fictícios para treinamento. Nenhum dados real foi acessado.</p>               </div>
 
-function enviarMensagem() {
-    const input = document.getElementById('chatInput');
-    const texto = input.value.toLowerCase().trim();
-    const display = document.getElementById('chatDisplay');
-    
-    if (!texto) return;
-    
-    display.innerHTML += `<div class="chat-msg user">${input.value}</div>`;
-    input.value = '';
-    
-    // Previne scroll automático pesado
-    display.scrollTop = display.scrollHeight;
-    
-    let resposta = "Não entendi 100%, mas o conselho de ouro é: conversem com calma e sem culpar o outro. O amor vence quando a comunicação abre caminho.";
-    
-    for (let key in baseConhecimento) {
-        if (texto.includes(key)) {
-            resposta = baseConhecimento[key];
-            break;
-        }
-    }
-    
-    setTimeout(() => {
-        display.innerHTML += `<div class="chat-msg bot">${resposta}</div>`;
-        display.scrollTop = display.scrollHeight;
-    }, 600);
-}
-</script>
+        </main>
 
-</body>
-</html>
+        <script>
+            const consoleDiv = document.getElementById('console');
+            const resultsArea = document.getElementById('resultsArea');
+
+            function addLog(msg, type = 'info') {
+                const line = document.createElement('div');
+                line.className = log-entry log-${type};
+                                                                                      const time = new Date().toLocaleTimeString('pt-BR', { hour12: false });
+                line.innerHTML = <span class="opacity-50">[${time}]</span> ${msg};
+
+                // Remove o cursor blinking da última linha
+                const lastCursor = document.querySelector('.log-entry.blink');
+                if(lastCursor) lastCursor.style.display = 'none';
+
+                consoleDiv.insertBefore(line, consoleDiv.lastElementChild);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+
+                // Adiciona novo cursor
+                const cursor = document.createElement('div');                         cursor.className = 'log-entry text-gray-500 blink';                   cursor.innerText = '>> _';
+                consoleDiv.appendChild(cursor);
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            }
+
+            function startSim(type) {                                                 resultsArea.classList.remove('hidden');
+                resultsArea.innerHTML = ''; // Limpa resultados anteriores
+
+                let simulation = [];                                  
+                if (type === 'username') {
+                    addLog('INICIANDO SCANNER SHERLOCK...', 'info');
+                    simulation = [
+                        { msg: 'Conectando a 400+ redes...', delay: 500 },
+                        { msg: 'BUSCANDO: @joaosilva_oficial', delay: 800 },
+                        { msg: 'FOI! Instagram (Perfil Público)', delay: 1200, result: 'instagram' },
+                        { msg: 'FOI! Twitter/X (Ativo)', delay: 1500, result: 'twitter' },
+                        { msg: 'OFF! Facebook (Privado)', delay: 1800, result: 'facebook' },
+                        { msg: 'FOI! GitHub (Repositórios públicos)', delay:
+    2200, result: 'github' },
+                        { msg: 'SCAN COMPLETO. 3 PERFIS ENCONTRADOS.', delay:                                                                   2500, type: 'success' }                                                               ];
+                } else if (type === 'email') {
+                    addLog('VERIFICANDO VAZAMENTOS (HIBP/IntelX)...', 'warning');                                                                               simulation = [                                                            { msg: 'Consultando 15B+ registros...', delay: 600 },
+                        { msg: 'ALERTA! Email encontrado em vazamento     "Collection #1"', delay: 1200, type: 'error' },
+                        { msg: 'Dados expostos: Nome, IP, Senha (Hash MD5)',                                                                    delay: 1600, type: 'warning' },
+                        { msg: 'Hash recuperado:                          5f4dcc3b5aa765d61d8327deb882cf99', delay: 2000, type: 'info' },
+                        { msg: 'Senha revelada (cracked): "senha123"', delay:
+    2400, type: 'error' },                                                                ];
+                } else if (type === 'ip') {
+                    addLog('APLICANDO WHOIS & GEOIP...', 'info');
+                    simulation = [                                                            { msg: 'Resolvendo: 192.168.1.100 (Simulado)', delay:
+    500 },
+                        { msg: 'ISP: Provedor Fictício Ltda', delay: 800 },
+                        { msg: 'País: Brasil (BR)', delay: 1100 },
+                        { msg: 'Configurações de Firewall: Portas 80, 443                                                                       ABERTAS', delay: 1400, type: 'warning' },
+                        { msg: 'LOCAL: São Paulo, SP - Centro', delay: 1800,
+    result: 'geo' },                                                                      ];
+                } else if (type === 'photos') {                                           addLog('EXTRAIENDO METADADOS EXIF...', 'info');
+                    simulation = [
+                        { msg: 'Analisando arquivo: foto_natal.jpg', delay: 500 },
+                        { msg: 'Camera: iPhone 13 Pro', delay: 800 },                         { msg: 'Data: 25/12/2023 20:45:12', delay: 1100 },
+                        { msg: 'GPS LAT: -23.5505 / LON: -46.6333', delay:
+    1500, type: 'success' },                                                                  { msg: 'LOCAL DECODE: Av. Paulista, 1000', delay:
+    1900, type: 'warning' },
+                    ];                                                                }
+
+                let totalDelay = 0;
+                simulation.forEach(step => {
+                    totalDelay = step.delay;
+                    setTimeout(() => {
+                        addLog(step.msg, step.type || 'info');
+
+                        if(step.result === 'instagram') {
+                            showResult('instagram', 'Perfil Encontrado no
+    Instagram', 'Bio: "Amante de churrasco e jogos. SP."<br>Seguidores:                                                                         1.2k<br>Última foto: Praia de Santos');
+                        } else if(step.result === 'twitter') {
+                            showResult('twitter', 'Perfil Encontrado no X
+    (Twitter)', '@joaosilva_oficial<br>Seguindo 500 contas<br>Último Tweet:
+    "Ontem foi um dia!"');
+                        } else if(step.result === 'facebook') {                                   showResult('facebook', 'Perfil Não Encontrado', 'O
+    usuário configurou perfil privado.<br>GitHub sugere que o nome não existe.');                                                                                   } else if(step.result === 'github') {
+                            showResult('github', 'Perfil Encontrado no
+    GitHub', 'Repositórios públicos:<br>- meu-site<br>- script-python');
+                        } else if(step.result === 'geo') {
+                            showResult('geo', 'Geolocalização Confirmada',
+    'Coordenadas: -23.5505, -46.6333<br>Mapa: [Simulado] Av. Paulista 1000, SP');
+                        }                                             
+                    }, step.delay);                                                   });
+            }                                                         
+            function showResult(id, title, content) {
+                const div = document.createElement('div');
+                div.className = 'card border-l-4 ' + (id === 'facebook' ?
+    'border-red-500' : 'border-green-500');
+                div.innerHTML = `
+                    <h3 class="font-bold text-lg mb-2 text-white">${title}</h3>
+                    <div class="text-sm text-gray-300 break-words">${content}</div>
+                    <button class="mt-2 text-xs text-blue-400
+    hover:text-blue-300 underline"                                        onclick="this.parentElement.remove()">Fechar Resultado</button>
+                `;
+                resultsArea.prepend(div);
+            }
+        </script>
+    </body>
+    </html>
